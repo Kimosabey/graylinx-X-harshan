@@ -94,11 +94,23 @@ a:hover{color:var(--acc)}
 .skip:focus{left:0}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:8px}
 
-/* decorative parallax backdrop */
+/* animated aurora gradient backdrop */
+#aurora{position:fixed;inset:-20%;z-index:-2;pointer-events:none;opacity:.48;transition:opacity .3s var(--ease);
+  background:
+    radial-gradient(42% 48% at 18% 22%, color-mix(in srgb,var(--acc) 16%,transparent), transparent 60%),
+    radial-gradient(40% 45% at 84% 28%, color-mix(in srgb,var(--st-ongoing) 13%,transparent), transparent 60%),
+    radial-gradient(46% 52% at 62% 86%, color-mix(in srgb,var(--st-done) 11%,transparent), transparent 62%);
+  background-size:200% 200%;background-position:0% 50%;animation:aurora 32s ease-in-out infinite}
+html[data-theme="dark"] #aurora{opacity:.6}
+@keyframes aurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* decorative parallax orbs (drift slowly) */
 #orbs{position:fixed;inset:-10% -10% auto -10%;height:120vh;z-index:-1;pointer-events:none;opacity:.5}
-#orbs::before,#orbs::after{content:"";position:absolute;border-radius:50%;filter:blur(60px)}
-#orbs::before{width:46vw;height:46vw;left:-6vw;top:2vh;background:radial-gradient(circle,color-mix(in srgb,var(--acc) 20%,transparent),transparent 70%)}
-#orbs::after{width:40vw;height:40vw;right:-4vw;top:38vh;background:radial-gradient(circle,var(--sh),transparent 70%)}
+#orbs::before,#orbs::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);will-change:transform}
+#orbs::before{width:46vw;height:46vw;left:-6vw;top:2vh;background:radial-gradient(circle,color-mix(in srgb,var(--acc) 20%,transparent),transparent 70%);animation:float1 26s ease-in-out infinite}
+#orbs::after{width:40vw;height:40vw;right:-4vw;top:38vh;background:radial-gradient(circle,var(--sh),transparent 70%);animation:float2 33s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,4vh) scale(1.12)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vw,-3vh) scale(1.08)}}
 
 /* scroll progress */
 #progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:200;background:transparent}
@@ -118,7 +130,9 @@ a:hover{color:var(--acc)}
 .avatar{height:44px;width:44px;border-radius:50%;object-fit:cover;filter:grayscale(1);padding:3px;background:var(--card);
   box-shadow:var(--raise);transition:filter .3s var(--ease)}
 .avatar:hover{filter:grayscale(0)}
-.titles h1{font-size:clamp(15px,2.2vw,18px);margin:0;font-weight:680;letter-spacing:-.2px;line-height:1.15}
+.titles{min-width:0}
+.titles h1{font-size:clamp(15px,2.2vw,18px);margin:0;font-weight:680;letter-spacing:-.2px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pdesc,.prole,.d-notes,.es-sub{overflow-wrap:anywhere}
 .titles .sub{font-size:11.5px;color:var(--ink2);margin-top:1px}
 .appbar.scrolled .titles .sub{display:none}
 .top-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
@@ -316,15 +330,16 @@ button.gbar{-webkit-appearance:none;appearance:none;padding:0;font:inherit}
 @media (max-width:768px){:root{--labelw:128px}.titles .sub{display:none}}
 @media (max-width:680px){.form-grid{grid-template-columns:1fr}.daylist .dayrow{grid-template-columns:1fr;gap:5px}
   .dayrow .d-date{order:-1}}
-@media (max-width:480px){.appwrap{gap:10px}.avatar{height:38px;width:38px}.logo-plate img{height:28px}
-  .stat .num{font-size:26px}.panel{padding:15px}.brand-x{display:none}}
+@media (max-width:480px){.appwrap{gap:10px;flex-wrap:wrap}.avatar{height:38px;width:38px}.logo-plate img{height:28px}
+  .stat .num{font-size:26px}.panel{padding:15px}.brand-x{display:none}.top-actions{width:100%;margin-left:0}
+  .tabs{width:100%}.tab{flex:1;justify-content:center}}
 @media (max-width:360px){.tab{padding:9px 12px}.btn.sm{padding:8px 9px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
-  #orbs{display:none}.bar>i{transition:none}}
+  #orbs,#aurora{display:none}.bar>i{transition:none}}
 
 @media print{
   body{background:#fff;color:#000}
-  #orbs,#progress,.no-print,.tabs,.toolbar,.top-actions,.row-actions,.modal{display:none!important}
+  #aurora,#orbs,#progress,.no-print,.tabs,.toolbar,.top-actions,.row-actions,.modal{display:none!important}
   .appbar{position:static;backdrop-filter:none}
   .panel,.stat,.pcard,.month{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
   #view-projects,#view-engagement{display:block!important}
@@ -335,6 +350,7 @@ button.gbar{-webkit-appearance:none;appearance:none;padding:0;font:inherit}
 </head>
 <body>
 <a href="#main" class="skip">Skip to content</a>
+<div id="aurora" aria-hidden="true"></div>
 <div id="orbs" aria-hidden="true"></div>
 <div id="progress" aria-hidden="true"><i></i></div>
 
