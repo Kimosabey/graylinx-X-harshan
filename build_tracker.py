@@ -622,6 +622,11 @@ def write_xlsx(path, projects, engagement):
     head_fill = fill(C["ink"])
 
     wb = Workbook()
+    # deterministic metadata so the .xlsx bytes are stable across rebuilds (no git churn)
+    stamp = datetime(TODAY.year, TODAY.month, TODAY.day)
+    wb.properties.created = stamp
+    wb.properties.modified = stamp
+    wb.properties.creator = "build_tracker.py"
 
     def make_sheet(title, cols, rows, status_key=None):
         ws = wb.create_sheet(title)
