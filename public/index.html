@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Harshan × Graylinx — Work Tracker</title>
+<meta name="description" content="Work tracker & showcase — projects, timeline and engagement at Graylinx." />
+<style>
+/* ===================================================================== *
+ *  ACCESSIBLE MONOCHROME NEUMORPHISM
+ *  One gray base; depth from dual soft shadows. Text & focus kept WCAG-AA+.
+ *  Status/work-type encoded by grayscale + glyph + label (never colour alone).
+ * ===================================================================== */
+:root{
+  --bg:#ECECEC; --card:#ECECEC; --hl:#FFFFFF; --sh:#C6C6C6;
+  --ink:#171717; --ink2:#4B4B4B; --ink3:#5C5C5C;
+  --line:#D2D2D2;
+  --s1:#171717; --s2:#3A3A3A; --s3:#5C5C5C; --s4:#888888; --s5:#ABABAB;
+  /* work-type foregrounds (backgrounds reference --s* which flip per theme) */
+  --wtOffice-fg:#F2F2F2; --wtDisc-fg:#F2F2F2; --wtWFH-fg:#171717;
+
+  --radius:20px; --radius-sm:13px; --radius-xs:10px; --gap:clamp(12px,2.2vw,18px); --appbar:66px; --labelw:200px;
+  --pad:clamp(14px,2.4vw,30px); --pad-panel:clamp(15px,2.2vw,20px); --pad-card:clamp(15px,1.8vw,18px);
+  --font:"Inter","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --raise:-4px -4px 8px var(--hl), 4px 4px 9px var(--sh);
+  --raise-hi:-6px -6px 13px var(--hl), 7px 7px 16px var(--sh);
+  --inset:inset 3px 3px 6px var(--sh), inset -3px -3px 6px var(--hl);
+  --inset-sm:inset 2px 2px 4px var(--sh), inset -2px -2px 4px var(--hl);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+html[data-theme="dark"]{
+  --bg:#1C1C1C; --card:#1C1C1C; --hl:#2A2A2A; --sh:#0D0D0D;
+  --ink:#F2F2F2; --ink2:#B2B2B2; --ink3:#8C8C8C; --line:#333333;
+  --s1:#F2F2F2; --s2:#CFCFCF; --s3:#A6A6A6; --s4:#7C7C7C; --s5:#5A5A5A;
+  --wtOffice-fg:#171717; --wtDisc-fg:#171717; --wtWFH-fg:#F2F2F2;
+}
+@media (prefers-color-scheme:dark){
+  html[data-theme="auto"]{
+    --bg:#1C1C1C; --card:#1C1C1C; --hl:#2A2A2A; --sh:#0D0D0D;
+    --ink:#F2F2F2; --ink2:#B2B2B2; --ink3:#8C8C8C; --line:#333333;
+    --s1:#F2F2F2; --s2:#CFCFCF; --s3:#A6A6A6; --s4:#7C7C7C; --s5:#5A5A5A;
+    --wtOffice-fg:#171717; --wtDisc-fg:#171717; --wtWFH-fg:#F2F2F2;
+  }
+}
+
+*{box-sizing:border-box}
+html{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+/* Lenis */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+
+html,body{margin:0;padding:0}
+body{font-family:var(--font);font-size:clamp(13.5px,.35vw+12.9px,15px);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;
+  line-height:1.55;min-height:100vh;overflow-x:hidden;transition:background .3s var(--ease),color .3s var(--ease)}
+a{color:var(--ink);text-underline-offset:3px}
+.ic{display:inline-block;vertical-align:middle;flex:none}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:var(--bg);padding:10px 16px;z-index:300;border-radius:0 0 10px 0}
+.skip:focus{left:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:8px}
+
+/* decorative parallax backdrop */
+#orbs{position:fixed;inset:-10% -10% auto -10%;height:120vh;z-index:-1;pointer-events:none;opacity:.6}
+#orbs::before,#orbs::after{content:"";position:absolute;border-radius:50%;filter:blur(60px)}
+#orbs::before{width:46vw;height:46vw;left:-6vw;top:2vh;background:radial-gradient(circle,var(--hl),transparent 70%)}
+#orbs::after{width:40vw;height:40vw;right:-4vw;top:38vh;background:radial-gradient(circle,var(--sh),transparent 70%)}
+
+/* scroll progress */
+#progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:200;background:transparent}
+#progress > i{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--ink);opacity:.85}
+
+/* ----------------------------- app bar ------------------------------ */
+.appbar{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:saturate(150%) blur(12px);-webkit-backdrop-filter:saturate(150%) blur(12px);
+  transition:padding .25s var(--ease),box-shadow .25s var(--ease)}
+.appbar.scrolled{box-shadow:0 6px 18px -12px var(--sh)}
+.appwrap{display:flex;align-items:center;gap:16px;max-width:1340px;margin:0 auto;padding:13px clamp(14px,3vw,30px);transition:padding .25s var(--ease)}
+.appbar.scrolled .appwrap{padding-top:9px;padding-bottom:9px}
+.brand{display:flex;align-items:center;gap:13px;min-width:0;will-change:transform}
+.logo-plate{display:grid;place-items:center;background:#FFFFFF;border-radius:13px;padding:6px 13px;box-shadow:var(--raise)}
+.logo-plate img{height:34px;width:auto;display:block}
+.brand-x{font-weight:200;font-size:20px;color:var(--ink3)}
+.avatar{height:44px;width:44px;border-radius:50%;object-fit:cover;filter:grayscale(1);padding:3px;background:var(--card);
+  box-shadow:var(--raise);transition:filter .3s var(--ease)}
+.avatar:hover{filter:grayscale(0)}
+.titles h1{font-size:clamp(15px,2.2vw,18px);margin:0;font-weight:680;letter-spacing:-.2px;line-height:1.15}
+.titles .sub{font-size:11.5px;color:var(--ink2);margin-top:1px}
+.appbar.scrolled .titles .sub{display:none}
+.top-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ----------------------------- buttons ------------------------------ */
+.btn{font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;background:var(--card);
+  border:0;border-radius:12px;padding:9px 14px;min-height:40px;display:inline-flex;align-items:center;gap:8px;
+  box-shadow:var(--raise);transition:box-shadow .18s var(--ease),transform .12s var(--ease),color .2s var(--ease)}
+.btn:hover{box-shadow:var(--raise-hi)}
+.btn:active{box-shadow:var(--inset);transform:translateY(1px)}
+.btn.primary{color:var(--ink)}
+.btn.sm{padding:8px 12px;min-height:36px;font-size:12.5px}
+.btn .ic{width:17px;height:17px}
+
+/* ----------------------------- layout ------------------------------- */
+main{max-width:1340px;margin:0 auto;padding:var(--pad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--gap);margin-bottom:24px}
+.stat{background:var(--card);border-radius:var(--radius);padding:clamp(14px,2vw,18px);box-shadow:var(--raise);
+  transition:box-shadow .2s var(--ease),transform .2s var(--ease)}
+.stat:hover{box-shadow:var(--raise-hi);transform:translateY(-2px)}
+.stat .num{font-size:clamp(23px,4.4vw,30px);font-weight:740;letter-spacing:-1px;line-height:1;font-variant-numeric:tabular-nums}
+.stat .lbl{font-size:11px;color:var(--ink2);margin-top:8px;text-transform:uppercase;letter-spacing:.7px}
+.stat .meta{font-size:11.5px;color:var(--ink3);margin-top:3px}
+
+/* ----------------------------- tabs --------------------------------- */
+.tabs{position:sticky;top:calc(var(--appbar) - 4px);z-index:40;display:inline-flex;gap:6px;margin-bottom:22px;
+  background:var(--card);padding:7px;border-radius:16px;box-shadow:var(--inset);max-width:100%;overflow-x:auto}
+.tab{font:inherit;font-weight:640;font-size:13.5px;color:var(--ink2);background:transparent;border:0;cursor:pointer;
+  padding:9px 17px;border-radius:11px;min-height:42px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+  transition:color .2s var(--ease),box-shadow .28s var(--ease),background .28s var(--ease)}
+.tab[aria-selected="true"]{color:var(--ink);background:var(--card);box-shadow:var(--raise)}
+.tab .ic{width:16px;height:16px}
+
+/* ----------------------------- toolbar ------------------------------ */
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:20px}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label{font-size:10.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.6px;padding-left:4px}
+select,input[type=text],input[type=date],input[type=number],textarea{font:inherit;font-size:13.5px;color:var(--ink);
+  background:var(--card);border:0;border-radius:12px;padding:10px 13px;min-height:42px;box-shadow:var(--inset);
+  transition:box-shadow .2s var(--ease)}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--ink);outline-offset:2px}
+input[type=text].search{min-width:220px}
+textarea{min-height:78px;resize:vertical;line-height:1.5}
+.legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--ink2);margin:0 0 16px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block;flex:none;box-shadow:var(--inset-sm)}
+.swatch{width:15px;height:15px;border-radius:5px;display:inline-block;flex:none}
+
+/* ----------------------------- panels ------------------------------- */
+.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--raise);padding:var(--pad-panel);margin-bottom:clamp(16px,2.4vw,24px)}
+.panel h2{margin:0 0 18px;font-size:15px;font-weight:680;letter-spacing:-.2px;display:flex;align-items:center;gap:9px}
+.panel h2 .ic{width:18px;height:18px;color:var(--ink2)}
+
+/* ------------------------- gantt timeline --------------------------- */
+.gantt{font-size:12.5px;overflow-x:auto;padding-bottom:8px}
+.gantt-axis{position:relative;height:20px;margin-left:var(--labelw);border-bottom:1px solid var(--line);min-width:460px}
+.gantt-axis .mlabel{position:absolute;top:0;font-size:10.5px;color:var(--ink3);transform:translateX(2px);white-space:nowrap}
+.gantt-group{margin-top:16px}
+.gantt-group .ghead{font-size:10.5px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.9px;margin:8px 0 8px}
+.grow{display:grid;grid-template-columns:var(--labelw) 1fr;align-items:center;min-height:32px}
+.grow .glabel{font-size:12.5px;color:var(--ink);padding-right:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gtrack{position:relative;height:20px;min-width:300px;border-radius:10px;box-shadow:var(--inset-sm)}
+.gtrack .gline{position:absolute;top:-8px;bottom:-8px;width:1px;background:var(--line)}
+.gbar{position:absolute;top:3px;height:14px;border-radius:8px;min-width:8px;cursor:pointer;
+  box-shadow:-2px -2px 4px color-mix(in srgb,var(--hl) 60%,transparent), 2px 2px 5px var(--sh);
+  transition:transform .16s var(--ease),filter .16s var(--ease);transform-origin:left center}
+.gbar:hover{transform:scaleY(1.4)}
+.gtoday{position:absolute;top:-10px;bottom:-10px;width:0;border-left:2px dashed var(--ink3)}
+.gtoday::after{content:"today";position:absolute;top:-14px;left:4px;font-size:9px;color:var(--ink3)}
+
+/* ----------------------------- cards -------------------------------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:var(--gap)}
+.pcard{background:var(--card);border-radius:var(--radius);box-shadow:var(--raise);padding:var(--pad-card);display:flex;
+  flex-direction:column;gap:11px;position:relative;overflow:hidden;
+  transition:box-shadow .2s var(--ease),transform .2s var(--ease)}
+.pcard:hover{box-shadow:var(--raise-hi);transform:translateY(-3px)}
+.pcard .phead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.pcard h3{margin:0;font-size:clamp(14.5px,1.7vw,15.5px);font-weight:660;line-height:1.25;letter-spacing:-.2px}
+.pcard .pcat{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;margin-top:5px}
+.pcard .pdesc{font-size:13px;color:var(--ink2)}
+.pcard .prole{font-size:12.5px;color:var(--ink)}
+.dates{font-size:12px;color:var(--ink2);display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.src{font-size:9px;padding:2px 8px;border-radius:20px;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;box-shadow:var(--inset-sm)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:680;color:var(--ink);
+  padding:4px 11px 4px 9px;border-radius:20px;background:var(--card);box-shadow:var(--inset-sm);white-space:nowrap}
+.chip .glyph{font-size:10px;color:var(--ink2)}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-size:11px;color:var(--ink2);background:var(--card);border-radius:9px;padding:3px 10px;box-shadow:var(--inset-sm)}
+.bar{height:9px;border-radius:8px;box-shadow:var(--inset-sm);overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:8px;background:var(--barcol,var(--s3));width:0;transition:width .8s var(--ease)}
+.hl{font-size:12px;color:var(--ink2);margin:0;padding-left:18px}
+.hl li{margin:3px 0}
+.commits{font-size:12px;color:var(--ink3);display:inline-flex;align-items:center;gap:4px}
+.commits .ic{width:13px;height:13px}
+.row-actions{display:flex;gap:7px;margin-top:auto;padding-top:4px}
+
+/* --------------------------- calendar ------------------------------- */
+.cal-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(244px,1fr));gap:var(--gap)}
+.month{background:var(--card);border-radius:var(--radius-sm);padding:14px;box-shadow:var(--inset)}
+.month h4{margin:0 0 10px;font-size:13px;font-weight:640;text-align:center}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal .wd{font-size:9.5px;color:var(--ink3);text-align:center;text-transform:uppercase}
+.cal .cell{aspect-ratio:1;border-radius:9px;display:grid;place-items:center;font-size:11.5px;color:var(--ink3);
+  background:var(--card);transition:transform .14s var(--ease)}
+.cal .cell.empty{box-shadow:none;background:transparent}
+.cal .cell:not(.empty):not(.has):not(.nf){box-shadow:var(--inset-sm)}
+.cal .cell.has{cursor:pointer;font-weight:680;box-shadow:var(--raise)}
+.cal .cell.has:hover{transform:scale(1.12);z-index:2}
+.cal .cell.nf{cursor:pointer;color:var(--ink2);box-shadow:var(--inset);
+  background-image:repeating-linear-gradient(45deg,transparent 0 4px,color-mix(in srgb,var(--ink3) 22%,transparent) 4px 5px)}
+.wt-Office{background:var(--s1);color:var(--wtOffice-fg)}
+.wt-Discussion{background:var(--s3);color:var(--wtDisc-fg)}
+.wt-WFH{background:var(--s5);color:var(--wtWFH-fg)}
+.wt-Leave{color:var(--ink2);box-shadow:var(--inset-sm);
+  background-image:repeating-linear-gradient(45deg,transparent 0 4px,color-mix(in srgb,var(--ink3) 20%,transparent) 4px 5px)}
+.daylist .dayrow{display:grid;grid-template-columns:108px 92px 1fr auto;gap:13px;align-items:center;
+  padding:12px 8px;border-bottom:1px solid var(--line);font-size:13px;cursor:pointer;border-radius:10px;
+  transition:box-shadow .16s var(--ease)}
+.daylist .dayrow:hover{box-shadow:var(--inset-sm)}
+.dayrow .d-date{font-weight:640}
+.dayrow .d-notes{color:var(--ink2);font-size:12.5px}
+.dayrow .d-loc{color:var(--ink3);font-size:12px;display:inline-flex;align-items:center;gap:5px}
+.dayrow .d-loc .ic{width:13px;height:13px}
+.wt{font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:9px;text-align:center;white-space:nowrap}
+
+/* ----------------------------- modal -------------------------------- */
+.modal{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 38%,transparent);display:none;
+  place-items:center;z-index:120;padding:18px;backdrop-filter:blur(3px)}
+.modal.open{display:grid;animation:fade .2s ease}
+.dialog{width:min(660px,100%);max-height:88vh;overflow:auto;background:var(--bg);border-radius:22px;
+  box-shadow:0 30px 60px -24px var(--sh),var(--raise);padding:24px;animation:pop .26s var(--ease)}
+.dialog h3{margin:0 0 18px;font-size:16px;font-weight:680}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+.form-grid label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--ink2)}
+.form-grid input,.form-grid select,.form-grid textarea{width:100%}
+.dialog-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.dialog-actions .left{margin-right:auto}
+
+footer{max-width:1340px;margin:8px auto 40px;padding:0 clamp(14px,2.4vw,30px);color:var(--ink3);font-size:11.5px}
+code{background:var(--card);border-radius:7px;padding:2px 7px;font-size:11px;box-shadow:var(--inset-sm)}
+.hidden{display:none!important}
+.empty-note{color:var(--ink3);font-size:13px;padding:26px;text-align:center}
+
+/* ----------------------------- motion ------------------------------- */
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.reveal{animation:reveal .5s var(--ease) both}
+
+/* ----------------------------- responsive --------------------------- */
+@media (max-width:1024px){:root{--labelw:170px}}
+@media (max-width:900px){.btn .bl{display:none}.btn{padding:9px 11px}.top-actions{gap:6px}}
+@media (max-width:768px){:root{--labelw:128px}.titles .sub{display:none}}
+@media (max-width:680px){.form-grid{grid-template-columns:1fr}.daylist .dayrow{grid-template-columns:1fr;gap:5px}
+  .dayrow .d-date{order:-1}}
+@media (max-width:480px){.appwrap{gap:10px}.avatar{height:38px;width:38px}.logo-plate img{height:28px}
+  .stat .num{font-size:26px}.panel{padding:15px}.brand-x{display:none}}
+@media (max-width:360px){.tab{padding:9px 12px}.btn.sm{padding:8px 9px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
+  #orbs{display:none}.bar>i{transition:none}}
+
+@media print{
+  body{background:#fff;color:#000}
+  #orbs,#progress,.no-print,.tabs,.toolbar,.top-actions,.row-actions,.modal{display:none!important}
+  .appbar{position:static;backdrop-filter:none}
+  .panel,.stat,.pcard,.month{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  #view-projects,#view-engagement{display:block!important}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<div id="orbs" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"><i></i></div>
+
+<header class="appbar" id="appbar">
+  <div class="appwrap">
+    <div class="brand" id="brand">
+      <span class="logo-plate"><img src="graylinxLogo.png" alt="Graylinx" onerror="this.parentNode.style.display='none'"/></span>
+      <span class="brand-x" aria-hidden="true">×</span>
+      <img class="avatar" src="IMG-20230616-WA0000.jpg" alt="Harshan Aiyappa" onerror="this.style.display='none'"/>
+      <div class="titles"><h1>Harshan&nbsp;×&nbsp;Graylinx</h1><div class="sub" id="span-sub">Work tracker & showcase</div></div>
+    </div>
+    <div class="top-actions no-print">
+      <button class="btn sm" id="btn-theme" title="Light / dark / auto"><span class="ic" data-icon="contrast"></span><span class="bl">Theme</span></button>
+      <button class="btn sm" id="btn-add"><span class="ic" data-icon="plus"></span><span class="bl">Add</span></button>
+      <button class="btn sm" id="btn-export"><span class="ic" data-icon="download"></span><span class="bl">Export</span></button>
+      <button class="btn sm" id="btn-import"><span class="ic" data-icon="upload"></span><span class="bl">Import</span></button>
+      <button class="btn sm" id="btn-print"><span class="ic" data-icon="printer"></span><span class="bl">Print</span></button>
+      <button class="btn sm" id="btn-reset" title="Discard local edits"><span class="ic" data-icon="reset"></span><span class="bl">Reset</span></button>
+      <input type="file" id="file-input" accept=".json,.csv" class="hidden" />
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="stats" id="stats" aria-label="Summary statistics"></section>
+
+  <div class="tabs" role="tablist" aria-label="Views">
+    <button class="tab" id="tab-projects" role="tab" aria-selected="true" aria-controls="view-projects"><span class="ic" data-icon="chart"></span> Projects &amp; Timeline</button>
+    <button class="tab" id="tab-engagement" role="tab" aria-selected="false" aria-controls="view-engagement"><span class="ic" data-icon="calendar"></span> Engagement &amp; Deployment</button>
+  </div>
+
+  <section id="view-projects" role="tabpanel" aria-labelledby="tab-projects">
+    <div class="toolbar no-print">
+      <div class="field"><label for="f-cat">Category</label><select id="f-cat"><option value="">All categories</option></select></div>
+      <div class="field"><label for="f-status">Status</label><select id="f-status"><option value="">All statuses</option></select></div>
+      <div class="field"><label for="f-sort">Sort</label><select id="f-sort">
+        <option value="start">Start date</option><option value="end">End date</option>
+        <option value="commits">Commits</option><option value="name">Name</option><option value="progress">Progress</option></select></div>
+      <div class="field" style="flex:1;min-width:200px"><label for="f-search">Search</label><input type="text" id="f-search" class="search" placeholder="name, tech, role…"/></div>
+    </div>
+    <div class="panel"><h2><span class="ic" data-icon="chart"></span>Timeline</h2><div class="gantt" id="gantt"></div></div>
+    <div class="legend" id="status-legend"></div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section id="view-engagement" role="tabpanel" aria-labelledby="tab-engagement" hidden>
+    <div class="stats" id="eng-stats" aria-label="Engagement statistics"></div>
+    <div class="legend" id="wt-legend"></div>
+    <div class="panel"><h2><span class="ic" data-icon="calendar"></span>Calendar</h2><div class="cal-wrap" id="calendar"></div></div>
+    <div class="panel"><h2><span class="ic" data-icon="route"></span>Daily log</h2>
+      <div class="toolbar no-print">
+        <div class="field" style="flex:1;min-width:200px"><label for="e-search">Search days</label><input type="text" id="e-search" class="search" placeholder="location, notes, work type…"/></div>
+        <div class="field"><label for="e-filter">Show</label><select id="e-filter">
+          <option value="">All days</option><option value="needs-fill">Needs filling</option>
+          <option value="Office">Office</option><option value="Discussion">Discussion</option>
+          <option value="WFH">WFH</option><option value="Leave">Leave</option></select></div>
+      </div>
+      <div class="daylist" id="daylist"></div>
+    </div>
+  </section>
+</main>
+
+<footer><span id="foot-meta"></span> · Editable in-browser, saved to this device. Re-run <code>build_tracker.py</code> to refresh from git / files.</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="dialog" data-lenis-prevent>
+    <h3 id="modal-title">Edit</h3>
+    <div id="modal-body"></div>
+    <div class="dialog-actions">
+      <button class="btn sm left hidden" id="modal-delete"><span class="ic" data-icon="trash"></span>Delete</button>
+      <button class="btn sm" id="modal-cancel">Cancel</button>
+      <button class="btn primary sm" id="modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<script id="seed-data" type="application/json">{"meta": {"title": "Harshan × Graylinx — Work Tracker", "generated": "2026-06-15", "span_start": "2026-04-22", "span_end": "2026-06-15", "stats": {"projects": 18, "active": 7, "done": 5, "total_commits": 363, "engagement_days": 48, "on_site_days": 10, "wfh_days": 31, "hotel_nights": 6, "needs_fill": 6}, "categories": ["Client Apps", "Graylinx Core", "HVAC Platform", "Infra & Tooling", "SelfAware Suite", "Voice AI"], "palette": {"ink": "171717", "ink2": "4B4B4B", "line": "C6C6C6", "base": "ECECEC", "card": "F4F4F4", "white": "FFFFFF", "Active": "171717", "Ongoing": "3A3A3A", "Done": "5C5C5C", "Planned": "888888", "Paused": "888888", "At-risk": "171717", "Office": "171717", "Discussion": "5C5C5C", "WFH": "888888", "Leave": "ABABAB"}, "build": "0b5809cce04d"}, "projects": [{"id": "thermynx", "parent_id": "", "type": "project", "name": "THERMYNX — HVAC AI Operations Intelligence", "category": "HVAC Platform", "description": "AI-powered HVAC analytics POC for the Unicharm facility — local LLM, RAG, work orders and analytics.", "role": "Sole engineer — full-stack build: FastAPI backend, React/TypeScript frontend, Ollama integration, analytics engine.", "tech": ["Python", "FastAPI", "React", "TypeScript", "Ollama", "MySQL", "Vite"], "start": "2026-05-08", "end": "ongoing", "date_source": "git", "status": "Active", "progress": 70, "commits": 310, "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform", "highlights": ["Most active project — 308 commits", "18 feature pages + 6 Claude/LLM agents", "RAG over facility docs, work-order workflow, analytics engine", "Local on-prem LLM (Ollama) inference"], "links": "", "notes": ""}, {"id": "thermynx.1", "parent_id": "thermynx", "type": "milestone", "name": "18 feature pages", "category": "HVAC Platform", "description": "Frontend feature surface", "role": "", "tech": [], "start": "2026-05-08", "end": "2026-05-15", "date_source": "git", "status": "Active", "progress": 80, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "thermynx.2", "parent_id": "thermynx", "type": "milestone", "name": "6 AI agents", "category": "HVAC Platform", "description": "Claude/LLM agents", "role": "", "tech": [], "start": "2026-05-15", "end": "2026-05-23", "date_source": "git", "status": "Active", "progress": 70, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "thermynx.3", "parent_id": "thermynx", "type": "milestone", "name": "RAG pipeline", "category": "HVAC Platform", "description": "Retrieval over facility docs", "role": "", "tech": [], "start": "2026-05-23", "end": "2026-05-30", "date_source": "git", "status": "Active", "progress": 65, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "thermynx.4", "parent_id": "thermynx", "type": "milestone", "name": "Work orders", "category": "HVAC Platform", "description": "Work-order workflow", "role": "", "tech": [], "start": "2026-05-30", "end": "2026-06-07", "date_source": "git", "status": "Active", "progress": 60, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "thermynx.5", "parent_id": "thermynx", "type": "milestone", "name": "Analytics engine", "category": "HVAC Platform", "description": "Chiller/HVAC analytics", "role": "", "tech": [], "start": "2026-06-07", "end": "2026-06-15", "date_source": "git", "status": "Active", "progress": 60, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "climastream", "parent_id": "", "type": "project", "name": "ClimaStream — Real-time HVAC Pipeline", "category": "HVAC Platform", "description": "Production-grade streaming pipeline POC: Kafka -> TimescaleDB -> Airflow -> FastAPI -> Next.js.", "role": "Sole engineer — designed and built the end-to-end microservice pipeline and simulator.", "tech": ["Python", "Kafka", "TimescaleDB", "Airflow", "Next.js", "Docker"], "start": "2026-04-24", "end": "2026-06-15", "date_source": "git", "status": "Done", "progress": 100, "commits": 32, "location": "D:\\Harshan\\clima-stream-hvac", "highlights": ["Proved the real-time streaming architecture", "Microservices: simulator, ingestion, processor, ML, storage, API", "31 commits over ~4 weeks"], "links": "", "notes": ""}, {"id": "climastream.1", "parent_id": "climastream", "type": "milestone", "name": "Device simulator", "category": "HVAC Platform", "description": "Synthetic HVAC data", "role": "", "tech": [], "start": "2026-04-24", "end": "2026-05-04", "date_source": "git", "status": "Done", "progress": 100, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "climastream.2", "parent_id": "climastream", "type": "milestone", "name": "Kafka ingestion", "category": "HVAC Platform", "description": "Streaming ingest", "role": "", "tech": [], "start": "2026-05-04", "end": "2026-05-14", "date_source": "git", "status": "Done", "progress": 100, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "climastream.3", "parent_id": "climastream", "type": "milestone", "name": "TimescaleDB storage", "category": "HVAC Platform", "description": "Time-series store", "role": "", "tech": [], "start": "2026-05-14", "end": "2026-05-25", "date_source": "git", "status": "Done", "progress": 100, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "climastream.4", "parent_id": "climastream", "type": "milestone", "name": "ML scoring", "category": "HVAC Platform", "description": "Anomaly/score service", "role": "", "tech": [], "start": "2026-05-25", "end": "2026-06-04", "date_source": "git", "status": "Done", "progress": 100, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "climastream.5", "parent_id": "climastream", "type": "milestone", "name": "Next.js UI", "category": "HVAC Platform", "description": "Frontend dashboard", "role": "", "tech": [], "start": "2026-06-04", "end": "2026-06-15", "date_source": "git", "status": "Done", "progress": 100, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "omnyx", "parent_id": "", "type": "project", "name": "OMNYX — Universal IoT Operations Platform", "category": "HVAC Platform", "description": "Next-gen production platform vision: Digital-Twin FDD, RL optimization, Agentic AI, dual-database architecture.", "role": "Architecture & platform design — the strategic north star consolidating the POCs.", "tech": ["Python", "React", "TypeScript", "PostgreSQL", "TimescaleDB", "Kafka"], "start": "2026-05-25", "end": "ongoing", "date_source": "approx", "status": "Active", "progress": 35, "commits": 0, "location": "D:\\Harshan\\graylinx-v2", "highlights": ["Digital Twin fault detection & diagnostics (FDD)", "Reinforcement-learning optimization", "Agentic AI operations layer", "Dual-DB (PostgreSQL + TimescaleDB) design"], "links": "", "notes": ""}, {"id": "omnyx.1", "parent_id": "omnyx", "type": "milestone", "name": "Digital-Twin FDD", "category": "HVAC Platform", "description": "Fault detection & diagnostics", "role": "", "tech": [], "start": "2026-05-25", "end": "2026-05-30", "date_source": "approx", "status": "Active", "progress": 40, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "omnyx.2", "parent_id": "omnyx", "type": "milestone", "name": "RL optimization", "category": "HVAC Platform", "description": "Setpoint optimization", "role": "", "tech": [], "start": "2026-05-30", "end": "2026-06-04", "date_source": "approx", "status": "Planned", "progress": 15, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "omnyx.3", "parent_id": "omnyx", "type": "milestone", "name": "Agentic AI", "category": "HVAC Platform", "description": "Operations agents", "role": "", "tech": [], "start": "2026-06-04", "end": "2026-06-09", "date_source": "approx", "status": "Active", "progress": 30, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "omnyx.4", "parent_id": "omnyx", "type": "milestone", "name": "Dual-DB architecture", "category": "HVAC Platform", "description": "Postgres + Timescale", "role": "", "tech": [], "start": "2026-06-09", "end": "2026-06-15", "date_source": "approx", "status": "Active", "progress": 45, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "gl-pulse", "parent_id": "", "type": "project", "name": "GL Pulse — Platform Architecture", "category": "HVAC Platform", "description": "Reference architecture & planning docs unifying ClimaStream, THERMYNX and OMNYX into one next-gen vision.", "role": "Author — architecture documentation and lessons-learned consolidation.", "tech": ["Markdown", "Architecture"], "start": "2026-05-26", "end": "2026-05-30", "date_source": "approx", "status": "Ongoing", "progress": 60, "commits": 0, "location": "D:\\Harshan\\gl-pulse", "highlights": ["20 architecture documents", "Consolidates POC lessons into unified design"], "links": "", "notes": ""}, {"id": "gl-pbs", "parent_id": "", "type": "project", "name": "GL PBS / BACnet Simulation", "category": "HVAC Platform", "description": "BACnet device simulator workstream (simulator dashboard lives under Current Works in GL).", "role": "Simulation flow study and BACnet device/UI analysis.", "tech": ["Vue 3", "BACnet", "Simulation"], "start": "2026-05-11", "end": "2026-05-13", "date_source": "manual", "status": "Paused", "progress": 20, "commits": 0, "location": "D:\\Harshan\\gl-pbs-simulation", "highlights": ["BACnet device simulation", "Vue 3 simulator dashboard"], "links": "", "notes": ""}, {"id": "current-works", "parent_id": "", "type": "project", "name": "Current Works in GL — Core Monorepo", "category": "Graylinx Core", "description": "Active Graylinx monorepo: backend/frontend, commission tool, ML trainings, simulations, Kafka stress testing.", "role": "Sole engineer — Kafka performance testing, cross-machine benchmarking, DB/ETL architecture audits.", "tech": ["Node.js", "Express", "Kafka", "MySQL", "Python"], "start": "2026-06-04", "end": "2026-06-04", "date_source": "git", "status": "Active", "progress": 75, "commits": 16, "location": "D:\\Harshan\\Current Works in GL", "highlights": ["Kafka stress tests 150x -> 5000x scale", "Cross-machine 24GB vs 8GB comparison reports", "DB & ETL critical-flaws audits, management summaries"], "links": "", "notes": ""}, {"id": "current-works.1", "parent_id": "current-works", "type": "milestone", "name": "Kafka stress tests (150x-5000x)", "category": "Graylinx Core", "description": "Throughput scaling", "role": "", "tech": [], "start": "2026-06-04", "end": "2026-06-04", "date_source": "git", "status": "Active", "progress": 80, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "current-works.2", "parent_id": "current-works", "type": "milestone", "name": "Cross-machine 24GB vs 8GB", "category": "Graylinx Core", "description": "Hardware comparison", "role": "", "tech": [], "start": "2026-06-04", "end": "2026-06-04", "date_source": "git", "status": "Done", "progress": 100, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "current-works.3", "parent_id": "current-works", "type": "milestone", "name": "DB/ETL architecture audits", "category": "Graylinx Core", "description": "Critical-flaws reviews", "role": "", "tech": [], "start": "2026-06-04", "end": "2026-06-04", "date_source": "git", "status": "Active", "progress": 70, "commits": 0, "location": "", "highlights": [], "links": "", "notes": ""}, {"id": "docs", "parent_id": "", "type": "project", "name": "Graylinx Docs & PRD", "category": "Graylinx Core", "description": "Product/architecture documentation: PRD, Modules & Features (175 features), Kafka/stress reports.", "role": "Author/maintainer — PRD, feature inventory, architecture references.", "tech": ["Markdown", "PRD", "Documentation"], "start": "2026-04-28", "end": "2026-05-21", "date_source": "approx", "status": "Ongoing", "progress": 65, "commits": 0, "location": "D:\\Harshan\\Docs", "highlights": ["Graylinx_Modules_and_Features.md — 175 features, phased", "PRD v1.0 + Industrial Platform Master"], "links": "", "notes": ""}, {"id": "selfaware-suite", "parent_id": "", "type": "project", "name": "The SelfAware® Intelligence Suite", "category": "SelfAware Suite", "description": "Umbrella of 5 products: SelfAware Continuum, Hyper, audit-shield, spatial-nexus, kimo-ai-agent.", "role": "Multi-product workspace — design & development across the portfolio.", "tech": ["React", "Python", "Docker"], "start": "2026-05-14", "end": "2026-05-21", "date_source": "approx", "status": "Active", "progress": 40, "commits": 0, "location": "D:\\Harshan\\The SelfAware® Intelligence Suite", "highlights": ["5 flagship products grouped locally", "Continuum, Hyper, audit-shield, spatial-nexus, kimo-ai-agent"], "links": "", "notes": ""}, {"id": "concept-standard", "parent_id": "", "type": "project", "name": "Concept Standard — Graph Analytics", "category": "SelfAware Suite", "description": "Interactive concept-map viewer (1,159 concepts, 5,985 relations) for lesson generation.", "role": "Built the in-browser graph analytics tool (ECharts + Neo4j GDS).", "tech": ["Python", "JavaScript", "ECharts", "Neo4j"], "start": "2026-06-15", "end": "ongoing", "date_source": "approx", "status": "Active", "progress": 55, "commits": 0, "location": "D:\\Harshan\\concept-standard", "highlights": ["1,159 concepts / 5,985 relations", "Force/circular graphs, command palette, light/dark, a11y"], "links": "", "notes": ""}, {"id": "voxara", "parent_id": "", "type": "project", "name": "VOXARA AI — Voice Intelligence", "category": "Voice AI", "description": "Realtime on-prem AI voice intelligence platform — monorepo with local LLM, Whisper STT, Piper TTS.", "role": "Architecture & monorepo setup (pnpm/Turbo), service scaffolding.", "tech": ["Node.js", "pnpm", "Turbo", "Ollama", "Whisper", "Piper", "Docker"], "start": "2026-05-20", "end": "2026-05-21", "date_source": "approx", "status": "Paused", "progress": 30, "commits": 0, "location": "D:\\Harshan\\VOXARA AI", "highlights": ["Largest by file count (37 items)", "Local LLM + Whisper + Piper TTS"], "links": "", "notes": ""}, {"id": "travel-app", "parent_id": "", "type": "project", "name": "TripTrail — Travel & Expense (RANGSONS)", "category": "Client Apps", "description": "Buildless travel/expense reporting web app for RANGSONS LLP with HR approval + Google Sheets.", "role": "Sole developer — static web app, Supabase backend, approval flow.", "tech": ["HTML", "Tailwind", "JavaScript", "Supabase"], "start": "2026-06-03", "end": "2026-06-03", "date_source": "git", "status": "Done", "progress": 100, "commits": 5, "location": "D:\\Harshan\\travel-app", "highlights": ["HR approval + Google Sheets integration", "Buildless static deployment"], "links": "", "notes": ""}, {"id": "konva", "parent_id": "", "type": "project", "name": "Konva Canvas App", "category": "Client Apps", "description": "React + TypeScript canvas/drawing app template (likely a UI/design component base).", "role": "Template/prototype setup.", "tech": ["React", "TypeScript", "Vite", "Konva"], "start": "2026-05-14", "end": "2026-05-14", "date_source": "approx", "status": "Paused", "progress": 25, "commits": 0, "location": "D:\\Harshan\\konva", "highlights": ["Canvas/drawing UI base"], "links": "", "notes": ""}, {"id": "farmer-app", "parent_id": "", "type": "project", "name": "Farmer App", "category": "Client Apps", "description": "Early/placeholder project.", "role": "Initial scaffolding.", "tech": [], "start": "2026-05-29", "end": "2026-06-03", "date_source": "approx", "status": "Planned", "progress": 5, "commits": 0, "location": "D:\\Harshan\\farmer-app", "highlights": ["Placeholder — minimal contents"], "links": "", "notes": ""}, {"id": "selfaware-dev-stack", "parent_id": "", "type": "project", "name": "SelfAware Dev Stack", "category": "Infra & Tooling", "description": "Canonical local Docker dev stack (MySQL, PostgreSQL, Neo4j, Redis) for the SelfAware products.", "role": "Authored the docker-compose environment for 4 products.", "tech": ["Docker", "MySQL", "PostgreSQL", "Neo4j", "Redis"], "start": "2026-05-21", "end": "2026-05-21", "date_source": "approx", "status": "Done", "progress": 100, "commits": 0, "location": "D:\\Harshan\\selfaware-dev-stack", "highlights": ["One dev environment for 4 products"], "links": "", "notes": ""}, {"id": "mysql-unicharm-proxy", "parent_id": "", "type": "project", "name": "MySQL Unicharm Proxy (deprecated)", "category": "Infra & Tooling", "description": "Docker MySQL port-forwarding helper — superseded by selfaware-dev-stack.", "role": "Quick infra utility (now reference-only).", "tech": ["Docker", "MySQL"], "start": "2026-05-21", "end": "2026-05-21", "date_source": "approx", "status": "Done", "progress": 100, "commits": 0, "location": "D:\\Harshan\\mysql-unicharm-proxy", "highlights": ["Deprecated — replaced by selfaware-dev-stack"], "links": "", "notes": ""}, {"id": "kimo-ssh-keys", "parent_id": "", "type": "project", "name": "Kimo SSH Keys", "category": "Infra & Tooling", "description": "SSH key storage / Graylinx laptop identity (kept out of git for security).", "role": "Access/identity setup.", "tech": ["SSH"], "start": "2026-05-18", "end": "2026-05-18", "date_source": "approx", "status": "Done", "progress": 100, "commits": 0, "location": "D:\\Harshan\\kimo-ssh-keys", "highlights": ["Laptop identity & access keys"], "links": "", "notes": ""}, {"id": "python-etl", "parent_id": "", "type": "project", "name": "Python ETL", "category": "Infra & Tooling", "description": "ETL / transformer-layer workstream (planning + follow-ups in May).", "role": "ETL transformer-layer planning and conversion-workflow design.", "tech": ["Python", "ETL"], "start": "2026-05-14", "end": "2026-05-25", "date_source": "manual", "status": "Planned", "progress": 10, "commits": 0, "location": "D:\\Harshan\\python-etl", "highlights": ["ETL transformer layer planning"], "links": "", "notes": ""}, {"id": "raspberry", "parent_id": "", "type": "project", "name": "Raspberry Stuffs", "category": "Infra & Tooling", "description": "Raspberry Pi / edge experiments (placeholder).", "role": "Edge hardware experiments.", "tech": ["Raspberry Pi"], "start": "2026-06-13", "end": "2026-06-13", "date_source": "approx", "status": "Planned", "progress": 5, "commits": 0, "location": "D:\\Harshan\\Rasberry-stuffs", "highlights": ["Placeholder"], "links": "", "notes": ""}], "engagement": [{"date": "2026-04-22", "day": "Wednesday", "work_type": "Discussion", "location": "Graylinx Office Bangalore", "hotel": "", "check_in": "11:00 AM", "check_out": "2:00 PM", "travel": "Mysore to Bangalore and return", "notes": "Initial deployment and coordination discussion with Graylinx team", "linked_project": "current-works", "source": "csv"}, {"date": "2026-04-27", "day": "Monday", "work_type": "Office", "location": "Graylinx Office Bangalore", "hotel": "GRS Hotel", "check_in": "9:30 AM", "check_out": "6:30 PM", "travel": "Mysore to Bangalore", "notes": "Started office deployment and stayed at hotel near office", "linked_project": "current-works", "source": "csv"}, {"date": "2026-04-28", "day": "Tuesday", "work_type": "Office", "location": "Graylinx Office Bangalore", "hotel": "GRS Hotel", "check_in": "9:30 AM", "check_out": "6:30 PM", "travel": "Stayed in Bangalore", "notes": "Continued office work and architecture discussions", "linked_project": "current-works", "source": "csv"}, {"date": "2026-04-29", "day": "Wednesday", "work_type": "Office", "location": "Graylinx Office Bangalore", "hotel": "GRS Hotel", "check_in": "9:30 AM", "check_out": "6:30 PM", "travel": "Stayed in Bangalore", "notes": "Regular office work and coordination discussions", "linked_project": "current-works", "source": "csv"}, {"date": "2026-04-30", "day": "Thursday", "work_type": "Office", "location": "Graylinx Office Bangalore", "hotel": "GRS Hotel", "check_in": "9:30 AM", "check_out": "6:30 PM", "travel": "Bangalore to Mysore", "notes": "Returned to Mysore due to Friday leave", "linked_project": "", "source": "csv"}, {"date": "2026-05-01", "day": "Friday", "work_type": "Leave", "location": "Mysore", "hotel": "", "check_in": "Leave", "check_out": "Leave", "travel": "Stayed in Mysore", "notes": "Friday leave and rest day", "linked_project": "", "source": "csv"}, {"date": "2026-05-04", "day": "Monday", "work_type": "Discussion", "location": "NA Group Office Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Local travel within Mysore", "notes": "PRD discussion regarding HVAC systems and architecture modules with Vishnu", "linked_project": "omnyx", "source": "csv"}, {"date": "2026-05-05", "day": "Tuesday", "work_type": "Discussion", "location": "NA Group Office Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Local travel within Mysore", "notes": "Continued PRD planning and module discussions", "linked_project": "omnyx", "source": "csv"}, {"date": "2026-05-06", "day": "Wednesday", "work_type": "Discussion", "location": "NA Group Office Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Local travel within Mysore", "notes": "Finalized PRD discussions and architecture workflows", "linked_project": "omnyx", "source": "csv"}, {"date": "2026-05-08", "day": "Friday", "work_type": "Office", "location": "Graylinx Office Bangalore", "hotel": "GRS Hotel", "check_in": "9:30 AM", "check_out": "6:30 PM", "travel": "Mysore to Bangalore", "notes": "Worked with Vishnu before his Australia travel and discussed ongoing tasks", "linked_project": "", "source": "csv"}, {"date": "2026-05-09", "day": "Saturday", "work_type": "Office", "location": "Graylinx Office Bangalore", "hotel": "GRS Hotel", "check_in": "9:30 AM", "check_out": "6:00 PM", "travel": "Bangalore to Mysore", "notes": "Returned to Mysore after architecture discussions and AI demonstrations", "linked_project": "thermynx", "source": "csv"}, {"date": "2026-05-10", "day": "Sunday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "5:00 PM", "travel": "Worked from Mysore residence", "notes": "Continued assigned tasks remotely and coordinated pending work", "linked_project": "", "source": "csv"}, {"date": "2026-05-11", "day": "Monday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Existing BACnet simulation flow understanding discussions with team", "linked_project": "gl-pbs", "source": "csv"}, {"date": "2026-05-12", "day": "Tuesday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "BACnet device simulation and UI analysis discussions along with recruitment coordination", "linked_project": "gl-pbs", "source": "csv"}, {"date": "2026-05-13", "day": "Wednesday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Interface and workflow architecture study and recruitment activities", "linked_project": "omnyx", "source": "csv"}, {"date": "2026-05-14", "day": "Thursday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Technical coordination discussions ETL follow-ups and recruitment process handling", "linked_project": "python-etl", "source": "csv"}, {"date": "2026-05-15", "day": "Friday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Transformer layer follow-up discussions and recruitment coordination activities", "linked_project": "python-etl", "source": "csv"}, {"date": "2026-05-16", "day": "Saturday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "5:00 PM", "travel": "Worked from Mysore residence", "notes": "ETL and conversion workflow discussions along with interview coordination", "linked_project": "python-etl", "source": "csv"}, {"date": "2026-05-17", "day": "Sunday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "4:00 PM", "travel": "Worked from Mysore residence", "notes": "Pending task coordination architecture planning and recruitment follow-ups", "linked_project": "current-works", "source": "csv"}, {"date": "2026-05-18", "day": "Monday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Continued ETL transformer layer planning discussions and recruitment activities", "linked_project": "python-etl", "source": "csv"}, {"date": "2026-05-19", "day": "Tuesday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Follow-up discussions architecture coordination and recruitment processes", "linked_project": "current-works", "source": "csv"}, {"date": "2026-05-20", "day": "Wednesday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Continued ETL transformer planning pending clarifications and recruitment coordination", "linked_project": "python-etl", "source": "csv"}, {"date": "2026-05-21", "day": "Thursday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Technical discussions implementation planning and interview coordination", "linked_project": "current-works", "source": "csv"}, {"date": "2026-05-22", "day": "Friday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Continued project coordination follow-ups and recruitment activities", "linked_project": "current-works", "source": "csv"}, {"date": "2026-05-23", "day": "Saturday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "5:00 PM", "travel": "Worked from Mysore residence", "notes": "Ongoing ETL architecture planning discussions and recruitment work", "linked_project": "python-etl", "source": "csv"}, {"date": "2026-05-24", "day": "Sunday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "4:00 PM", "travel": "Worked from Mysore residence", "notes": "Pending workflow coordination architecture discussions and recruitment coordination", "linked_project": "current-works", "source": "csv"}, {"date": "2026-05-25", "day": "Monday", "work_type": "WFH", "location": "Mysore", "hotel": "", "check_in": "10:00 AM", "check_out": "6:00 PM", "travel": "Worked from Mysore residence", "notes": "Continued follow-ups project discussions and recruitment coordination", "linked_project": "current-works", "source": "csv"}, {"date": "2026-05-26", "day": "Tuesday", "work_type": "", "location": "", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "", "linked_project": "", "source": "needs-fill"}, {"date": "2026-05-27", "day": "Wednesday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-05-28", "day": "Thursday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-05-29", "day": "Friday", "work_type": "", "location": "", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "", "linked_project": "", "source": "needs-fill"}, {"date": "2026-05-30", "day": "Saturday", "work_type": "", "location": "", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "", "linked_project": "", "source": "needs-fill"}, {"date": "2026-05-31", "day": "Sunday", "work_type": "", "location": "", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "", "linked_project": "", "source": "needs-fill"}, {"date": "2026-06-01", "day": "Monday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-02", "day": "Tuesday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-03", "day": "Wednesday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on TripTrail — Travel & Expense (RANGSONS) (auto-derived from git).", "linked_project": "travel-app", "source": "derived"}, {"date": "2026-06-04", "day": "Thursday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-05", "day": "Friday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-06", "day": "Saturday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-07", "day": "Sunday", "work_type": "", "location": "", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "", "linked_project": "", "source": "needs-fill"}, {"date": "2026-06-08", "day": "Monday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-09", "day": "Tuesday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-10", "day": "Wednesday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-11", "day": "Thursday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-12", "day": "Friday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-13", "day": "Saturday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}, {"date": "2026-06-14", "day": "Sunday", "work_type": "", "location": "", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "", "linked_project": "", "source": "needs-fill"}, {"date": "2026-06-15", "day": "Monday", "work_type": "WFH", "location": "Mysore (residence)", "hotel": "", "check_in": "", "check_out": "", "travel": "", "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).", "linked_project": "thermynx", "source": "derived"}]}</script>
+<script src="lenis.min.js"></script>
+<script>
+"use strict";
+/* ===================== Lucide-style inline SVG icon set ===================== */
+const ICONS={
+  contrast:'<circle cx="12" cy="12" r="10"/><path d="M12 18a6 6 0 0 0 0-12v12z"/>',
+  plus:'<path d="M5 12h14"/><path d="M12 5v14"/>',
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>',
+  printer:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  reset:'<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+  chart:'<path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6" rx="1"/><rect x="12" y="8" width="3" height="10" rx="1"/><rect x="17" y="5" width="3" height="13" rx="1"/>',
+  calendar:'<rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>',
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  trash:'<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>',
+  search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  bed:'<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',
+  route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
+  commit:'<circle cx="12" cy="12" r="3"/><line x1="3" x2="9" y1="12" y2="12"/><line x1="15" x2="21" y1="12" y2="12"/>'
+};
+function icon(name,size){ size=size||18; return '<svg class="ic" viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[name]||"")+'</svg>'; }
+function paintIcons(root){ (root||document).querySelectorAll("[data-icon]").forEach(el=>{ el.outerHTML=icon(el.dataset.icon, el.classList.contains("ic")?17:18); }); }
+
+/* ===================== Data ===================== */
+const SEED=JSON.parse(document.getElementById("seed-data").textContent||"{}");
+const STORE_KEY="glx-tracker-v2";
+const TODAY=(SEED.meta&&SEED.meta.span_end)||new Date().toISOString().slice(0,10);
+const RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+const STATUS={"Active":{v:"--s1",g:"●"},"Ongoing":{v:"--s2",g:"◑"},"Done":{v:"--s3",g:"✓"},"Planned":{v:"--s4",g:"○"},"Paused":{v:"--s5",g:"⏸"},"At-risk":{v:"--s1",g:"⚠"}};
+const STATUS_LIST=["Active","Ongoing","Done","Paused","Planned","At-risk"];
+const WT_LIST=["Office","Discussion","WFH","Leave"];
+let DB=load(), animate=true;
+function load(){ try{ const s=JSON.parse(localStorage.getItem(STORE_KEY));
+  if(s&&s.meta&&s.meta.build&&SEED.meta&&s.meta.build===SEED.meta.build) return s; /* same build -> keep edits */
+}catch(e){} return clone(SEED); /* new/changed build or no store -> fresh seed */ }
+function clone(o){ return JSON.parse(JSON.stringify(o||{})); }
+function persist(){ try{localStorage.setItem(STORE_KEY,JSON.stringify(DB));}catch(e){} }
+function projects(){ return DB.projects||[]; }
+function engagement(){ return DB.engagement||[]; }
+function cssvar(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+function statusColor(s){ return cssvar((STATUS[s]||{v:"--s3"}).v); }
+function statusGlyph(s){ return (STATUS[s]||{g:""}).g; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function asList(v){ return Array.isArray(v)?v:(v?String(v).split(/;\s*/).filter(Boolean):[]); }
+function d2(n){ return String(n).padStart(2,"0"); }
+function parse(iso){ if(!iso) return null; const [y,m,d]=iso.split("-").map(Number); return new Date(y,m-1,d); }
+function effEnd(p){ return (p.end==="ongoing"||!p.end)?TODAY:p.end; }
+function fmt(s){ if(!s) return "—"; if(s==="ongoing") return "ongoing"; const dt=parse(s); return dt?dt.toLocaleDateString(undefined,{day:"2-digit",month:"short",year:"2-digit"}):s; }
+function countUp(el,to){ if(RM||!/^\d+$/.test(String(to))){ el.textContent=to; return; }
+  const end=+to,dur=700,t0=performance.now();
+  (function step(t){ const k=Math.min(1,(t-t0)/dur); el.textContent=Math.round(end*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(step); })(t0); }
+
+/* ===================== Stats ===================== */
+function statCards(target,cards){
+  target.innerHTML=cards.map((c,i)=>`<div class="stat ${animate&&!RM?"reveal":""}" style="animation-delay:${i*45}ms">
+    <div class="num" data-c="${esc(c[1])}">${esc(c[1])}</div><div class="lbl">${esc(c[0])}</div><div class="meta">${esc(c[2])}</div></div>`).join("");
+  target.querySelectorAll(".num").forEach(n=>countUp(n,n.dataset.c));
+}
+function renderStats(){
+  const ps=projects().filter(p=>p.type==="project"), st=(SEED.meta&&SEED.meta.stats)||{};
+  const active=ps.filter(p=>p.status==="Active"||p.status==="Ongoing").length, done=ps.filter(p=>p.status==="Done").length;
+  const commits=ps.reduce((a,p)=>a+(+p.commits||0),0), span=(DB.meta&&DB.meta.span_start)||st.span_start||"2026-04-22", cats=new Set(ps.map(p=>p.category)).size;
+  statCards(document.getElementById("stats"),[
+    ["Projects",ps.length,cats+" categories"],["Active / Ongoing",active,done+" delivered"],
+    ["Total commits",commits,"across git repos"],["Since",fmt(span),"→ "+fmt(TODAY)],
+    ["On-site days",(st.on_site_days??"—"),(st.hotel_nights??0)+" hotel nights"],
+  ]);
+  document.getElementById("span-sub").textContent="Engagement "+fmt(span)+" → "+fmt(TODAY)+" · "+ps.length+" projects";
+  document.getElementById("foot-meta").textContent="Generated "+((SEED.meta&&SEED.meta.generated)||TODAY)+" · "+ps.length+" projects · "+engagement().length+" engagement days";
+}
+
+/* ===================== Gantt ===================== */
+function ganttRange(){ const ps=projects().filter(p=>p.type==="project"&&p.start);
+  let min=ps.length?ps.reduce((a,p)=>p.start<a?p.start:a,ps[0].start):"2026-04-22";
+  const e=engagement(); if(e.length&&e[0].date<min) min=e[0].date; return [parse(min),parse(TODAY)]; }
+function renderGantt(){
+  const [r0,r1]=ganttRange(), total=Math.max(1,(r1-r0)/864e5), pct=d=>(((parse(d)||r0)-r0)/864e5/total*100);
+  const groups={}; visibleProjects().forEach(p=>{(groups[p.category]=groups[p.category]||[]).push(p);});
+  let lines="",labels="",m=new Date(r0.getFullYear(),r0.getMonth(),1);
+  while(m<=r1){ const left=((m-r0)/864e5/total*100);
+    if(left>=0){ lines+=`<div class="gline" style="left:${left}%"></div>`; labels+=`<div class="mlabel" style="left:${left}%">${m.toLocaleDateString(undefined,{month:"short",year:"2-digit"})}</div>`; }
+    m=new Date(m.getFullYear(),m.getMonth()+1,1); }
+  const todayLeft=((parse(TODAY)-r0)/864e5/total*100);
+  let html=`<div class="gantt-axis" style="margin-left:var(--labelw)">${labels}</div>`;
+  Object.keys(groups).sort().forEach(cat=>{
+    html+=`<div class="gantt-group"><div class="ghead">${esc(cat)}</div>`;
+    groups[cat].forEach(p=>{ const l=Math.max(0,pct(p.start)),w=Math.max(1.5,pct(effEnd(p))-l),col=statusColor(p.status);
+      html+=`<div class="grow"><div class="glabel" title="${esc(p.name)}">${esc(p.name)}</div>
+        <div class="gtrack">${lines}<div class="gtoday" style="left:${todayLeft}%"></div>
+          <div class="gbar" data-id="${esc(p.id)}" style="left:${l}%;width:${w}%;background:${col}" title="${esc(p.name)} · ${fmt(p.start)}→${fmt(p.end)} · ${esc(p.status)}"></div></div></div>`; });
+    html+=`</div>`; });
+  const g=document.getElementById("gantt"); g.innerHTML=html;
+  g.querySelectorAll(".gbar").forEach(b=>b.addEventListener("click",()=>openProject(b.dataset.id)));
+}
+
+/* ===================== Cards ===================== */
+function visibleProjects(){
+  const cat=document.getElementById("f-cat").value,stt=document.getElementById("f-status").value;
+  const q=document.getElementById("f-search").value.toLowerCase().trim(),sort=document.getElementById("f-sort").value;
+  let ps=projects().filter(p=>p.type==="project");
+  if(cat) ps=ps.filter(p=>p.category===cat); if(stt) ps=ps.filter(p=>p.status===stt);
+  if(q) ps=ps.filter(p=>(p.name+" "+p.role+" "+p.description+" "+asList(p.tech).join(" ")+" "+p.category).toLowerCase().includes(q));
+  ps.sort((a,b)=>{ if(sort==="name") return a.name.localeCompare(b.name);
+    if(sort==="commits") return (+b.commits||0)-(+a.commits||0);
+    if(sort==="progress") return (+b.progress||0)-(+a.progress||0);
+    if(sort==="end") return effEnd(b).localeCompare(effEnd(a)); return (a.start||"").localeCompare(b.start||""); });
+  return ps;
+}
+function renderCards(){
+  const ps=visibleProjects(),wrap=document.getElementById("cards");
+  if(!ps.length){ wrap.innerHTML=`<div class="empty-note">No projects match your filters.</div>`; return; }
+  wrap.innerHTML=ps.map((p,i)=>{ const col=statusColor(p.status),ms=projects().filter(m=>m.parent_id===p.id),hl=asList(p.highlights);
+    return `<article class="pcard ${animate&&!RM?"reveal":""}" style="--barcol:${col};animation-delay:${i*35}ms">
+      <div class="phead"><div><h3>${esc(p.name)}</h3><div class="pcat">${esc(p.category)}</div></div>
+        <span class="chip"><span class="dot" style="background:${col}"></span><span class="glyph">${statusGlyph(p.status)}</span>${esc(p.status)}</span></div>
+      <div class="dates"><b>${fmt(p.start)}</b> → <b>${fmt(p.end)}</b><span class="src">${esc(p.date_source)}</span>
+        ${(+p.commits>0)?`<span class="commits">${icon("commit",13)} ${p.commits}</span>`:""}</div>
+      <div class="pdesc">${esc(p.description)}</div>
+      ${p.role?`<div class="prole"><b>Role:</b> ${esc(p.role)}</div>`:""}
+      <div class="tags">${asList(p.tech).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+      ${hl.length?`<ul class="hl">${hl.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>`:""}
+      ${ms.length?`<div class="pcat">Milestones (${ms.length})</div><div class="tags">${ms.map(m=>`<span class="tag" title="${esc(m.status)} · ${m.progress}%">${esc(m.name)}</span>`).join("")}</div>`:""}
+      <div class="bar" title="${p.progress||0}%"><i data-w="${Math.max(2,+p.progress||0)}"></i></div>
+      <div class="row-actions no-print"><button class="btn sm" data-edit="${esc(p.id)}">${icon("edit",15)} Edit</button></div></article>`;
+  }).join("");
+  wrap.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>openProject(b.dataset.edit)));
+  requestAnimationFrame(()=>wrap.querySelectorAll(".bar > i").forEach(i=>i.style.width=i.dataset.w+"%"));
+}
+function renderStatusLegend(){
+  document.getElementById("status-legend").innerHTML=
+    STATUS_LIST.map(s=>`<span><span class="dot" style="background:${statusColor(s)}"></span>${statusGlyph(s)} ${esc(s)}</span>`).join("")
+    +`<span style="margin-left:auto;color:var(--ink3)">bars by status · dashed = today</span>`;
+}
+
+/* ===================== Engagement ===================== */
+function renderEngStats(){
+  const e=engagement(),bt=t=>e.filter(r=>r.work_type===t).length;
+  const locs=new Set(e.filter(r=>r.location).map(r=>r.location)).size,nf=e.filter(r=>r.source==="needs-fill").length;
+  statCards(document.getElementById("eng-stats"),[
+    ["Days logged",e.length-nf,nf+" need filling"],["On-site",bt("Office")+bt("Discussion"),"office + discussion"],
+    ["WFH",bt("WFH"),"remote"],["Hotel nights",e.filter(r=>r.hotel).length,"stays"],["Locations",locs,"distinct places"],
+  ]);
+  document.getElementById("wt-legend").innerHTML=
+    WT_LIST.map(t=>`<span><span class="swatch wt-${t}"></span>${esc(t)}</span>`).join("")
+    +`<span><span class="swatch wt-Leave"></span>Needs filling</span>`;
+}
+function wtCls(r){ return r.source==="needs-fill"?"nf":("wt-"+(r.work_type||"Leave")); }
+function renderCalendar(){
+  const e=engagement(); if(!e.length){ document.getElementById("calendar").innerHTML=`<div class="empty-note">No engagement data.</div>`; return; }
+  const byDate={}; e.forEach(r=>byDate[r.date]=r);
+  const first=parse(e[0].date),last=parse(e[e.length-1].date),WDS=["Su","Mo","Tu","We","Th","Fr","Sa"];
+  let html="",m=new Date(first.getFullYear(),first.getMonth(),1);
+  while(m<=last){ const y=m.getFullYear(),mo=m.getMonth(),start=new Date(y,mo,1).getDay(),days=new Date(y,mo+1,0).getDate();
+    let cells=WDS.map(w=>`<div class="wd">${w}</div>`).join("");
+    for(let i=0;i<start;i++) cells+=`<div class="cell empty"></div>`;
+    for(let d=1;d<=days;d++){ const ds=y+"-"+d2(mo+1)+"-"+d2(d),rec=byDate[ds];
+      if(!rec){ cells+=`<div class="cell">${d}</div>`; continue; }
+      if(rec.source==="needs-fill"){ cells+=`<div class="cell nf" data-date="${ds}" title="${ds} — needs filling">${d}</div>`; continue; }
+      cells+=`<div class="cell has ${wtCls(rec)}" data-date="${ds}" title="${esc(ds)} · ${esc(rec.work_type)} · ${esc(rec.location||"")}">${d}</div>`; }
+    html+=`<div class="month"><h4>${m.toLocaleDateString(undefined,{month:"long",year:"numeric"})}</h4><div class="cal">${cells}</div></div>`;
+    m=new Date(y,mo+1,1); }
+  const cal=document.getElementById("calendar"); cal.innerHTML=html;
+  cal.querySelectorAll("[data-date]").forEach(c=>c.addEventListener("click",()=>openDay(c.dataset.date)));
+}
+function renderDayList(){
+  const q=document.getElementById("e-search").value.toLowerCase().trim(),f=document.getElementById("e-filter").value;
+  let e=engagement().slice().reverse();
+  if(f==="needs-fill") e=e.filter(r=>r.source==="needs-fill"); else if(f) e=e.filter(r=>r.work_type===f);
+  if(q) e=e.filter(r=>(r.location+" "+r.notes+" "+r.work_type+" "+r.hotel).toLowerCase().includes(q));
+  const wrap=document.getElementById("daylist");
+  if(!e.length){ wrap.innerHTML=`<div class="empty-note">No matching days.</div>`; return; }
+  wrap.innerHTML=e.map(r=>{ const nf=r.source==="needs-fill";
+    return `<div class="dayrow" data-date="${esc(r.date)}">
+      <span class="d-date">${fmt(r.date)}<br><small style="color:var(--ink3)">${esc(r.day||"")}</small></span>
+      <span class="wt ${nf?"wt-Leave":"wt-"+(r.work_type||"Leave")}">${esc(nf?"fill":(r.work_type||"—"))}</span>
+      <span><span class="d-loc">${r.location?icon("pin",13):""}${esc(r.location||(nf?"(add details)":"—"))}</span><br><span class="d-notes">${esc(r.notes||"")}</span></span>
+      <span class="d-loc">${r.hotel?(icon("bed",13)+" "+esc(r.hotel)):""}${r.travel?(" "+icon("route",13)+" "+esc(r.travel)):""}</span></div>`;
+  }).join("");
+  wrap.querySelectorAll(".dayrow").forEach(d=>d.addEventListener("click",()=>openDay(d.dataset.date)));
+}
+
+/* ===================== Modal ===================== */
+const modal=document.getElementById("modal"); let modalCtx=null;
+function field(label,name,val,type="text",opts){
+  if(type==="select") return `<label class="${opts&&opts.full?"full":""}">${label}<select name="${name}">${opts.choices.map(c=>`<option ${c===val?"selected":""}>${esc(c)}</option>`).join("")}</select></label>`;
+  if(type==="textarea") return `<label class="full">${label}<textarea name="${name}">${esc(val)}</textarea></label>`;
+  return `<label class="${opts&&opts.full?"full":""}">${label}<input type="${type}" name="${name}" value="${esc(val)}"/></label>`;
+}
+function openProject(id){ const p=projects().find(x=>x.id===id); if(!p) return; modalCtx={kind:"project",id};
+  document.getElementById("modal-title").textContent="Edit project — "+p.name;
+  document.getElementById("modal-delete").classList.remove("hidden");
+  document.getElementById("modal-body").innerHTML=`<div class="form-grid">
+    ${field("Name","name",p.name,"text",{full:true})}${field("Category","category",p.category)}
+    ${field("Status","status",p.status,"select",{choices:STATUS_LIST})}${field("Start","start",p.start,"date")}
+    ${field("End (blank = ongoing)","end",p.end==="ongoing"?"":p.end,"text")}${field("Progress %","progress",p.progress,"number")}
+    ${field("Commits","commits",p.commits,"number")}${field("Date source","date_source",p.date_source,"select",{choices:["git","approx","manual"]})}
+    ${field("Description","description",p.description,"textarea")}${field("Role","role",p.role,"textarea")}
+    ${field("Tech (; separated)","tech",asList(p.tech).join("; "),"textarea")}${field("Highlights (; separated)","highlights",asList(p.highlights).join("; "),"textarea")}</div>`;
+  openModal();
+}
+function openDay(dateStr){ let r=engagement().find(x=>x.date===dateStr);
+  if(!r) r={date:dateStr,day:parse(dateStr).toLocaleDateString(undefined,{weekday:"long"}),work_type:"WFH",location:"",hotel:"",check_in:"",check_out:"",travel:"",notes:"",linked_project:"",source:"manual"};
+  modalCtx={kind:"day",date:dateStr};
+  document.getElementById("modal-title").textContent="Engagement — "+fmt(dateStr)+" ("+(r.day||"")+")";
+  document.getElementById("modal-delete").classList.remove("hidden");
+  const pc=[""].concat(projects().filter(p=>p.type==="project").map(p=>p.id));
+  document.getElementById("modal-body").innerHTML=`<div class="form-grid">
+    ${field("Work type","work_type",r.work_type,"select",{choices:["Office","Discussion","WFH","Leave",""]})}${field("Location","location",r.location)}
+    ${field("Hotel","hotel",r.hotel)}${field("Travel","travel",r.travel,"text",{full:true})}
+    ${field("Check-in","check_in",r.check_in)}${field("Check-out","check_out",r.check_out)}
+    ${field("Linked project","linked_project",r.linked_project,"select",{choices:pc})}${field("Source","source",r.source,"select",{choices:["csv","derived","manual","needs-fill"]})}
+    ${field("Notes","notes",r.notes,"textarea")}</div>`;
+  openModal();
+}
+function openModal(){ modal.classList.add("open"); if(lenis) lenis.stop(); const f=modal.querySelector("#modal-body input,#modal-body select,#modal-body textarea"); if(f) f.focus(); }
+function closeModal(){ modal.classList.remove("open"); if(lenis) lenis.start(); modalCtx=null; }
+function readForm(){ const o={}; modal.querySelectorAll("[name]").forEach(el=>o[el.name]=el.value); return o; }
+document.getElementById("modal-cancel").addEventListener("click",closeModal);
+modal.addEventListener("click",e=>{ if(e.target===modal) closeModal(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&modal.classList.contains("open")) closeModal(); });
+document.getElementById("modal-save").addEventListener("click",()=>{ const f=readForm(); animate=false;
+  if(modalCtx.kind==="project"){ const p=projects().find(x=>x.id===modalCtx.id);
+    Object.assign(p,{name:f.name,category:f.category,status:f.status,start:f.start,end:f.end.trim()||"ongoing",progress:+f.progress||0,commits:+f.commits||0,date_source:f.date_source,description:f.description,role:f.role,tech:asList(f.tech),highlights:asList(f.highlights)});
+  } else { let r=engagement().find(x=>x.date===modalCtx.date);
+    if(!r){ r={date:modalCtx.date}; DB.engagement.push(r); DB.engagement.sort((a,b)=>a.date.localeCompare(b.date)); }
+    Object.assign(r,{day:r.day||parse(modalCtx.date).toLocaleDateString(undefined,{weekday:"long"}),work_type:f.work_type,location:f.location,hotel:f.hotel,travel:f.travel,check_in:f.check_in,check_out:f.check_out,linked_project:f.linked_project,notes:f.notes,source:f.source}); }
+  persist(); closeModal(); renderAll();
+});
+document.getElementById("modal-delete").addEventListener("click",()=>{ if(!confirm("Delete this entry?")) return; animate=false;
+  if(modalCtx.kind==="project") DB.projects=projects().filter(p=>p.id!==modalCtx.id&&p.parent_id!==modalCtx.id);
+  else DB.engagement=engagement().filter(r=>r.date!==modalCtx.date);
+  persist(); closeModal(); renderAll();
+});
+document.getElementById("btn-add").addEventListener("click",()=>{
+  if(!document.getElementById("view-projects").hidden){ const id="proj-"+Date.now(); animate=false;
+    DB.projects.push({id,parent_id:"",type:"project",name:"New project",category:"Graylinx Core",description:"",role:"",tech:[],start:TODAY,end:"ongoing",date_source:"manual",status:"Active",progress:0,commits:0,location:"",highlights:[],links:"",notes:""});
+    persist(); renderAll(); openProject(id);
+  } else openDay(TODAY);
+});
+
+/* ===================== Export / Import / Theme / Print ===================== */
+function download(name,text,type){ const b=new Blob([text],{type}),u=URL.createObjectURL(b),a=document.createElement("a"); a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u); }
+function toCSV(cols,rows){ const q=v=>{ v=Array.isArray(v)?v.join("; "):(v==null?"":String(v)); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }; return cols.join(",")+"\n"+rows.map(r=>cols.map(c=>q(r[c])).join(",")).join("\n"); }
+const PCOLS=["id","parent_id","type","name","category","description","role","tech","start","end","date_source","status","progress","commits","location","highlights","links","notes"];
+const ECOLS=["date","day","work_type","location","hotel","check_in","check_out","travel","notes","linked_project","source"];
+document.getElementById("btn-export").addEventListener("click",()=>{ const w=prompt("Export:  'csv' (projects), 'eng' (engagement), or 'json'","csv"); if(!w) return;
+  if(w==="json") download("works.json",JSON.stringify(DB,null,2),"application/json");
+  else if(w==="eng") download("engagement.csv",toCSV(ECOLS,engagement()),"text/csv");
+  else download("works.csv",toCSV(PCOLS,projects()),"text/csv"); });
+document.getElementById("btn-import").addEventListener("click",()=>document.getElementById("file-input").click());
+document.getElementById("file-input").addEventListener("change",e=>{ const file=e.target.files[0]; if(!file) return; const rd=new FileReader();
+  rd.onload=()=>{ try{ animate=false;
+    if(file.name.endsWith(".json")){ const d=JSON.parse(rd.result); if(d.projects||d.engagement) DB=d; else { alert("JSON must contain projects/engagement."); return; } }
+    else importCSV(rd.result); persist(); renderAll(); alert("Imported "+file.name);
+  }catch(err){ alert("Import failed: "+err.message); } };
+  rd.readAsText(file); e.target.value=""; });
+function importCSV(text){ const rows=parseCSV(text); if(!rows.length) return;
+  const head=rows[0].map(h=>h.trim()),objs=rows.slice(1).map(r=>{ const o={}; head.forEach((h,i)=>o[h]=r[i]); return o; });
+  if(head.includes("date")&&head.includes("work_type")) DB.engagement=objs;
+  else { objs.forEach(o=>{ o.tech=asList(o.tech); o.highlights=asList(o.highlights); o.progress=+o.progress||0; o.commits=+o.commits||0; }); DB.projects=objs; } }
+function parseCSV(text){ const rows=[]; let row=[],cur="",q=false;
+  for(let i=0;i<text.length;i++){ const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
+    else { if(c==='"') q=true; else if(c===","){ row.push(cur); cur=""; } else if(c==="\n"){ row.push(cur); rows.push(row); row=[]; cur=""; } else if(c!=="\r") cur+=c; } }
+  if(cur||row.length){ row.push(cur); rows.push(row); } return rows.filter(r=>r.some(c=>c.trim())); }
+document.getElementById("btn-print").addEventListener("click",()=>window.print());
+document.getElementById("btn-reset").addEventListener("click",()=>{ if(confirm("Discard local edits and reload the seed data?")){ localStorage.removeItem(STORE_KEY); DB=clone(SEED); animate=true; renderAll(); } });
+document.getElementById("btn-theme").addEventListener("click",()=>{ const cur=document.documentElement.getAttribute("data-theme"),next=cur==="dark"?"light":(cur==="light"?"auto":"dark");
+  document.documentElement.setAttribute("data-theme",next); try{localStorage.setItem("glx-theme",next);}catch(e){} animate=false; renderAll(); });
+(function(){ try{const t=localStorage.getItem("glx-theme"); if(t) document.documentElement.setAttribute("data-theme",t);}catch(e){} })();
+
+/* ===================== Lenis smooth scroll + progress + parallax ===================== */
+let lenis=null;
+const progressBar=document.querySelector("#progress > i"), appbar=document.getElementById("appbar"), brand=document.getElementById("brand"), orbs=document.getElementById("orbs");
+function onScroll(st){ const h=document.documentElement.scrollHeight-innerHeight; const k=h>0?Math.min(1,st/h):0;
+  progressBar.style.transform="scaleX("+k+")"; appbar.classList.toggle("scrolled", st>8);
+  if(!RM){ if(orbs) orbs.style.transform="translateY("+(st*0.18)+"px)"; if(brand) brand.style.transform="translateY("+Math.min(st*0.04,6)+"px)"; } }
+if(!RM && window.Lenis){
+  lenis=new Lenis({duration:1.05,smoothWheel:true,wheelMultiplier:1});
+  lenis.on("scroll",e=>onScroll(e.scroll||e.animatedScroll||scrollY));
+  (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(0);
+} else { addEventListener("scroll",()=>onScroll(scrollY),{passive:true}); }
+
+/* ===================== Tabs / filters / boot ===================== */
+function selectTab(which){ const pj=which==="projects";
+  document.getElementById("tab-projects").setAttribute("aria-selected",pj);
+  document.getElementById("tab-engagement").setAttribute("aria-selected",!pj);
+  document.getElementById("view-projects").hidden=!pj; document.getElementById("view-engagement").hidden=pj; animate=true; renderAll(); }
+document.getElementById("tab-projects").addEventListener("click",()=>selectTab("projects"));
+document.getElementById("tab-engagement").addEventListener("click",()=>selectTab("engagement"));
+function initFilters(){
+  const cats=[...new Set(projects().filter(p=>p.type==="project").map(p=>p.category))].sort();
+  document.getElementById("f-cat").innerHTML=`<option value="">All categories</option>`+cats.map(c=>`<option>${esc(c)}</option>`).join("");
+  document.getElementById("f-status").innerHTML=`<option value="">All statuses</option>`+STATUS_LIST.map(s=>`<option>${esc(s)}</option>`).join("");
+  ["f-cat","f-status","f-sort","f-search"].forEach(id=>document.getElementById(id).addEventListener(id==="f-search"?"input":"change",()=>{animate=false;renderGantt();renderCards();}));
+  ["e-search","e-filter"].forEach(id=>document.getElementById(id).addEventListener(id==="e-search"?"input":"change",()=>renderDayList()));
+}
+function renderAll(){ renderStats(); renderStatusLegend(); renderGantt(); renderCards(); renderEngStats(); renderCalendar(); renderDayList(); }
+paintIcons(); initFilters(); renderAll();
+</script>
+</body>
+</html>

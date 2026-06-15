@@ -1,0 +1,25 @@
+# Netlify deploy config — static showcase, no build step.
+# The dashboard's data is embedded as seed JSON in index.html, so we just
+# publish the pre-assembled `public/` directory (built by build_tracker.py).
+
+[build]
+  publish = "public"
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache the vendored library; always revalidate the HTML.
+[[headers]]
+  for = "/lenis.min.js"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
