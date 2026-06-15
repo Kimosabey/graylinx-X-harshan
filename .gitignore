@@ -5,6 +5,11 @@ __pycache__/
 # Tooling / local config
 .claude/
 
+# Design handoff (kept on disk, not tracked) + scratch
+_handoff/
+_gitscan.json
+*.zip
+
 # Netlify
 .netlify/
 
