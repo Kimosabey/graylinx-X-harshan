@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Tooling / local config
+.claude/
+
+# Netlify
+.netlify/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp

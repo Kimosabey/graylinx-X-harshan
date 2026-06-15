@@ -1,0 +1,64 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../clima-stream-hvac"
+		},
+		{
+			"path": "../concept-standard"
+		},
+		{
+			"path": "../Current Works in GL"
+		},
+		{
+			"path": "../Docs"
+		},
+		{
+			"path": "../farmer-app"
+		},
+		{
+			"path": "../gl-pbs-simulation"
+		},
+		{
+			"path": "../gl-pulse"
+		},
+		{
+			"path": "../graylinx-v2"
+		},
+		{
+			"path": "../HVAC AI Operations Intelligence Platform"
+		},
+		{
+			"path": "../kimo-ssh-keys"
+		},
+		{
+			"path": "../konva"
+		},
+		{
+			"path": "../mysql-unicharm-proxy"
+		},
+		{
+			"path": "../python-etl"
+		},
+		{
+			"path": "../Rasberry-stuffs"
+		},
+		{
+			"path": "../selfaware-dev-stack"
+		},
+		{
+			"path": "../The SelfAware® Intelligence Suite"
+		},
+		{
+			"path": "../travel-app"
+		},
+		{
+			"path": "../VOXARA AI"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Graylinx X Harshan"
+	}
+}
