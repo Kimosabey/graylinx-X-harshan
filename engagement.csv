@@ -1,0 +1,49 @@
+﻿date,day,work_type,location,hotel,check_in,check_out,travel,notes,linked_project,source
+2026-04-22,Wednesday,Discussion,Graylinx Office Bangalore,,11:00 AM,2:00 PM,Mysore to Bangalore and return,Initial deployment and coordination discussion with Graylinx team,current-works,csv
+2026-04-27,Monday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Mysore to Bangalore,Started office deployment and stayed at hotel near office,current-works,csv
+2026-04-28,Tuesday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Stayed in Bangalore,Continued office work and architecture discussions,current-works,csv
+2026-04-29,Wednesday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Stayed in Bangalore,Regular office work and coordination discussions,current-works,csv
+2026-04-30,Thursday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Bangalore to Mysore,Returned to Mysore due to Friday leave,,csv
+2026-05-01,Friday,Leave,Mysore,,Leave,Leave,Stayed in Mysore,Friday leave and rest day,,csv
+2026-05-04,Monday,Discussion,NA Group Office Mysore,,10:00 AM,6:00 PM,Local travel within Mysore,PRD discussion regarding HVAC systems and architecture modules with Vishnu,omnyx,csv
+2026-05-05,Tuesday,Discussion,NA Group Office Mysore,,10:00 AM,6:00 PM,Local travel within Mysore,Continued PRD planning and module discussions,omnyx,csv
+2026-05-06,Wednesday,Discussion,NA Group Office Mysore,,10:00 AM,6:00 PM,Local travel within Mysore,Finalized PRD discussions and architecture workflows,omnyx,csv
+2026-05-08,Friday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Mysore to Bangalore,Worked with Vishnu before his Australia travel and discussed ongoing tasks,,csv
+2026-05-09,Saturday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:00 PM,Bangalore to Mysore,Returned to Mysore after architecture discussions and AI demonstrations,thermynx,csv
+2026-05-10,Sunday,WFH,Mysore,,10:00 AM,5:00 PM,Worked from Mysore residence,Continued assigned tasks remotely and coordinated pending work,,csv
+2026-05-11,Monday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Existing BACnet simulation flow understanding discussions with team,gl-pbs,csv
+2026-05-12,Tuesday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,BACnet device simulation and UI analysis discussions along with recruitment coordination,gl-pbs,csv
+2026-05-13,Wednesday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Interface and workflow architecture study and recruitment activities,omnyx,csv
+2026-05-14,Thursday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Technical coordination discussions ETL follow-ups and recruitment process handling,python-etl,csv
+2026-05-15,Friday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Transformer layer follow-up discussions and recruitment coordination activities,python-etl,csv
+2026-05-16,Saturday,WFH,Mysore,,10:00 AM,5:00 PM,Worked from Mysore residence,ETL and conversion workflow discussions along with interview coordination,python-etl,csv
+2026-05-17,Sunday,WFH,Mysore,,10:00 AM,4:00 PM,Worked from Mysore residence,Pending task coordination architecture planning and recruitment follow-ups,current-works,csv
+2026-05-18,Monday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Continued ETL transformer layer planning discussions and recruitment activities,python-etl,csv
+2026-05-19,Tuesday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Follow-up discussions architecture coordination and recruitment processes,current-works,csv
+2026-05-20,Wednesday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Continued ETL transformer planning pending clarifications and recruitment coordination,python-etl,csv
+2026-05-21,Thursday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Technical discussions implementation planning and interview coordination,current-works,csv
+2026-05-22,Friday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Continued project coordination follow-ups and recruitment activities,current-works,csv
+2026-05-23,Saturday,WFH,Mysore,,10:00 AM,5:00 PM,Worked from Mysore residence,Ongoing ETL architecture planning discussions and recruitment work,python-etl,csv
+2026-05-24,Sunday,WFH,Mysore,,10:00 AM,4:00 PM,Worked from Mysore residence,Pending workflow coordination architecture discussions and recruitment coordination,current-works,csv
+2026-05-25,Monday,WFH,Mysore,,10:00 AM,6:00 PM,Worked from Mysore residence,Continued follow-ups project discussions and recruitment coordination,current-works,csv
+2026-05-26,Tuesday,,,,,,,,,needs-fill
+2026-05-27,Wednesday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-05-28,Thursday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-05-29,Friday,,,,,,,,,needs-fill
+2026-05-30,Saturday,,,,,,,,,needs-fill
+2026-05-31,Sunday,,,,,,,,,needs-fill
+2026-06-01,Monday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-02,Tuesday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-03,Wednesday,WFH,Mysore (residence),,,,,Development activity on TripTrail — Travel & Expense (RANGSONS) (auto-derived from git).,travel-app,derived
+2026-06-04,Thursday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-05,Friday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-06,Saturday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-07,Sunday,,,,,,,,,needs-fill
+2026-06-08,Monday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-09,Tuesday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-10,Wednesday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-11,Thursday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-12,Friday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-13,Saturday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
+2026-06-14,Sunday,,,,,,,,,needs-fill
+2026-06-15,Monday,WFH,Mysore (residence),,,,,Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).,thermynx,derived
