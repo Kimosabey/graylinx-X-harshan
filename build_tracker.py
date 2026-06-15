@@ -100,7 +100,7 @@ PROJECTS = [
     },
     {
         "id": "omnyx", "name": "OMNYX — Universal IoT Operations Platform",
-        "dir": "graylinx-v2", "git": False,
+        "dir": "graylinx-v2", "git": True,
         "category": "HVAC Platform", "status": "Active", "progress": 35,
         "description": "Next-gen production platform vision: Digital-Twin FDD, RL optimization, Agentic AI, dual-database architecture.",
         "role": "Architecture & platform design — the strategic north star consolidating the POCs.",
@@ -169,13 +169,20 @@ PROJECTS = [
     },
     {
         "id": "selfaware-suite", "name": "The SelfAware® Intelligence Suite",
-        "dir": "The SelfAware® Intelligence Suite", "git": False,
-        "category": "SelfAware Suite", "status": "Active", "progress": 40,
-        "description": "Umbrella of 5 products: SelfAware Continuum, Hyper, audit-shield, spatial-nexus, kimo-ai-agent.",
-        "role": "Multi-product workspace — design & development across the portfolio.",
-        "tech": ["React", "Python", "Docker"],
-        "highlights": ["5 flagship products grouped locally", "Continuum, Hyper, audit-shield, spatial-nexus, kimo-ai-agent"],
-        "milestones": [],
+        "dir": "The SelfAware® Intelligence Suite", "git": True,
+        "category": "SelfAware Suite", "status": "Active", "progress": 45,
+        "description": "Six-product local-AI suite (6 repos): Continuum (HVAC intelligence), AuditShield, Autonomous-Cortex, NeuralPulse, VisioScan, SpatialNexus.",
+        "role": "Designed & built the multi-product suite across six repositories.",
+        "tech": ["React", "TypeScript", "Python", "Neo4j", "pgvector", "Ollama", "Docker"],
+        "highlights": ["6 products in one suite", "SelfAware Continuum: Unicharm + Neo4j + pgvector + Ollama"],
+        "milestones": [
+            {"name": "SelfAware Continuum — HVAC intelligence", "status": "Active", "progress": 55, "desc": "Neo4j + pgvector + Ollama"},
+            {"name": "AuditShield — Compliance Ledger", "status": "Done", "progress": 100, "desc": "Compliance ledger"},
+            {"name": "Autonomous-Cortex — Mission Console", "status": "Done", "progress": 100, "desc": "Mission console"},
+            {"name": "NeuralPulse — Signal Lab", "status": "Done", "progress": 100, "desc": "Signal lab"},
+            {"name": "VisioScan — Light Studio", "status": "Done", "progress": 100, "desc": "Light studio"},
+            {"name": "SpatialNexus — Topology Atlas", "status": "Done", "progress": 100, "desc": "Topology atlas"},
+        ],
     },
     {
         "id": "concept-standard", "name": "Concept Standard — Graph Analytics",
@@ -218,13 +225,13 @@ PROJECTS = [
         "milestones": [],
     },
     {
-        "id": "farmer-app", "name": "Farmer App",
-        "dir": "farmer-app", "git": False,
-        "category": "Client Apps", "status": "Planned", "progress": 5,
-        "description": "Early/placeholder project.",
-        "role": "Initial scaffolding.",
-        "tech": [],
-        "highlights": ["Placeholder — minimal contents"],
+        "id": "farmer-app", "name": "Nesso — Farm Traceability Platform",
+        "dir": "farmer-app", "git": True,
+        "category": "Client Apps", "status": "Active", "progress": 45,
+        "description": "Farm-to-fork traceability platform for NR Group (Nesso).",
+        "role": "Built the traceability web app — including a weekend build sprint (30–31 May).",
+        "tech": ["TypeScript", "React", "Node.js"],
+        "highlights": ["Farm-to-fork traceability (NR Group)", "~1-week build incl. weekend sprint"],
         "milestones": [],
     },
     {
@@ -326,6 +333,70 @@ def git_dates(path):
     return dates[0], dates[-1], count, set(dates)
 
 
+# --- nested-repo discovery (catches repos like graylinx-v2/omnyx, the SelfAware
+#     sub-repos, farmer-app/nesso-...) so their real git dates/commits + weekend
+#     activity are captured, not just top-level repos. ----------------------------
+_REPO_CACHE = {}
+_ALL_REPOS = None
+
+
+def discover_repos(max_depth=3):
+    """All git repos under BASE (depth<=max_depth), excluding the tracker repo (OUT_DIR)."""
+    repos = []
+    skip = {"node_modules", ".next", "dist", "build", "__pycache__", ".venv", "venv"}
+    base_depth = BASE.rstrip(os.sep).count(os.sep)
+    for root, dirs, files in os.walk(BASE):
+        if root.rstrip(os.sep).count(os.sep) - base_depth > max_depth:
+            dirs[:] = []
+            continue
+        if ".git" in dirs and os.path.abspath(root) != os.path.abspath(OUT_DIR):
+            repos.append(root)
+        dirs[:] = [d for d in dirs if d not in skip and d != ".git"]
+    return repos
+
+
+def all_repos():
+    global _ALL_REPOS
+    if _ALL_REPOS is None:
+        _ALL_REPOS = discover_repos()
+    return _ALL_REPOS
+
+
+def repo_dates(repo):
+    """(commit_count, set_of_iso_dates) of Harshan's commits in one repo (cached)."""
+    if repo in _REPO_CACHE:
+        return _REPO_CACHE[repo]
+    raw = _run(["git", "-C", repo, "log", "--all", "-i", "--author=harshan",
+                "--date=short", "--format=%ad"])
+    dates = {ln.strip() for ln in raw.splitlines() if ln.strip() and ln.strip()[0].isdigit()}
+    cnt = _run(["git", "-C", repo, "rev-list", "--all", "--count", "-i", "--author=harshan"]).strip()
+    try:
+        count = int(cnt)
+    except ValueError:
+        count = len(dates)
+    _REPO_CACHE[repo] = (count, dates)
+    return _REPO_CACHE[repo]
+
+
+def git_for_project(project_dir):
+    """Aggregate Harshan's git history across a project dir and any nested repos.
+    Returns (start, end, total_commits, set_of_dates) or None."""
+    if not project_dir:
+        return None
+    pd = os.path.abspath(project_dir)
+    dates, total = set(), 0
+    for repo in all_repos():
+        rp = os.path.abspath(repo)
+        if rp == pd or rp.startswith(pd + os.sep):
+            c, ds = repo_dates(repo)
+            dates |= ds
+            total += c
+    if not dates:
+        return None
+    sd = sorted(dates)
+    return sd[0], sd[-1], total, dates
+
+
 def mtime_dates(path, max_depth=2):
     """Estimate (start, end) from oldest/newest file mtime, ignoring noise dirs."""
     if not os.path.isdir(path):
@@ -372,8 +443,8 @@ def build_projects():
             start = p["override"]["start"]
             end = p["override"]["end"]
             source = p["override"].get("source", "manual")
-        elif p.get("git") and path:
-            g = git_dates(path)
+        else:
+            g = git_for_project(path)   # auto-detect, incl. nested repos
             if g:
                 start, end, commits, active = g[0], g[1], g[2], g[3]
                 source = "git"
@@ -465,14 +536,19 @@ def carry_forward(att, projects):
     have = {r["date"] for r in att}
     last = max(datetime.fromisoformat(r["date"]).date() for r in att)
 
-    # map iso-date -> project id from git active dates (re-read repos)
+    # map iso-date -> project id across ALL repos (incl. nested), nearest project dir.
+    # This captures weekend (Sat/Sun) commits in graylinx-v2/omnyx, farmer-app/nesso, etc.
+    proj_dirs = sorted(
+        [(os.path.abspath(os.path.join(BASE, p["dir"])), p["id"]) for p in PROJECTS if p.get("dir")],
+        key=lambda t: len(t[0]), reverse=True)
     git_day = {}
-    for p in PROJECTS:
-        if p.get("git") and p.get("dir"):
-            g = git_dates(os.path.join(BASE, p["dir"]))
-            if g:
-                for ds in g[3]:
-                    git_day.setdefault(ds, p["id"])
+    for repo in all_repos():
+        rp = os.path.abspath(repo)
+        pid = next((pid for d, pid in proj_dirs if rp == d or rp.startswith(d + os.sep)), "")
+        if not pid:
+            continue
+        for ds in repo_dates(repo)[1]:
+            git_day.setdefault(ds, pid)
 
     extra = []
     d = last + timedelta(days=1)
