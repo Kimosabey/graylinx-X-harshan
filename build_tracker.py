@@ -682,6 +682,27 @@ def write_xlsx(path, projects, engagement):
 
     wb.remove(wb["Sheet"])
     wb.save(path)
+    _normalize_xlsx(path)
+
+
+def _normalize_xlsx(path):
+    """Rewrite the .xlsx zip with fixed member timestamps + sorted order so the
+    bytes are reproducible across rebuilds (avoids meaningless git churn)."""
+    import zipfile
+    fixed = (2026, 6, 15, 0, 0, 0)
+    with zipfile.ZipFile(path) as zin:
+        items = sorted(zin.infolist(), key=lambda i: i.filename)
+        blobs = [(i.filename, i.external_attr, zin.read(i.filename)) for i in items]
+    tmp = path + ".tmp"
+    with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
+        for name, attr, data in blobs:
+            if name == "docProps/core.xml":   # openpyxl writes real save-time here
+                data = re.sub(rb"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", b"2026-06-15T00:00:00Z", data)
+            zi = zipfile.ZipInfo(name, fixed)
+            zi.compress_type = zipfile.ZIP_DEFLATED
+            zi.external_attr = attr
+            zout.writestr(zi, data)
+    os.replace(tmp, path)
 
 
 def _tint(hexv, amount=0.86):
