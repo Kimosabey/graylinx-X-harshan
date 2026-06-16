@@ -234,6 +234,57 @@ main{max-width:1340px;margin:0 auto;padding:var(--pad)}
 .stat .lbl{font-size:11px;color:var(--ink2);margin-top:8px;text-transform:uppercase;letter-spacing:.7px}
 .stat .meta{font-size:11.5px;color:var(--ink3);margin-top:3px}
 
+/* ===================== Bento Overview ===================== */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);grid-auto-rows:minmax(116px,auto)}
+.bt{background:var(--card);border-radius:var(--radius);box-shadow:var(--raise);padding:clamp(15px,1.8vw,20px);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;transition:box-shadow .2s var(--ease),transform .2s var(--ease)}
+.bt:hover{box-shadow:var(--raise-hi);transform:translateY(-2px)}
+.bt h3{margin:0;font-size:10.5px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.7px}
+.bt .big{font-family:var(--font-display);font-weight:740;letter-spacing:-1px;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.bt .big-sm{font-size:clamp(26px,4vw,40px)}
+.bt .sub{font-size:12px;color:var(--ink3)}
+.bt::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tile-acc,transparent)}
+.bt-accent{--tile-acc:var(--acc)}
+.bt-hero{grid-column:span 2;grid-row:span 2}
+.bt-hero .big{font-size:clamp(40px,8vw,74px)}
+.bt-wide{grid-column:span 2}
+.bt-full{grid-column:1/-1}
+.bt .toplist{display:flex;flex-direction:column;gap:6px;margin-top:auto;font-size:12.5px}
+.bt .toplist .tl{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;color:var(--ink2)}
+.bt .toplist .tl b{color:var(--ink);font-variant-numeric:tabular-nums}
+/* hero sparkline */
+.spark{margin-top:auto;width:100%;height:52px;display:block;overflow:visible}
+.spark .line{fill:none;stroke:var(--acc);stroke-width:2.5;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+.spark .area{fill:color-mix(in srgb,var(--acc) 15%,transparent);stroke:none}
+/* digit-roll odometer */
+.droll{display:inline-block;height:1em;overflow:hidden;vertical-align:bottom;line-height:1}
+.droll .dcol{display:flex;flex-direction:column;transition:transform 1.05s var(--ease-spring)}
+.droll .dcol>span{height:1em;line-height:1}
+.d-sep{display:inline-block}
+/* mini category donut (pure CSS conic) */
+.bt-donut .row{display:flex;gap:14px;align-items:center;margin-top:auto}
+.minidonut{--sz:104px;width:var(--sz);height:var(--sz);border-radius:50%;position:relative;flex:none}
+.minidonut::after{content:"";position:absolute;inset:26%;border-radius:50%;background:var(--card)}
+.donut-legend{display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--ink2);min-width:0}
+.donut-legend span{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.donut-legend i{width:9px;height:9px;border-radius:3px;flex:none}
+/* mini commit heatmap */
+.miniheat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;margin-top:auto}
+.miniheat i{aspect-ratio:1;border-radius:2px;box-shadow:var(--inset-sm)}
+/* scope mini bars */
+.scopebars{display:flex;flex-direction:column;gap:8px;margin-top:auto;font-size:11.5px}
+.scopebars .sb{display:grid;grid-template-columns:58px 1fr 22px;gap:9px;align-items:center;color:var(--ink2)}
+.scopebars .sb .t{height:8px;border-radius:5px;box-shadow:var(--inset-sm);overflow:hidden}
+.scopebars .sb .t i{display:block;height:100%;border-radius:5px;background:var(--sc,var(--acc));width:0;transition:width .85s var(--ease)}
+.scopebars .sb .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:640}
+@media (max-width:780px){.bento{grid-template-columns:repeat(2,1fr)}.bt-hero{grid-column:span 2;grid-row:auto}.bt-hero .big{font-size:clamp(40px,12vw,66px)}}
+@media (max-width:460px){.bento{grid-template-columns:1fr}.bt-hero,.bt-wide{grid-column:span 1}}
+
+/* scroll-reveal (applied to bento tiles; disabled under reduced-motion) */
+[data-reveal]{opacity:0;transform:translateY(14px)}
+[data-reveal].in{opacity:1;transform:none;transition:opacity .5s var(--ease-out),transform .55s var(--ease-out)}
+@media (prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none}}
+
 /* ----------------------------- tabs --------------------------------- */
 .tabs{position:sticky;top:calc(var(--appbar) - 4px);z-index:40;display:inline-flex;gap:6px;margin-bottom:22px;
   background:var(--card);padding:7px;border-radius:16px;box-shadow:var(--inset);max-width:100%;overflow-x:auto}
@@ -514,16 +565,21 @@ button.hc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 </header>
 
 <main id="main">
-  <section class="stats" id="stats" aria-label="Summary statistics"></section>
+  <section class="stats hidden" id="stats" aria-label="Summary statistics"></section>
 
   <div class="tabs" role="tablist" aria-label="Views">
-    <button class="tab" id="tab-projects" role="tab" aria-selected="true" aria-controls="view-projects"><span class="ic" data-icon="grid"></span> Projects</button>
+    <button class="tab" id="tab-overview" role="tab" aria-selected="true" aria-controls="view-overview"><span class="ic" data-icon="layout"></span> Overview</button>
+    <button class="tab" id="tab-projects" role="tab" aria-selected="false" aria-controls="view-projects" tabindex="-1"><span class="ic" data-icon="grid"></span> Projects</button>
     <button class="tab" id="tab-timeline" role="tab" aria-selected="false" aria-controls="view-timeline" tabindex="-1"><span class="ic" data-icon="chart"></span> Timeline</button>
     <button class="tab" id="tab-engagement" role="tab" aria-selected="false" aria-controls="view-engagement" tabindex="-1"><span class="ic" data-icon="calendar"></span> Engagement &amp; Deployment</button>
     <button class="tab" id="tab-analytics" role="tab" aria-selected="false" aria-controls="view-analytics" tabindex="-1"><span class="ic" data-icon="activity"></span> Analytics</button>
   </div>
 
-  <section id="view-projects" role="tabpanel" aria-labelledby="tab-projects">
+  <section id="view-overview" role="tabpanel" aria-labelledby="tab-overview">
+    <div class="bento" id="bento"></div>
+  </section>
+
+  <section id="view-projects" role="tabpanel" aria-labelledby="tab-projects" hidden>
     <div class="toolbar no-print">
       <div class="field"><label for="f-cat">Category</label><select id="f-cat"><option value="">All categories</option></select></div>
       <div class="field"><label for="f-scope">Scope</label><select id="f-scope">
@@ -630,6 +686,7 @@ const ICONS={
   commit:'<circle cx="12" cy="12" r="3"/><line x1="3" x2="9" y1="12" y2="12"/><line x1="15" x2="21" y1="12" y2="12"/>',
   rows:'<rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/>',
   grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  layout:'<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
   inbox:'<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
   activity:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
@@ -690,8 +747,75 @@ function renderStats(){
     ["Projects",ps.length,cats+" categories"],["Active / Ongoing",active,"in progress"],
     ["Delivered",done,"completed"],["Total commits",commits,"across git repos"],
   ]);
-  document.getElementById("span-sub").textContent="Engagement "+fmt(span)+" → "+fmt(TODAY)+" · "+ps.length+" projects";
+  /* subtitle reflects the PROJECT span (span_start = earliest project), not attendance — so it's labelled "Work".
+     The Engagement tab's own calendar/stats cover the real attendance window (Apr–Jun 2026). */
+  document.getElementById("span-sub").textContent="Work "+fmt(span)+" → "+fmt(TODAY)+" · "+ps.length+" projects";
   document.getElementById("foot-meta").textContent="Generated "+((SEED.meta&&SEED.meta.generated)||TODAY)+" · "+ps.length+" projects · "+engagement().length+" engagement days";
+}
+
+/* ===================== Bento Overview ===================== */
+function rollNumber(el,value){ const s=String(value);
+  if(RM||!/^\d+$/.test(s)){ el.textContent=s; return; }
+  el.innerHTML=s.split("").map(()=>`<span class="droll"><span class="dcol">${"0123456789".split("").map(d=>`<span>${d}</span>`).join("")}</span></span>`).join("");
+  const cols=el.querySelectorAll(".droll .dcol");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ s.split("").forEach((d,i)=>{ if(cols[i]) cols[i].style.transform=`translateY(-${(+d)*10}%)`; }); }));
+}
+function sparkSVG(pairs){ if(!pairs||!pairs.length) return "";
+  let acc=0; const ys=pairs.map(p=>(acc+=p[1])); const n=ys.length,max=Math.max(1,ys[n-1]),W=100,H=30;
+  const pts=ys.map((y,i)=>[(n>1?i/(n-1)*W:0),H-(y/max)*H]);
+  const line=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(2)+" "+p[1].toFixed(2)).join(" ");
+  const area=`M0 ${H} `+pts.map(p=>"L"+p[0].toFixed(2)+" "+p[1].toFixed(2)).join(" ")+` L${W} ${H} Z`;
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path class="area" d="${area}"/><path class="line" d="${line}"/></svg>`;
+}
+function miniDonut(cats){ const tot=cats.reduce((a,c)=>a+c[1],0)||1; let acc=0; const segs=[];
+  cats.forEach(([name,v])=>{ const a0=acc/tot*360,a1=(acc+v)/tot*360; acc+=v; segs.push(`${catColor(name)} ${a0.toFixed(1)}deg ${a1.toFixed(1)}deg`); });
+  return `conic-gradient(${segs.join(",")})`; }
+function scopeColor(k){ return k==="Graylinx"?"var(--acc)":(k==="Personal"?"var(--wt-disc)":"var(--st-paused)"); }
+function renderOverview(){
+  const bento=document.getElementById("bento"); if(!bento) return;
+  const a=(SEED.meta&&SEED.meta.analytics)||{}, st=(SEED.meta&&SEED.meta.stats)||{};
+  const ps=projects().filter(p=>p.type==="project");
+  const total=st.total_commits!=null?st.total_commits:ps.reduce((x,p)=>x+(+p.commits||0),0);
+  const cats=new Set(ps.map(p=>p.category)).size, bd=a.busiest_day||{};
+  const byCat=(a.commits_by_category||[]).filter(c=>c[1]>0), byScope=a.projects_by_scope||[];
+  const t=[];
+  t.push(`<div class="bt bt-hero bt-accent" data-reveal><h3>Total commits</h3>
+    <div class="big" data-roll="${total}">${total}</div>
+    <div class="sub">${a.active_commit_days||0} active days · ${fmt(SEED.meta.span_start)} → ${fmt(TODAY)}</div>
+    ${sparkSVG(a.per_day||[])}</div>`);
+  t.push(`<div class="bt" data-reveal><h3>Longest streak</h3><div class="big big-sm" data-count="${a.longest_streak||0}">${a.longest_streak||0}</div><div class="sub">days in a row</div></div>`);
+  t.push(`<div class="bt" data-reveal><h3>Busiest day</h3><div class="big big-sm" data-count="${bd.commits||0}">${bd.commits||0}</div><div class="sub">${fmt(bd.date)}</div></div>`);
+  t.push(`<div class="bt" data-reveal><h3>Commits / day</h3><div class="big big-sm">${a.commits_per_active_day!=null?a.commits_per_active_day:0}</div><div class="sub">per active day</div></div>`);
+  t.push(`<div class="bt" data-reveal><h3>Projects</h3><div class="big big-sm" data-count="${ps.length}">${ps.length}</div><div class="sub">${cats} categories</div>
+    <div class="scopebars">${byScope.map(([k,v])=>`<div class="sb"><span>${esc(k)}</span><span class="t"><i data-w="${Math.round(v/Math.max(1,ps.length)*100)}" style="background:${scopeColor(k)}"></i></span><span class="v">${v}</span></div>`).join("")}</div></div>`);
+  t.push(`<div class="bt bt-wide" data-reveal><h3>Top projects by commits</h3>
+    <div class="toplist">${(a.commits_by_project||[]).slice(0,5).map(([n,c])=>`<div class="tl"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(n)}</span><b>${c}</b></div>`).join("")}</div></div>`);
+  t.push(`<div class="bt bt-wide bt-donut" data-reveal><h3>Effort by category</h3>
+    <div class="row"><div class="minidonut" style="background:${miniDonut(byCat)}" role="img" aria-label="Commits by category"></div>
+    <div class="donut-legend">${byCat.map(([n,v])=>`<span><i style="background:${catColor(n)}"></i>${esc(n)} · ${v}</span>`).join("")}</div></div></div>`);
+  const pd={}; (a.per_day||[]).forEach(p=>pd[p[0]]=p[1]);
+  const end=parse(TODAY)||new Date(), days=[]; for(let i=111;i>=0;i--){ const d=new Date(end); d.setDate(d.getDate()-i); days.push(d); }
+  const cells=[]; for(let i=0;i<days[0].getDay();i++) cells.push(null); days.forEach(d=>cells.push(d));
+  const accH=cssvar("--acc")||"#0123B4", cardH=cssvar("--card")||"#ffffff", emptyH=mixHex(cssvar("--ink3")||"#888888",cardH,.86);
+  const maxc=Math.max(1,...Object.values(pd));
+  const heat=cells.map(d=>{ if(!d) return `<i style="background:transparent;box-shadow:none"></i>`;
+    const ds=d.getFullYear()+"-"+d2(d.getMonth()+1)+"-"+d2(d.getDate()), c=pd[ds]||0;
+    const col=c?mixHex(accH,cardH,1-Math.min(1,c/maxc)*.82):emptyH;
+    return `<i title="${ds}: ${c} commits" style="background:${col}"></i>`; }).join("");
+  t.push(`<div class="bt bt-full" data-reveal><h3>Commit activity · last 16 weeks</h3><div class="miniheat">${heat}</div></div>`);
+  bento.innerHTML=t.join("");
+  const hero=bento.querySelector("[data-roll]"); if(hero) rollNumber(hero,hero.dataset.roll);
+  bento.querySelectorAll("[data-count]").forEach(n=>countUp(n,n.dataset.count));
+  requestAnimationFrame(()=>bento.querySelectorAll(".scopebars .sb i").forEach(i=>i.style.width=(i.dataset.w||0)+"%"));
+  observeReveals(bento);
+}
+/* shared scroll-reveal observer (bento tiles); disabled under reduced-motion */
+let _revObs=null;
+function observeReveals(root){
+  const els=(root||document).querySelectorAll("[data-reveal]:not(.in)");
+  if(RM){ els.forEach(e=>e.classList.add("in")); return; }
+  if(!_revObs) _revObs=new IntersectionObserver(ents=>ents.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); _revObs.unobserve(en.target); } }),{rootMargin:"0px 0px -6% 0px",threshold:.06});
+  els.forEach((e,i)=>{ e.style.transitionDelay=(Math.min(i,9)*45)+"ms"; _revObs.observe(e); });
 }
 
 /* ===================== Gantt ===================== */
@@ -1011,15 +1135,15 @@ if(!RM && window.Lenis){
 } else { addEventListener("scroll",()=>onScroll(scrollY),{passive:true}); }
 
 /* ===================== Tabs / filters / boot ===================== */
-const VIEWS=[["tab-projects","view-projects","projects"],["tab-timeline","view-timeline","timeline"],["tab-engagement","view-engagement","engagement"],["tab-analytics","view-analytics","analytics"]];
+const VIEWS=[["tab-overview","view-overview","overview"],["tab-projects","view-projects","projects"],["tab-timeline","view-timeline","timeline"],["tab-engagement","view-engagement","engagement"],["tab-analytics","view-analytics","analytics"]];
 const TAB_IDS=VIEWS.map(v=>v[0]);
 function selectTab(which,focusTab){
   VIEWS.forEach(([tid,vid,key])=>{ const sel=key===which,t=document.getElementById(tid),v=document.getElementById(vid);
     t.setAttribute("aria-selected",sel); t.tabIndex=sel?0:-1; v.hidden=!sel;
     if(sel){ if(!RM){ v.classList.remove("panel-anim"); void v.offsetWidth; v.classList.add("panel-anim"); } if(focusTab) t.focus(); } });
-  /* avoid a double stat header: Engagement & Analytics have their own contextual stat rows,
-     so hide the global summary bar there (it stays on Projects & Timeline) */
-  document.getElementById("stats").classList.toggle("hidden", which==="engagement"||which==="analytics");
+  /* one stat row per tab: the global summary bar shows only on Projects & Timeline.
+     Overview has its own hero/bento; Engagement & Analytics have their own stat rows. */
+  document.getElementById("stats").classList.toggle("hidden", !(which==="projects"||which==="timeline"));
   animate=true; renderAll();
 }
 VIEWS.forEach(([tid,,key])=>document.getElementById(tid).addEventListener("click",()=>selectTab(key)));
@@ -1103,7 +1227,7 @@ function renderAnalytics(){
     yAxis:{type:'category',data:a.projects_by_status.map(x=>x[0]),axisLine:{lineStyle:{color:t.line}},axisTick:{show:false},axisLabel:{color:t.ink2,fontSize:10.5}},
     series:[{type:'bar',barWidth:'55%',data:a.projects_by_status.map(x=>({value:x[1],itemStyle:{color:statusColor(x[0]),borderRadius:[0,5,5,0]}}))}] });
 }
-function renderAll(){ renderStats(); renderStatusLegend(); renderGantt(); renderCards(); renderEngStats(); renderCalendar(); renderDayList(); renderAnalytics(); }
+function renderAll(){ renderOverview(); renderStats(); renderStatusLegend(); renderGantt(); renderCards(); renderEngStats(); renderCalendar(); renderDayList(); renderAnalytics(); }
 
 /* ===================== Card density ===================== */
 const DENSITY_KEY="glx-density";
@@ -1120,7 +1244,9 @@ document.getElementById("den-compact").addEventListener("click",()=>applyDensity
 const cmdk=document.getElementById("cmdk"),cmdkInput=document.getElementById("cmdk-input"),cmdkList=document.getElementById("cmdk-list");
 let cmdkSel=0;
 function buildCmdk(){ const it=[
-  {t:"Go to Projects & Timeline",ic:"chart",run:()=>selectTab("projects")},
+  {t:"Go to Overview",ic:"layout",run:()=>selectTab("overview")},
+  {t:"Go to Projects",ic:"grid",run:()=>selectTab("projects")},
+  {t:"Go to Timeline",ic:"chart",run:()=>selectTab("timeline")},
   {t:"Go to Engagement & Deployment",ic:"calendar",run:()=>selectTab("engagement")},
   {t:"Go to Analytics",ic:"activity",run:()=>selectTab("analytics")},
   {t:"Toggle theme",ic:"contrast",run:()=>document.getElementById("btn-theme").click()},
@@ -1165,7 +1291,7 @@ function mixHex(a,b,w){ a=a.replace("#",""); b=b.replace("#","");
   return "#"+m(p(a,0),p(b,0))+m(p(a,2),p(b,2))+m(p(a,4),p(b,4)); }
 let _ecrz; addEventListener("resize",()=>{ clearTimeout(_ecrz); _ecrz=setTimeout(()=>{ for(const k in ECI){ try{ECI[k].resize();}catch(e){} } },150); });
 
-paintIcons(); updateThemeBtn(); initFilters(); renderAll();
+paintIcons(); updateThemeBtn(); initFilters(); selectTab("overview");
 </script>
 </body>
 </html>
