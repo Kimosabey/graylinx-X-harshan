@@ -8,7 +8,7 @@
       "projects": 21,
       "active": 8,
       "done": 8,
-      "total_commits": 903,
+      "total_commits": 904,
       "engagement_days": 55,
       "on_site_days": 10,
       "wfh_days": 44,
@@ -177,13 +177,13 @@
         ],
         [
           "2026-06-16",
-          8
+          9
         ]
       ],
       "commits_by_project": [
         [
           "THERMYNX — HVAC AI Operations Intelligence",
-          319
+          320
         ],
         [
           "OMNYX — Universal IoT Operations Platform",
@@ -225,7 +225,7 @@
       "commits_by_category": [
         [
           "HVAC Platform",
-          590
+          591
         ],
         [
           "Client Apps",
@@ -268,6 +268,20 @@
         [
           "Planned",
           2
+        ]
+      ],
+      "projects_by_scope": [
+        [
+          "Graylinx",
+          13
+        ],
+        [
+          "Personal",
+          5
+        ],
+        [
+          "Client",
+          3
         ]
       ],
       "work_type": [
@@ -323,7 +337,7 @@
         ],
         [
           "W25",
-          35
+          36
         ]
       ],
       "weekend_worked": 16,
@@ -338,7 +352,7 @@
       "hotel_nights": 6,
       "locations": 4
     },
-    "build": "95eddd7956e6"
+    "build": "f6d10a3355a6"
   },
   "projects": [
     {
@@ -347,6 +361,7 @@
       "type": "project",
       "name": "THERMYNX — HVAC AI Operations Intelligence",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "AI-powered HVAC analytics POC for the Unicharm facility — local LLM, RAG, work orders and analytics.",
       "role": "Sole engineer — full-stack build: FastAPI backend, React/TypeScript frontend, Ollama integration, analytics engine.",
       "tech": [
@@ -363,7 +378,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 319,
+      "commits": 320,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -380,6 +395,7 @@
       "type": "milestone",
       "name": "18 feature pages",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Frontend feature surface",
       "role": "",
       "tech": [],
@@ -400,6 +416,7 @@
       "type": "milestone",
       "name": "6 AI agents",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Claude/LLM agents",
       "role": "",
       "tech": [],
@@ -420,6 +437,7 @@
       "type": "milestone",
       "name": "RAG pipeline",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Retrieval over facility docs",
       "role": "",
       "tech": [],
@@ -440,6 +458,7 @@
       "type": "milestone",
       "name": "Work orders",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Work-order workflow",
       "role": "",
       "tech": [],
@@ -460,6 +479,7 @@
       "type": "milestone",
       "name": "Analytics engine",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Chiller/HVAC analytics",
       "role": "",
       "tech": [],
@@ -480,6 +500,7 @@
       "type": "project",
       "name": "ClimaStream — Real-time HVAC Pipeline",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Production-grade streaming pipeline POC: Kafka -> TimescaleDB -> Airflow -> FastAPI -> Next.js.",
       "role": "Sole engineer — designed and built the end-to-end microservice pipeline and simulator.",
       "tech": [
@@ -511,6 +532,7 @@
       "type": "milestone",
       "name": "Device simulator",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Synthetic HVAC data",
       "role": "",
       "tech": [],
@@ -531,6 +553,7 @@
       "type": "milestone",
       "name": "Kafka ingestion",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Streaming ingest",
       "role": "",
       "tech": [],
@@ -551,6 +574,7 @@
       "type": "milestone",
       "name": "TimescaleDB storage",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Time-series store",
       "role": "",
       "tech": [],
@@ -571,6 +595,7 @@
       "type": "milestone",
       "name": "ML scoring",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Anomaly/score service",
       "role": "",
       "tech": [],
@@ -591,6 +616,7 @@
       "type": "milestone",
       "name": "Next.js UI",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Frontend dashboard",
       "role": "",
       "tech": [],
@@ -611,6 +637,7 @@
       "type": "project",
       "name": "OMNYX — Universal IoT Operations Platform",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Next-gen production platform vision: Digital-Twin FDD, RL optimization, Agentic AI, dual-database architecture.",
       "role": "Architecture & platform design — the strategic north star consolidating the POCs.",
       "tech": [
@@ -643,6 +670,7 @@
       "type": "milestone",
       "name": "Digital-Twin FDD",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Fault detection & diagnostics",
       "role": "",
       "tech": [],
@@ -663,6 +691,7 @@
       "type": "milestone",
       "name": "RL optimization",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Setpoint optimization",
       "role": "",
       "tech": [],
@@ -683,6 +712,7 @@
       "type": "milestone",
       "name": "Agentic AI",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Operations agents",
       "role": "",
       "tech": [],
@@ -703,6 +733,7 @@
       "type": "milestone",
       "name": "Dual-DB architecture",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Postgres + Timescale",
       "role": "",
       "tech": [],
@@ -723,6 +754,7 @@
       "type": "project",
       "name": "GL Pulse — Platform Architecture",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Reference architecture & planning docs unifying ClimaStream, THERMYNX and OMNYX into one next-gen vision.",
       "role": "Author — architecture documentation and lessons-learned consolidation.",
       "tech": [
@@ -749,6 +781,7 @@
       "type": "project",
       "name": "GL PBS / BACnet Simulation",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "BACnet device simulator workstream (simulator dashboard lives under Current Works in GL).",
       "role": "Simulation flow study and BACnet device/UI analysis.",
       "tech": [
@@ -776,6 +809,7 @@
       "type": "project",
       "name": "Current Works in GL — Core Monorepo",
       "category": "Graylinx Core",
+      "scope": "Graylinx",
       "description": "Active Graylinx monorepo: backend/frontend, commission tool, ML trainings, simulations, Kafka stress testing.",
       "role": "Sole engineer — Kafka performance testing, cross-machine benchmarking, DB/ETL architecture audits.",
       "tech": [
@@ -806,6 +840,7 @@
       "type": "milestone",
       "name": "Kafka stress tests (150x-5000x)",
       "category": "Graylinx Core",
+      "scope": "Graylinx",
       "description": "Throughput scaling",
       "role": "",
       "tech": [],
@@ -826,6 +861,7 @@
       "type": "milestone",
       "name": "Cross-machine 24GB vs 8GB",
       "category": "Graylinx Core",
+      "scope": "Graylinx",
       "description": "Hardware comparison",
       "role": "",
       "tech": [],
@@ -846,6 +882,7 @@
       "type": "milestone",
       "name": "DB/ETL architecture audits",
       "category": "Graylinx Core",
+      "scope": "Graylinx",
       "description": "Critical-flaws reviews",
       "role": "",
       "tech": [],
@@ -866,6 +903,7 @@
       "type": "project",
       "name": "Graylinx Docs & PRD",
       "category": "Graylinx Core",
+      "scope": "Graylinx",
       "description": "Product/architecture documentation: PRD, Modules & Features (175 features), Kafka/stress reports.",
       "role": "Author/maintainer — PRD, feature inventory, architecture references.",
       "tech": [
@@ -893,6 +931,7 @@
       "type": "project",
       "name": "The SelfAware® Intelligence Suite",
       "category": "SelfAware Suite",
+      "scope": "Personal",
       "description": "Six-product local-AI suite (6 repos): Continuum (HVAC intelligence), AuditShield, Autonomous-Cortex, NeuralPulse, VisioScan, SpatialNexus.",
       "role": "Designed & built the multi-product suite across six repositories.",
       "tech": [
@@ -924,6 +963,7 @@
       "type": "milestone",
       "name": "SelfAware Continuum — HVAC intelligence",
       "category": "SelfAware Suite",
+      "scope": "Personal",
       "description": "Neo4j + pgvector + Ollama",
       "role": "",
       "tech": [],
@@ -944,6 +984,7 @@
       "type": "milestone",
       "name": "AuditShield — Compliance Ledger",
       "category": "SelfAware Suite",
+      "scope": "Personal",
       "description": "Compliance ledger",
       "role": "",
       "tech": [],
@@ -964,6 +1005,7 @@
       "type": "milestone",
       "name": "Autonomous-Cortex — Mission Console",
       "category": "SelfAware Suite",
+      "scope": "Personal",
       "description": "Mission console",
       "role": "",
       "tech": [],
@@ -984,6 +1026,7 @@
       "type": "milestone",
       "name": "NeuralPulse — Signal Lab",
       "category": "SelfAware Suite",
+      "scope": "Personal",
       "description": "Signal lab",
       "role": "",
       "tech": [],
@@ -1004,6 +1047,7 @@
       "type": "milestone",
       "name": "VisioScan — Light Studio",
       "category": "SelfAware Suite",
+      "scope": "Personal",
       "description": "Light studio",
       "role": "",
       "tech": [],
@@ -1024,6 +1068,7 @@
       "type": "milestone",
       "name": "SpatialNexus — Topology Atlas",
       "category": "SelfAware Suite",
+      "scope": "Personal",
       "description": "Topology atlas",
       "role": "",
       "tech": [],
@@ -1044,6 +1089,7 @@
       "type": "project",
       "name": "Concept Standard — Graph Analytics",
       "category": "SelfAware Suite",
+      "scope": "Personal",
       "description": "Interactive concept-map viewer (1,159 concepts, 5,985 relations) for lesson generation.",
       "role": "Built the in-browser graph analytics tool (ECharts + Neo4j GDS).",
       "tech": [
@@ -1072,6 +1118,7 @@
       "type": "project",
       "name": "VOXARA AI — Voice Intelligence",
       "category": "Voice AI",
+      "scope": "Personal",
       "description": "Realtime on-prem AI voice intelligence platform — monorepo with local LLM, Whisper STT, Piper TTS.",
       "role": "Architecture & monorepo setup (pnpm/Turbo), service scaffolding.",
       "tech": [
@@ -1103,6 +1150,7 @@
       "type": "project",
       "name": "TripTrail — Travel & Expense (RANGSONS)",
       "category": "Client Apps",
+      "scope": "Client",
       "description": "Buildless travel/expense reporting web app for RANGSONS LLP with HR approval + Google Sheets.",
       "role": "Sole developer — static web app, Supabase backend, approval flow.",
       "tech": [
@@ -1131,6 +1179,7 @@
       "type": "project",
       "name": "Konva Canvas App",
       "category": "Client Apps",
+      "scope": "Client",
       "description": "React + TypeScript canvas/drawing app template (likely a UI/design component base).",
       "role": "Template/prototype setup.",
       "tech": [
@@ -1158,6 +1207,7 @@
       "type": "project",
       "name": "Nesso — Farm Traceability Platform",
       "category": "Client Apps",
+      "scope": "Client",
       "description": "Farm-to-fork traceability platform for NR Group (Nesso).",
       "role": "Built the traceability web app — including a weekend build sprint (30–31 May).",
       "tech": [
@@ -1185,6 +1235,7 @@
       "type": "project",
       "name": "SelfAware Dev Stack",
       "category": "Infra & Tooling",
+      "scope": "Personal",
       "description": "Canonical local Docker dev stack (MySQL, PostgreSQL, Neo4j, Redis) for the SelfAware products.",
       "role": "Authored the docker-compose environment for 4 products.",
       "tech": [
@@ -1213,6 +1264,7 @@
       "type": "project",
       "name": "MySQL Unicharm Proxy (deprecated)",
       "category": "Infra & Tooling",
+      "scope": "Graylinx",
       "description": "Docker MySQL port-forwarding helper — superseded by selfaware-dev-stack.",
       "role": "Quick infra utility (now reference-only).",
       "tech": [
@@ -1238,6 +1290,7 @@
       "type": "project",
       "name": "Kimo SSH Keys",
       "category": "Infra & Tooling",
+      "scope": "Graylinx",
       "description": "SSH key storage / Graylinx laptop identity (kept out of git for security).",
       "role": "Access/identity setup.",
       "tech": [
@@ -1262,6 +1315,7 @@
       "type": "project",
       "name": "Python ETL",
       "category": "Infra & Tooling",
+      "scope": "Graylinx",
       "description": "ETL / transformer-layer workstream (planning + follow-ups in May).",
       "role": "ETL transformer-layer planning and conversion-workflow design.",
       "tech": [
@@ -1287,6 +1341,7 @@
       "type": "project",
       "name": "Raspberry Stuffs",
       "category": "Infra & Tooling",
+      "scope": "Personal",
       "description": "Raspberry Pi / edge experiments (placeholder).",
       "role": "Edge hardware experiments.",
       "tech": [
@@ -1311,6 +1366,7 @@
       "type": "project",
       "name": "Graylinx.ai HVAC (early prototype)",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "\"HVAC Data Pipeline v2\" — first Graylinx HVAC repo (Python), precursor to ClimaStream.",
       "role": "Initial HVAC data-pipeline prototype.",
       "tech": [
@@ -1336,6 +1392,7 @@
       "type": "project",
       "name": "Graylinx Legacy-Code Analysis",
       "category": "Graylinx Core",
+      "scope": "Graylinx",
       "description": "Audit/analysis of the Graylinx legacy codebase that informed the v2/OMNYX rebuild.",
       "role": "Reviewed & documented legacy code for migration.",
       "tech": [
@@ -1362,6 +1419,7 @@
       "type": "project",
       "name": "HVAC Data Pipeline (v1 & v2)",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Graylinx HVAC Chiller-Plant telemetry pipeline: Node.js → MySQL + Kafka → MinIO (Parquet + manifests) → Airflow → ClickHouse → Grafana. v1 + production-ready v2 on the harshan-aiyappa account (Nov 2025).",
       "role": "Built the end-to-end pipeline + its 3 POCs with J. Suryanarayanan & Satish Krishna; milestone-tracked over email.",
       "tech": [
@@ -1397,6 +1455,7 @@
       "type": "milestone",
       "name": "POC 1 — Ingestion (Node.js → MySQL + Kafka)",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Simulator → Node.js service → MySQL + Kafka",
       "role": "",
       "tech": [],
@@ -1417,6 +1476,7 @@
       "type": "milestone",
       "name": "POC 2 — Data Lake (Kafka → MinIO/Parquet)",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "Kafka → connector → MinIO Parquet storage",
       "role": "",
       "tech": [],
@@ -1437,6 +1497,7 @@
       "type": "milestone",
       "name": "POC 3 — Analytics (Airflow → ClickHouse → Grafana)",
       "category": "HVAC Platform",
+      "scope": "Graylinx",
       "description": "MinIO → Airflow → ClickHouse → Grafana dashboards",
       "role": "",
       "tech": [],

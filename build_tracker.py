@@ -343,6 +343,27 @@ PROJECTS = [
     # },
 ]
 
+# Ownership / scope tag per project. Default is "Graylinx"; only the non-Graylinx
+# ids are listed here. "Client" = built for another company; "Personal" = Harshan's
+# own/independent products. Surfaced as a badge + filter in the dashboard.
+SCOPE_BY_ID = {
+    # client work (other companies)
+    "travel-app": "Client",        # RANGSONS LLP
+    "farmer-app": "Client",        # NR Group (Nesso)
+    "konva": "Client",             # generic canvas template
+    # personal / independent products
+    "selfaware-suite": "Personal",
+    "selfaware-dev-stack": "Personal",
+    "voxara": "Personal",
+    "concept-standard": "Personal",
+    "raspberry": "Personal",
+}
+
+
+def scope_of(pid):
+    return SCOPE_BY_ID.get(pid, "Graylinx")
+
+
 # Engagement -> project cross-link rules (keyword in notes -> project id)
 LINK_RULES = [
     (r"\bbacnet\b|device simulation|simulation flow", "gl-pbs"),
@@ -572,7 +593,7 @@ def build_projects():
 
         row = {
             "id": p["id"], "parent_id": "", "type": "project",
-            "name": p["name"], "category": p["category"],
+            "name": p["name"], "category": p["category"], "scope": scope_of(p["id"]),
             "description": p["description"], "role": p["role"],
             "tech": p["tech"], "start": start, "end": end_display,
             "date_source": source, "status": p["status"], "progress": p["progress"],
@@ -598,7 +619,7 @@ def build_projects():
                     pass
             rows.append({
                 "id": f"{p['id']}.{i+1}", "parent_id": p["id"], "type": "milestone",
-                "name": m["name"], "category": p["category"],
+                "name": m["name"], "category": p["category"], "scope": scope_of(p["id"]),
                 "description": m.get("desc", ""), "role": "",
                 "tech": [], "start": mstart, "end": mend,
                 "date_source": source, "status": m["status"], "progress": m["progress"],
@@ -705,10 +726,11 @@ def compute_analytics(proj, engagement):
     """Precompute 'how much worked' analytics for the dashboard Analytics view."""
     by_proj = sorted([[p["name"], p["commits"]] for p in proj if p.get("commits")],
                      key=lambda x: -x[1])[:12]
-    cat, status = {}, {}
+    cat, status, scope = {}, {}, {}
     for p in proj:
         cat[p["category"]] = cat.get(p["category"], 0) + (p["commits"] or 0)
         status[p["status"]] = status.get(p["status"], 0) + 1
+        scope[p.get("scope", "Graylinx")] = scope.get(p.get("scope", "Graylinx"), 0) + 1
     wt = {}
     for r in engagement:
         k = r["work_type"] or "—"
@@ -737,6 +759,7 @@ def compute_analytics(proj, engagement):
         "commits_by_project": by_proj,
         "commits_by_category": sorted(cat.items(), key=lambda x: -x[1]),
         "projects_by_status": sorted(status.items(), key=lambda x: -x[1]),
+        "projects_by_scope": sorted(scope.items(), key=lambda x: -x[1]),
         "work_type": sorted(wt.items(), key=lambda x: -x[1]),
         "weekly_commits": [[f"W{k}", v] for k, v in sorted(weekly.items())],
         "weekend_worked": weekend_worked,
@@ -753,7 +776,7 @@ def compute_analytics(proj, engagement):
 # --------------------------------------------------------------------------- #
 #  Writers
 # --------------------------------------------------------------------------- #
-PROJ_COLS = ["id", "parent_id", "type", "name", "category", "description", "role",
+PROJ_COLS = ["id", "parent_id", "type", "name", "category", "scope", "description", "role",
              "tech", "start", "end", "date_source", "status", "progress", "commits",
              "location", "highlights", "links", "notes"]
 ENG_COLS = ["date", "day", "work_type", "location", "hotel", "check_in", "check_out",
