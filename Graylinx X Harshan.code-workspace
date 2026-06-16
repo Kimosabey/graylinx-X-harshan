@@ -7,9 +7,6 @@
 			"path": "../clima-stream-hvac"
 		},
 		{
-			"path": "../concept-standard"
-		},
-		{
 			"path": "../Current Works in GL"
 		},
 		{
@@ -31,12 +28,6 @@
 			"path": "../HVAC AI Operations Intelligence Platform"
 		},
 		{
-			"path": "../kimo-ssh-keys"
-		},
-		{
-			"path": "../konva"
-		},
-		{
 			"path": "../mysql-unicharm-proxy"
 		},
 		{
@@ -50,12 +41,6 @@
 		},
 		{
 			"path": "../The SelfAware® Intelligence Suite"
-		},
-		{
-			"path": "../travel-app"
-		},
-		{
-			"path": "../VOXARA AI"
 		}
 	],
 	"settings": {
