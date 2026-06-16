@@ -196,7 +196,10 @@ html[data-theme="dark"] #grain,html[data-theme="oled"] #grain{opacity:.08;mix-bl
 .pdesc,.prole,.d-notes,.es-sub{overflow-wrap:anywhere}
 .titles .sub{font-size:11.5px;color:var(--ink2);margin-top:1px}
 .appbar.scrolled .titles .sub{display:none}
-.top-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.top-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* icon-only app-bar: labels hidden (accessible name kept via aria-label + tooltip), snug square buttons */
+.bl{display:none}
+.top-actions .btn.sm{padding:9px;gap:0}
 
 /* ----------------------------- buttons ------------------------------ */
 .btn{font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;background:var(--card);
@@ -494,17 +497,17 @@ button.hc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
       <div class="titles"><h1>Harshan&nbsp;×&nbsp;Graylinx</h1><div class="sub" id="span-sub">Work tracker & showcase</div></div>
     </div>
     <div class="top-actions no-print">
-      <button class="btn sm" id="btn-cmdk" title="Search (Ctrl/⌘ K)"><span class="ic" data-icon="search"></span><span class="bl">Search</span></button>
-      <button class="btn sm" id="btn-theme" title="Light / dark / OLED / auto"><span class="ic" data-icon="contrast"></span><span class="bl">Theme</span></button>
+      <button class="btn sm" id="btn-cmdk" title="Search (Ctrl/⌘ K)" aria-label="Search (Ctrl or Cmd + K)"><span class="ic" data-icon="search"></span><span class="bl">Search</span></button>
+      <button class="btn sm" id="btn-theme" title="Theme: light / dark / OLED / auto" aria-label="Change theme"><span class="ic" data-icon="contrast"></span><span class="bl">Theme</span></button>
       <div class="accent-wrap">
-        <button class="btn sm" id="btn-accent" aria-haspopup="true" aria-expanded="false" title="Accent colour"><span class="ic" data-icon="palette"></span><span class="bl">Accent</span></button>
+        <button class="btn sm" id="btn-accent" aria-haspopup="true" aria-expanded="false" title="Accent colour" aria-label="Accent colour"><span class="ic" data-icon="palette"></span><span class="bl">Accent</span></button>
         <div class="accent-pop" id="accent-pop" role="menu" aria-label="Accent colour" hidden></div>
       </div>
-      <button class="btn sm" id="btn-add"><span class="ic" data-icon="plus"></span><span class="bl">Add</span></button>
-      <button class="btn sm" id="btn-export"><span class="ic" data-icon="download"></span><span class="bl">Export</span></button>
-      <button class="btn sm" id="btn-import"><span class="ic" data-icon="upload"></span><span class="bl">Import</span></button>
-      <button class="btn sm" id="btn-print"><span class="ic" data-icon="printer"></span><span class="bl">Print</span></button>
-      <button class="btn sm" id="btn-reset" title="Discard local edits"><span class="ic" data-icon="reset"></span><span class="bl">Reset</span></button>
+      <button class="btn sm" id="btn-add" title="Add entry" aria-label="Add entry"><span class="ic" data-icon="plus"></span><span class="bl">Add</span></button>
+      <button class="btn sm" id="btn-export" title="Export (CSV / JSON)" aria-label="Export data"><span class="ic" data-icon="download"></span><span class="bl">Export</span></button>
+      <button class="btn sm" id="btn-import" title="Import (CSV / JSON)" aria-label="Import data"><span class="ic" data-icon="upload"></span><span class="bl">Import</span></button>
+      <button class="btn sm" id="btn-print" title="Print / PDF" aria-label="Print or save as PDF"><span class="ic" data-icon="printer"></span><span class="bl">Print</span></button>
+      <button class="btn sm" id="btn-reset" title="Discard local edits" aria-label="Reset — discard local edits"><span class="ic" data-icon="reset"></span><span class="bl">Reset</span></button>
       <input type="file" id="file-input" accept=".json,.csv" class="hidden" />
     </div>
   </div>
