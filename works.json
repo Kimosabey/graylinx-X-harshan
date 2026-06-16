@@ -9,11 +9,11 @@
       "active": 8,
       "done": 5,
       "total_commits": 868,
-      "engagement_days": 48,
+      "engagement_days": 55,
       "on_site_days": 10,
-      "wfh_days": 36,
+      "wfh_days": 44,
       "hotel_nights": 6,
-      "needs_fill": 1
+      "needs_fill": 0
     },
     "categories": [
       "Client Apps",
@@ -41,7 +41,7 @@
       "WFH": "888888",
       "Leave": "ABABAB"
     },
-    "build": "fdca3b867c23"
+    "build": "108fb1f64b18"
   },
   "projects": [
     {
@@ -1024,6 +1024,58 @@
       "source": "csv"
     },
     {
+      "date": "2026-04-23",
+      "day": "Thursday",
+      "work_type": "WFH",
+      "location": "Mysore",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "Lingotran task + recruitment interviews for RAPL and Examic.",
+      "linked_project": "",
+      "source": "manual"
+    },
+    {
+      "date": "2026-04-24",
+      "day": "Friday",
+      "work_type": "WFH",
+      "location": "Mysore",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "Lingotran task + recruitment interviews for RAPL and Examic.",
+      "linked_project": "",
+      "source": "manual"
+    },
+    {
+      "date": "2026-04-25",
+      "day": "Saturday",
+      "work_type": "WFH",
+      "location": "Mysore",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "Lingotran task + recruitment interviews for RAPL and Examic.",
+      "linked_project": "",
+      "source": "manual"
+    },
+    {
+      "date": "2026-04-26",
+      "day": "Sunday",
+      "work_type": "WFH",
+      "location": "Mysore",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "Lingotran task + recruitment interviews for RAPL and Examic.",
+      "linked_project": "",
+      "source": "manual"
+    },
+    {
       "date": "2026-04-27",
       "day": "Monday",
       "work_type": "Office",
@@ -1089,6 +1141,32 @@
       "source": "csv"
     },
     {
+      "date": "2026-05-02",
+      "day": "Saturday",
+      "work_type": "WFH",
+      "location": "Mysore",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "Lingotran task + recruitment interviews for RAPL and Examic.",
+      "linked_project": "",
+      "source": "manual"
+    },
+    {
+      "date": "2026-05-03",
+      "day": "Sunday",
+      "work_type": "WFH",
+      "location": "Mysore",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "Lingotran task + recruitment interviews for RAPL and Examic.",
+      "linked_project": "",
+      "source": "manual"
+    },
+    {
       "date": "2026-05-04",
       "day": "Monday",
       "work_type": "Discussion",
@@ -1126,6 +1204,19 @@
       "notes": "Finalized PRD discussions and architecture workflows",
       "linked_project": "omnyx",
       "source": "csv"
+    },
+    {
+      "date": "2026-05-07",
+      "day": "Thursday",
+      "work_type": "WFH",
+      "location": "Mysore",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "Lingotran task + recruitment interviews for RAPL and Examic.",
+      "linked_project": "",
+      "source": "manual"
     },
     {
       "date": "2026-05-08",
@@ -1611,15 +1702,15 @@
     {
       "date": "2026-06-14",
       "day": "Sunday",
-      "work_type": "",
-      "location": "",
+      "work_type": "WFH",
+      "location": "Mysore",
       "hotel": "",
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "",
+      "notes": "Lingotran task + recruitment interviews for RAPL and Examic.",
       "linked_project": "",
-      "source": "needs-fill"
+      "source": "manual"
     },
     {
       "date": "2026-06-15",

@@ -1,13 +1,20 @@
 ﻿date,day,work_type,location,hotel,check_in,check_out,travel,notes,linked_project,source
 2026-04-22,Wednesday,Discussion,Graylinx Office Bangalore,,11:00 AM,2:00 PM,Mysore to Bangalore and return,Initial deployment and coordination discussion with Graylinx team,current-works,csv
+2026-04-23,Thursday,WFH,Mysore,,,,,Lingotran task + recruitment interviews for RAPL and Examic.,,manual
+2026-04-24,Friday,WFH,Mysore,,,,,Lingotran task + recruitment interviews for RAPL and Examic.,,manual
+2026-04-25,Saturday,WFH,Mysore,,,,,Lingotran task + recruitment interviews for RAPL and Examic.,,manual
+2026-04-26,Sunday,WFH,Mysore,,,,,Lingotran task + recruitment interviews for RAPL and Examic.,,manual
 2026-04-27,Monday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Mysore to Bangalore,Started office deployment and stayed at hotel near office,current-works,csv
 2026-04-28,Tuesday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Stayed in Bangalore,Continued office work and architecture discussions,current-works,csv
 2026-04-29,Wednesday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Stayed in Bangalore,Regular office work and coordination discussions,current-works,csv
 2026-04-30,Thursday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Bangalore to Mysore,Returned to Mysore due to Friday leave,,csv
 2026-05-01,Friday,Leave,Mysore,,Leave,Leave,Stayed in Mysore,Friday leave and rest day,,csv
+2026-05-02,Saturday,WFH,Mysore,,,,,Lingotran task + recruitment interviews for RAPL and Examic.,,manual
+2026-05-03,Sunday,WFH,Mysore,,,,,Lingotran task + recruitment interviews for RAPL and Examic.,,manual
 2026-05-04,Monday,Discussion,NA Group Office Mysore,,10:00 AM,6:00 PM,Local travel within Mysore,PRD discussion regarding HVAC systems and architecture modules with Vishnu,omnyx,csv
 2026-05-05,Tuesday,Discussion,NA Group Office Mysore,,10:00 AM,6:00 PM,Local travel within Mysore,Continued PRD planning and module discussions,omnyx,csv
 2026-05-06,Wednesday,Discussion,NA Group Office Mysore,,10:00 AM,6:00 PM,Local travel within Mysore,Finalized PRD discussions and architecture workflows,omnyx,csv
+2026-05-07,Thursday,WFH,Mysore,,,,,Lingotran task + recruitment interviews for RAPL and Examic.,,manual
 2026-05-08,Friday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:30 PM,Mysore to Bangalore,Worked with Vishnu before his Australia travel and discussed ongoing tasks,,csv
 2026-05-09,Saturday,Office,Graylinx Office Bangalore,GRS Hotel,9:30 AM,6:00 PM,Bangalore to Mysore,Returned to Mysore after architecture discussions and AI demonstrations,thermynx,csv
 2026-05-10,Sunday,WFH,Mysore,,10:00 AM,5:00 PM,Worked from Mysore residence,Continued assigned tasks remotely and coordinated pending work,,csv
@@ -45,5 +52,5 @@
 2026-06-11,Thursday,WFH,Mysore (residence),,,,,THERMYNX [25]: chore(obs): comment out the langfuse SDK; mark tracing disabled / future-only; chore(frontend): remove orphaned migration-leftover components (zero imports); docs(agentic): F4.9 HITL done; F1.11 durable checkpointer deferred to 48/64GB (+22 more) · OMNYX [1]: docs(ops): flag shared Ollama GPU with THERMYNX (avoid VRAM eviction)  (26 commits),thermynx,derived
 2026-06-12,Friday,WFH,Mysore (residence),,,,,"THERMYNX [9]: docs(agentic): Session 3 handoff (2026-06-12); fix(eval): pre-push no longer auto-runs the golden suite (it floods the 20 GB GP; feat(agent): per-node timing traces (lightweight, no Langfuse/infra) (+6 more)  (9 commits)",thermynx,derived
 2026-06-13,Saturday,WFH,Mysore (residence),,,,,THERMYNX [6]: docs(agentic): loop-accurate plain-English overview + incidents log + Session-4 ; feat(frontend): Agent Lab workbench - tabbed Run/History/Compare/Tune/Validate +; feat(provider): OpenRouter dev-bridge provider switch (chat roles only; embeddin (+3 more)  (6 commits),thermynx,derived
-2026-06-14,Sunday,,,,,,,,,needs-fill
+2026-06-14,Sunday,WFH,Mysore,,,,,Lingotran task + recruitment interviews for RAPL and Examic.,,manual
 2026-06-15,Monday,WFH,Mysore (residence),,,,,"THERMYNX [24]: feat: add .claude/settings.json with pre-configured shell execution permissions; feat(security): M9 recursive injection-hardening of tool results; Add architectural handbook for Graylinx LLM platform and initialize Claude proje (+21 more) · ClimaStream [1]: docs: add architecture and agentic flow diagrams to project documentation · Nesso [1]: chore: update lockfile to reflect dependency changes · OMNYX [1]: docs: initialize architecture, security, and roadmap documentation and implement  (27 commits)",thermynx,derived

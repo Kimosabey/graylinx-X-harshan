@@ -621,6 +621,29 @@ def carry_forward(att, projects):
     return att + extra
 
 
+# Days with no git commits and no attendance row were spent on the Lingotran task
+# and recruitment interviews for RAPL & Examic (per Harshan). Recorded here so they
+# aren't blank/needs-fill.
+GAP_NOTE = "Lingotran task + recruitment interviews for RAPL and Examic."
+GAP_DATES = ["2026-04-23", "2026-04-24", "2026-04-25", "2026-04-26",
+             "2026-05-02", "2026-05-03", "2026-05-07", "2026-06-14"]
+
+
+def apply_gap_fill(eng):
+    """Fill known non-coding gap days (Lingotran + RAPL/Examic interviews)."""
+    by = {r["date"]: r for r in eng}
+    for ds in GAP_DATES:
+        dt = datetime.fromisoformat(ds).date()
+        row = {"date": ds, "day": dt.strftime("%A"), "work_type": "WFH",
+               "location": "Mysore", "hotel": "", "check_in": "", "check_out": "",
+               "travel": "", "notes": GAP_NOTE, "linked_project": "", "source": "manual"}
+        if ds in by:
+            by[ds].update(row)
+        else:
+            eng.append(row)
+    return eng
+
+
 # --------------------------------------------------------------------------- #
 #  Writers
 # --------------------------------------------------------------------------- #
@@ -804,6 +827,7 @@ def main():
     projects = build_projects()
     engagement = parse_attendance()
     engagement = carry_forward(engagement, projects)
+    engagement = apply_gap_fill(engagement)
     engagement.sort(key=lambda r: r["date"])
 
     proj_only = [r for r in projects if r["type"] == "project"]
