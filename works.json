@@ -5,10 +5,10 @@
     "span_start": "2025-11-19",
     "span_end": "2026-06-15",
     "stats": {
-      "projects": 19,
+      "projects": 16,
       "active": 7,
-      "done": 7,
-      "total_commits": 900,
+      "done": 6,
+      "total_commits": 901,
       "engagement_days": 55,
       "on_site_days": 10,
       "wfh_days": 44,
@@ -20,8 +20,7 @@
       "Graylinx Core",
       "HVAC Platform",
       "Infra & Tooling",
-      "SelfAware Suite",
-      "Voice AI"
+      "SelfAware Suite"
     ],
     "palette": {
       "ink": "171717",
@@ -177,13 +176,13 @@
         ],
         [
           "2026-06-16",
-          10
+          11
         ]
       ],
       "commits_by_project": [
         [
           "THERMYNX — HVAC AI Operations Intelligence",
-          321
+          322
         ],
         [
           "OMNYX — Universal IoT Operations Platform",
@@ -221,7 +220,7 @@
       "commits_by_category": [
         [
           "HVAC Platform",
-          592
+          593
         ],
         [
           "Client Apps",
@@ -236,10 +235,6 @@
           23
         ],
         [
-          "Voice AI",
-          0
-        ],
-        [
           "Infra & Tooling",
           0
         ]
@@ -247,15 +242,11 @@
       "projects_by_status": [
         [
           "Done",
-          7
+          6
         ],
         [
           "Active",
           5
-        ],
-        [
-          "Paused",
-          3
         ],
         [
           "Ongoing",
@@ -264,20 +255,24 @@
         [
           "Planned",
           2
+        ],
+        [
+          "Paused",
+          1
         ]
       ],
       "projects_by_scope": [
         [
           "Graylinx",
-          13
+          12
         ],
         [
           "Personal",
-          4
+          3
         ],
         [
           "Client",
-          2
+          1
         ]
       ],
       "work_type": [
@@ -333,7 +328,7 @@
         ],
         [
           "W25",
-          37
+          38
         ]
       ],
       "weekend_worked": 16,
@@ -348,7 +343,7 @@
       "hotel_nights": 6,
       "locations": 4
     },
-    "build": "0c25c4a45b36"
+    "build": "2539cf2bede1"
   },
   "projects": [
     {
@@ -374,7 +369,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 321,
+      "commits": 322,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -1080,66 +1075,6 @@
       "notes": ""
     },
     {
-      "id": "voxara",
-      "parent_id": "",
-      "type": "project",
-      "name": "VOXARA AI — Voice Intelligence",
-      "category": "Voice AI",
-      "scope": "Personal",
-      "description": "Realtime on-prem AI voice intelligence platform — monorepo with local LLM, Whisper STT, Piper TTS.",
-      "role": "Architecture & monorepo setup (pnpm/Turbo), service scaffolding.",
-      "tech": [
-        "Node.js",
-        "pnpm",
-        "Turbo",
-        "Ollama",
-        "Whisper",
-        "Piper",
-        "Docker"
-      ],
-      "start": "2026-05-20",
-      "end": "2026-05-21",
-      "date_source": "approx",
-      "status": "Paused",
-      "progress": 30,
-      "commits": 0,
-      "location": "D:\\Harshan\\VOXARA AI",
-      "highlights": [
-        "Largest by file count (37 items)",
-        "Local LLM + Whisper + Piper TTS"
-      ],
-      "links": "",
-      "notes": ""
-    },
-    {
-      "id": "konva",
-      "parent_id": "",
-      "type": "project",
-      "name": "Konva Canvas App",
-      "category": "Client Apps",
-      "scope": "Client",
-      "description": "React + TypeScript canvas/drawing app template (likely a UI/design component base).",
-      "role": "Template/prototype setup.",
-      "tech": [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Konva"
-      ],
-      "start": "2026-05-14",
-      "end": "2026-05-14",
-      "date_source": "approx",
-      "status": "Paused",
-      "progress": 25,
-      "commits": 0,
-      "location": "D:\\Harshan\\konva",
-      "highlights": [
-        "Canvas/drawing UI base"
-      ],
-      "links": "",
-      "notes": ""
-    },
-    {
       "id": "farmer-app",
       "parent_id": "",
       "type": "project",
@@ -1218,31 +1153,6 @@
       "location": "D:\\Harshan\\mysql-unicharm-proxy",
       "highlights": [
         "Deprecated — replaced by selfaware-dev-stack"
-      ],
-      "links": "",
-      "notes": ""
-    },
-    {
-      "id": "kimo-ssh-keys",
-      "parent_id": "",
-      "type": "project",
-      "name": "Kimo SSH Keys",
-      "category": "Infra & Tooling",
-      "scope": "Graylinx",
-      "description": "SSH key storage / Graylinx laptop identity (kept out of git for security).",
-      "role": "Access/identity setup.",
-      "tech": [
-        "SSH"
-      ],
-      "start": "2026-05-18",
-      "end": "2026-05-18",
-      "date_source": "approx",
-      "status": "Done",
-      "progress": 100,
-      "commits": 0,
-      "location": "D:\\Harshan\\kimo-ssh-keys",
-      "highlights": [
-        "Laptop identity & access keys"
       ],
       "links": "",
       "notes": ""

@@ -195,16 +195,17 @@ PROJECTS = [
     #     "highlights": ["1,159 concepts / 5,985 relations", "Force/circular graphs, command palette, light/dark, a11y"],
     #     "milestones": [],
     # },
-    {
-        "id": "voxara", "name": "VOXARA AI — Voice Intelligence",
-        "dir": "VOXARA AI", "git": False,
-        "category": "Voice AI", "status": "Paused", "progress": 30,
-        "description": "Realtime on-prem AI voice intelligence platform — monorepo with local LLM, Whisper STT, Piper TTS.",
-        "role": "Architecture & monorepo setup (pnpm/Turbo), service scaffolding.",
-        "tech": ["Node.js", "pnpm", "Turbo", "Ollama", "Whisper", "Piper", "Docker"],
-        "highlights": ["Largest by file count (37 items)", "Local LLM + Whisper + Piper TTS"],
-        "milestones": [],
-    },
+    # --- REMOVED (2026-06-16, per Harshan) — not in the curated workspace; commented out, restorable ---
+    # {
+    #     "id": "voxara", "name": "VOXARA AI — Voice Intelligence",
+    #     "dir": "VOXARA AI", "git": False,
+    #     "category": "Voice AI", "status": "Paused", "progress": 30,
+    #     "description": "Realtime on-prem AI voice intelligence platform — monorepo with local LLM, Whisper STT, Piper TTS.",
+    #     "role": "Architecture & monorepo setup (pnpm/Turbo), service scaffolding.",
+    #     "tech": ["Node.js", "pnpm", "Turbo", "Ollama", "Whisper", "Piper", "Docker"],
+    #     "highlights": ["Largest by file count (37 items)", "Local LLM + Whisper + Piper TTS"],
+    #     "milestones": [],
+    # },
     # --- REMOVED (2026-06-16, per Harshan) — RANGSONS client app, not Graylinx; commented out, restorable ---
     # {
     #     "id": "travel-app", "name": "TripTrail — Travel & Expense (RANGSONS)",
@@ -216,16 +217,17 @@ PROJECTS = [
     #     "highlights": ["HR approval + Google Sheets integration", "Buildless static deployment"],
     #     "milestones": [],
     # },
-    {
-        "id": "konva", "name": "Konva Canvas App",
-        "dir": "konva", "git": False,
-        "category": "Client Apps", "status": "Paused", "progress": 25,
-        "description": "React + TypeScript canvas/drawing app template (likely a UI/design component base).",
-        "role": "Template/prototype setup.",
-        "tech": ["React", "TypeScript", "Vite", "Konva"],
-        "highlights": ["Canvas/drawing UI base"],
-        "milestones": [],
-    },
+    # --- REMOVED (2026-06-16, per Harshan) — not in the curated workspace; commented out, restorable ---
+    # {
+    #     "id": "konva", "name": "Konva Canvas App",
+    #     "dir": "konva", "git": False,
+    #     "category": "Client Apps", "status": "Paused", "progress": 25,
+    #     "description": "React + TypeScript canvas/drawing app template (likely a UI/design component base).",
+    #     "role": "Template/prototype setup.",
+    #     "tech": ["React", "TypeScript", "Vite", "Konva"],
+    #     "highlights": ["Canvas/drawing UI base"],
+    #     "milestones": [],
+    # },
     {
         "id": "farmer-app", "name": "Nesso — Farm Traceability Platform",
         "dir": "farmer-app", "git": True,
@@ -256,16 +258,17 @@ PROJECTS = [
         "highlights": ["Deprecated — replaced by selfaware-dev-stack"],
         "milestones": [],
     },
-    {
-        "id": "kimo-ssh-keys", "name": "Kimo SSH Keys",
-        "dir": "kimo-ssh-keys", "git": False,
-        "category": "Infra & Tooling", "status": "Done", "progress": 100,
-        "description": "SSH key storage / Graylinx laptop identity (kept out of git for security).",
-        "role": "Access/identity setup.",
-        "tech": ["SSH"],
-        "highlights": ["Laptop identity & access keys"],
-        "milestones": [],
-    },
+    # --- REMOVED (2026-06-16, per Harshan) — not in the curated workspace; infra, not really "work"; restorable ---
+    # {
+    #     "id": "kimo-ssh-keys", "name": "Kimo SSH Keys",
+    #     "dir": "kimo-ssh-keys", "git": False,
+    #     "category": "Infra & Tooling", "status": "Done", "progress": 100,
+    #     "description": "SSH key storage / Graylinx laptop identity (kept out of git for security).",
+    #     "role": "Access/identity setup.",
+    #     "tech": ["SSH"],
+    #     "highlights": ["Laptop identity & access keys"],
+    #     "milestones": [],
+    # },
     {
         "id": "python-etl", "name": "Python ETL",
         "dir": "python-etl", "git": False,
