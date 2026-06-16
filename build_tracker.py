@@ -644,6 +644,54 @@ def apply_gap_fill(eng):
     return eng
 
 
+def compute_analytics(proj, engagement):
+    """Precompute 'how much worked' analytics for the dashboard Analytics view."""
+    by_proj = sorted([[p["name"], p["commits"]] for p in proj if p.get("commits")],
+                     key=lambda x: -x[1])[:12]
+    cat, status = {}, {}
+    for p in proj:
+        cat[p["category"]] = cat.get(p["category"], 0) + (p["commits"] or 0)
+        status[p["status"]] = status.get(p["status"], 0) + 1
+    wt = {}
+    for r in engagement:
+        k = r["work_type"] or "—"
+        wt[k] = wt.get(k, 0) + 1
+    worked = [r for r in engagement if r["work_type"] and r["work_type"] != "Leave"]
+    weekend_worked = sum(1 for r in worked if datetime.fromisoformat(r["date"]).weekday() >= 5)
+    per_day = {d: sum(len(v) for v in m.values()) for d, m in day_commits().items()}
+    busiest = max(per_day.items(), key=lambda kv: kv[1]) if per_day else ("", 0)
+    weekly = {}
+    for d, c in per_day.items():
+        iso = datetime.fromisoformat(d).date().isocalendar()
+        key = f"{iso[1]:02d}"  # ISO week number
+        weekly[key] = weekly.get(key, 0) + c
+    wdates = sorted(r["date"] for r in worked)
+    longest = cur = 0
+    prev = None
+    for ds in wdates:
+        dt = datetime.fromisoformat(ds).date()
+        cur = cur + 1 if (prev and (dt - prev).days == 1) else 1
+        longest = max(longest, cur)
+        prev = dt
+    active = len(per_day)
+    total = sum(p["commits"] or 0 for p in proj)
+    return {
+        "commits_by_project": by_proj,
+        "commits_by_category": sorted(cat.items(), key=lambda x: -x[1]),
+        "projects_by_status": sorted(status.items(), key=lambda x: -x[1]),
+        "work_type": sorted(wt.items(), key=lambda x: -x[1]),
+        "weekly_commits": [[f"W{k}", v] for k, v in sorted(weekly.items())],
+        "weekend_worked": weekend_worked,
+        "worked_days": len(worked),
+        "active_commit_days": active,
+        "busiest_day": {"date": busiest[0], "commits": busiest[1]},
+        "commits_per_active_day": round(total / active, 1) if active else 0,
+        "longest_streak": longest,
+        "hotel_nights": sum(1 for r in engagement if r["hotel"]),
+        "locations": len(set(r["location"] for r in engagement if r["location"])),
+    }
+
+
 # --------------------------------------------------------------------------- #
 #  Writers
 # --------------------------------------------------------------------------- #
@@ -858,6 +906,7 @@ def main():
         "categories": sorted({r["category"] for r in proj_only}),
         "palette": C,
     }
+    meta["analytics"] = compute_analytics(proj_only, engagement)
     # Content signature: when this changes, the dashboard auto-reloads the fresh
     # seed (so a stale localStorage copy never masks regenerated data).
     meta["build"] = hashlib.sha1(

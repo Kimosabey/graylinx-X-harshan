@@ -8,7 +8,7 @@
       "projects": 18,
       "active": 8,
       "done": 5,
-      "total_commits": 868,
+      "total_commits": 869,
       "engagement_days": 55,
       "on_site_days": 10,
       "wfh_days": 44,
@@ -41,7 +41,154 @@
       "WFH": "888888",
       "Leave": "ABABAB"
     },
-    "build": "108fb1f64b18"
+    "analytics": {
+      "commits_by_project": [
+        [
+          "THERMYNX — HVAC AI Operations Intelligence",
+          312
+        ],
+        [
+          "OMNYX — Universal IoT Operations Platform",
+          219
+        ],
+        [
+          "Nesso — Farm Traceability Platform",
+          191
+        ],
+        [
+          "The SelfAware® Intelligence Suite",
+          94
+        ],
+        [
+          "ClimaStream — Real-time HVAC Pipeline",
+          32
+        ],
+        [
+          "Current Works in GL — Core Monorepo",
+          16
+        ],
+        [
+          "TripTrail — Travel & Expense (RANGSONS)",
+          5
+        ]
+      ],
+      "commits_by_category": [
+        [
+          "HVAC Platform",
+          563
+        ],
+        [
+          "Client Apps",
+          196
+        ],
+        [
+          "SelfAware Suite",
+          94
+        ],
+        [
+          "Graylinx Core",
+          16
+        ],
+        [
+          "Voice AI",
+          0
+        ],
+        [
+          "Infra & Tooling",
+          0
+        ]
+      ],
+      "projects_by_status": [
+        [
+          "Active",
+          6
+        ],
+        [
+          "Done",
+          5
+        ],
+        [
+          "Paused",
+          3
+        ],
+        [
+          "Ongoing",
+          2
+        ],
+        [
+          "Planned",
+          2
+        ]
+      ],
+      "work_type": [
+        [
+          "WFH",
+          44
+        ],
+        [
+          "Office",
+          6
+        ],
+        [
+          "Discussion",
+          4
+        ],
+        [
+          "Leave",
+          1
+        ]
+      ],
+      "weekly_commits": [
+        [
+          "W17",
+          14
+        ],
+        [
+          "W18",
+          16
+        ],
+        [
+          "W19",
+          55
+        ],
+        [
+          "W20",
+          33
+        ],
+        [
+          "W21",
+          129
+        ],
+        [
+          "W22",
+          137
+        ],
+        [
+          "W23",
+          355
+        ],
+        [
+          "W24",
+          102
+        ],
+        [
+          "W25",
+          28
+        ]
+      ],
+      "weekend_worked": 16,
+      "worked_days": 54,
+      "active_commit_days": 34,
+      "busiest_day": {
+        "date": "2026-06-03",
+        "commits": 99
+      },
+      "commits_per_active_day": 25.6,
+      "longest_streak": 45,
+      "hotel_nights": 6,
+      "locations": 4
+    },
+    "build": "9800e28c3412"
   },
   "projects": [
     {
@@ -66,7 +213,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 311,
+      "commits": 312,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -127,7 +274,7 @@
       "role": "",
       "tech": [],
       "start": "2026-05-23",
-      "end": "2026-05-30",
+      "end": "2026-05-31",
       "date_source": "git",
       "status": "Active",
       "progress": 65,
@@ -146,8 +293,8 @@
       "description": "Work-order workflow",
       "role": "",
       "tech": [],
-      "start": "2026-05-30",
-      "end": "2026-06-07",
+      "start": "2026-05-31",
+      "end": "2026-06-08",
       "date_source": "git",
       "status": "Active",
       "progress": 60,
@@ -166,8 +313,8 @@
       "description": "Chiller/HVAC analytics",
       "role": "",
       "tech": [],
-      "start": "2026-06-07",
-      "end": "2026-06-15",
+      "start": "2026-06-08",
+      "end": "2026-06-16",
       "date_source": "git",
       "status": "Active",
       "progress": 60,
