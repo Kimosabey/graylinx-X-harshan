@@ -8,6 +8,7 @@ __pycache__/
 # Design handoff (kept on disk, not tracked) + scratch
 _handoff/
 graylinx-X-harshan-handoff/
+_drop/
 _gitscan.json
 *.zip
 

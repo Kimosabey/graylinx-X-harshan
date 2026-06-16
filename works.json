@@ -5,10 +5,10 @@
     "span_start": "2025-10-28",
     "span_end": "2026-06-15",
     "stats": {
-      "projects": 25,
+      "projects": 22,
       "active": 8,
-      "done": 12,
-      "total_commits": 899,
+      "done": 9,
+      "total_commits": 900,
       "engagement_days": 55,
       "on_site_days": 10,
       "wfh_days": 44,
@@ -177,13 +177,13 @@
         ],
         [
           "2026-06-16",
-          4
+          5
         ]
       ],
       "commits_by_project": [
         [
           "THERMYNX — HVAC AI Operations Intelligence",
-          315
+          316
         ],
         [
           "OMNYX — Universal IoT Operations Platform",
@@ -225,7 +225,7 @@
       "commits_by_category": [
         [
           "HVAC Platform",
-          586
+          587
         ],
         [
           "Client Apps",
@@ -251,7 +251,7 @@
       "projects_by_status": [
         [
           "Done",
-          12
+          9
         ],
         [
           "Active",
@@ -323,7 +323,7 @@
         ],
         [
           "W25",
-          31
+          32
         ]
       ],
       "weekend_worked": 16,
@@ -333,12 +333,12 @@
         "date": "2026-06-03",
         "commits": 99
       },
-      "commits_per_active_day": 26.4,
+      "commits_per_active_day": 26.5,
       "longest_streak": 45,
       "hotel_nights": 6,
       "locations": 4
     },
-    "build": "ddc3daea2dd5"
+    "build": "e04cccc4bc08"
   },
   "projects": [
     {
@@ -363,7 +363,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 315,
+      "commits": 316,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -1362,12 +1362,14 @@
       "type": "project",
       "name": "HVAC Data Pipeline (v1 & v2)",
       "category": "HVAC Platform",
-      "description": "Production HVAC telemetry pipeline: Node.js → MySQL + Kafka → MinIO (Parquet) → Airflow → ClickHouse → Grafana. Original build on the harshan-aiyappa GitHub account (Nov 2025).",
+      "description": "Graylinx HVAC Chiller-Plant telemetry pipeline: Node.js → MySQL + Kafka → MinIO (Parquet + manifests) → Airflow → ClickHouse → Grafana. v1 + production-ready v2 on the harshan-aiyappa account (Nov 2025).",
       "role": "Built the end-to-end pipeline + its 3 POCs with J. Suryanarayanan & Satish Krishna; milestone-tracked over email.",
       "tech": [
         "Node.js",
+        "Express",
         "Kafka",
         "MinIO",
+        "Parquet",
         "Airflow",
         "ClickHouse",
         "Grafana",
@@ -1382,9 +1384,9 @@
       "commits": 12,
       "location": "",
       "highlights": [
-        "v1 (19 Nov) + v2 (26 Nov 2025) on the harshan-aiyappa account",
-        "Ingestion · Data Lake · Analytics POCs",
-        "Node→Kafka→MinIO→Airflow→ClickHouse→Grafana"
+        "Chiller-plant predictive-maintenance + energy-optimization pipeline",
+        "v1 (19 Nov) + production v2 (26 Nov 2025), harshan-aiyappa account",
+        "POCs: Ingestion · Data Lake · Analytics"
       ],
       "links": "",
       "notes": ""
@@ -1446,86 +1448,6 @@
       "commits": 0,
       "location": "",
       "highlights": [],
-      "links": "",
-      "notes": ""
-    },
-    {
-      "id": "poc-asset-mgmt",
-      "parent_id": "",
-      "type": "project",
-      "name": "Asset Management POC — NodeJS → Kafka → MinIO",
-      "category": "Graylinx Core",
-      "description": "Asset-management ingestion POC: NodeJS → Kafka → MinIO with MySQL.",
-      "role": "Designed table schema + ingestion flow (with Surya Narayanan).",
-      "tech": [
-        "NodeJS",
-        "Kafka",
-        "MinIO",
-        "MySQL"
-      ],
-      "start": "2025-11-07",
-      "end": "2025-11-12",
-      "date_source": "email",
-      "status": "Done",
-      "progress": 100,
-      "commits": 0,
-      "location": "",
-      "highlights": [
-        "NodeJS → Kafka → MinIO pipeline",
-        "Nov 2025"
-      ],
-      "links": "",
-      "notes": ""
-    },
-    {
-      "id": "poc-kafka-minio",
-      "parent_id": "",
-      "type": "project",
-      "name": "Kafka → MinIO Data Ingestion POC",
-      "category": "Graylinx Core",
-      "description": "Kafka-to-MinIO data ingestion POC — plan & meeting summary.",
-      "role": "Led the plan + meeting summary (with Raghunandan Srinath, Surya Narayanan).",
-      "tech": [
-        "Kafka",
-        "MinIO"
-      ],
-      "start": "2025-11-07",
-      "end": "2025-11-07",
-      "date_source": "email",
-      "status": "Done",
-      "progress": 100,
-      "commits": 0,
-      "location": "",
-      "highlights": [
-        "Ingestion plan + meeting summary",
-        "Nov 2025"
-      ],
-      "links": "",
-      "notes": ""
-    },
-    {
-      "id": "poc-chiller",
-      "parent_id": "",
-      "type": "project",
-      "name": "HVAC Chiller Plant Data Pipeline — POC 1",
-      "category": "HVAC Platform",
-      "description": "Chiller-plant data pipeline, POC 1.",
-      "role": "Started POC 1 (aligned with J. Suryanarayanan).",
-      "tech": [
-        "NodeJS",
-        "Kafka"
-      ],
-      "start": "2025-11-14",
-      "end": "2025-11-14",
-      "date_source": "email",
-      "status": "Done",
-      "progress": 100,
-      "commits": 0,
-      "location": "",
-      "highlights": [
-        "Chiller plant POC 1",
-        "Nov 2025"
-      ],
       "links": "",
       "notes": ""
     },
