@@ -11,9 +11,13 @@
  *  One gray base; depth from dual soft shadows. Text & focus kept WCAG-AA+.
  *  Status/work-type encoded by grayscale + glyph + label (never colour alone).
  * ===================================================================== */
+/* vendored variable display font (offline-safe, no runtime CDN) — used for headings + hero numerals only */
+@font-face{font-family:"Space Grotesk";src:url("SpaceGrotesk.woff2") format("woff2");
+  font-weight:300 700;font-style:normal;font-display:swap}
 :root{
   /* SOFT-FLAT: high-contrast flat surfaces + gentle soft shadow & top highlight for tactile warmth */
   --bg:#EEF0F4; --card:#FFFFFF; --hl:#FFFFFF; --sh:#D9DCE2;
+  --glass-hi:rgba(255,255,255,.6);
   --ink:#15171C; --ink2:#525866; --ink3:#646B7A;
   --line:#E4E6EB; --line2:#D3D7DE;
   --s1:#171717; --s2:#3A3A3A; --s3:#5C5C5C; --s4:#888888; --s5:#ABABAB;
@@ -28,6 +32,10 @@
   --radius:18px; --radius-sm:13px; --radius-xs:10px; --gap:clamp(12px,2.2vw,18px); --appbar:66px; --labelw:200px;
   --pad:clamp(14px,2.4vw,30px); --pad-panel:clamp(15px,2.2vw,20px); --pad-card:clamp(15px,1.8vw,18px);
   --font:"Inter","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --font-display:"Space Grotesk",var(--font);
+  /* motion tokens — consistent spring/ease + durations for micro-motion (all gated by reduced-motion) */
+  --ease-spring:cubic-bezier(.34,1.42,.5,1); --ease-out:cubic-bezier(.2,.7,.2,1);
+  --dur-1:.16s; --dur-2:.28s; --dur-3:.5s;
   /* soft-flat shadow primitives (themed below) */
   --amb:0 1px 2px rgba(16,18,23,.05), 0 8px 20px -10px rgba(16,18,23,.20);
   --amb-hi:0 3px 8px rgba(16,18,23,.07), 0 18px 34px -12px rgba(16,18,23,.28);
@@ -42,6 +50,7 @@
 }
 html[data-theme="dark"]{
   --bg:#0E1014; --card:#171A21; --hl:#2A2A2A; --sh:#05060A;
+  --glass-hi:rgba(255,255,255,.07);
   --ink:#F1F2F5; --ink2:#A2A9B6; --ink3:#828998;
   --line:#262A33; --line2:#333945;
   --s1:#F2F2F2; --s2:#CFCFCF; --s3:#A6A6A6; --s4:#7C7C7C; --s5:#5A5A5A;
@@ -56,9 +65,29 @@ html[data-theme="dark"]{
   --soft-in:inset 0 1px 2px rgba(0,0,0,.45);
   --soft-in-sm:inset 0 1px 1.5px rgba(0,0,0,.35);
 }
+/* OLED: pure-black canvas, near-black cards, cobalt glow on raise. Ink kept WCAG-AA on #000. */
+html[data-theme="oled"]{
+  --bg:#000000; --card:#0A0B0E; --hl:#16181D; --sh:#000000;
+  --glass-hi:rgba(255,255,255,.05);
+  --ink:#F4F5F8; --ink2:#A7AEBC; --ink3:#878E9D;
+  --line:#1C2026; --line2:#2A2F38;
+  --s1:#F2F2F2; --s2:#CFCFCF; --s3:#A6A6A6; --s4:#7C7C7C; --s5:#5A5A5A;
+  --st-active:#8A98FF; --st-ongoing:#22B8CF; --st-done:#34D399; --st-planned:#94A3B8; --st-paused:#FBBF24; --st-risk:#F87171;
+  --wt-office:#8A98FF; --wt-office-ink:#05060A;
+  --wt-disc:#C4B5FD;   --wt-disc-ink:#05060A;
+  --wt-wfh:#2DD4BF;    --wt-wfh-ink:#05060A;
+  --acc:#8A98FF; --acc-ink:#05060A;
+  --amb:0 2px 8px rgba(0,0,0,.7), 0 14px 32px -12px rgba(0,0,0,.92);
+  --amb-hi:0 0 0 1px rgba(138,152,255,.10), 0 8px 22px -6px rgba(1,35,180,.30), 0 18px 40px -12px rgba(0,0,0,.96);
+  --soft-hi:inset 0 1px 0 rgba(255,255,255,.04);
+  --soft-in:inset 0 1px 2px rgba(0,0,0,.7);
+  --soft-in-sm:inset 0 1px 1.5px rgba(0,0,0,.55);
+}
+html[data-theme="oled"] #aurora{opacity:.7}
 @media (prefers-color-scheme:dark){
   html[data-theme="auto"]{
     --bg:#0E1014; --card:#171A21; --hl:#2A2A2A; --sh:#05060A;
+    --glass-hi:rgba(255,255,255,.07);
     --ink:#F1F2F5; --ink2:#A2A9B6; --ink3:#828998;
     --line:#262A33; --line2:#333945;
     --s1:#F2F2F2; --s2:#CFCFCF; --s3:#A6A6A6; --s4:#7C7C7C; --s5:#5A5A5A;
@@ -73,6 +102,27 @@ html[data-theme="dark"]{
     --soft-in:inset 0 1px 2px rgba(0,0,0,.45);
     --soft-in-sm:inset 0 1px 1.5px rgba(0,0,0,.35);
   }
+}
+
+/* ---- accent presets: chosen via html[data-accent]; --acc-soft auto-derives from --acc + --card.
+   Each --acc is ≥AA where used as text on its theme's card; each --acc-ink is ≥AA on its --acc. ---- */
+html[data-accent="cobalt"]{--acc:#0123B4;--acc-ink:#fff}
+html[data-accent="teal"]{--acc:#0F766E;--acc-ink:#fff}
+html[data-accent="violet"]{--acc:#6D28D9;--acc-ink:#fff}
+html[data-accent="amber"]{--acc:#B45309;--acc-ink:#fff}
+html[data-accent="magenta"]{--acc:#BE185D;--acc-ink:#fff}
+/* dark + OLED use lighter variants (AA as text on dark cards; dark ink on the bright accent) */
+html[data-theme="dark"][data-accent="cobalt"],html[data-theme="oled"][data-accent="cobalt"]{--acc:#7C8CFF;--acc-ink:#0E1014}
+html[data-theme="dark"][data-accent="teal"],html[data-theme="oled"][data-accent="teal"]{--acc:#2DD4BF;--acc-ink:#06201D}
+html[data-theme="dark"][data-accent="violet"],html[data-theme="oled"][data-accent="violet"]{--acc:#A78BFA;--acc-ink:#160A2E}
+html[data-theme="dark"][data-accent="amber"],html[data-theme="oled"][data-accent="amber"]{--acc:#FBBF24;--acc-ink:#2A1A00}
+html[data-theme="dark"][data-accent="magenta"],html[data-theme="oled"][data-accent="magenta"]{--acc:#F472B6;--acc-ink:#2A0A18}
+@media (prefers-color-scheme:dark){
+  html[data-theme="auto"][data-accent="cobalt"]{--acc:#7C8CFF;--acc-ink:#0E1014}
+  html[data-theme="auto"][data-accent="teal"]{--acc:#2DD4BF;--acc-ink:#06201D}
+  html[data-theme="auto"][data-accent="violet"]{--acc:#A78BFA;--acc-ink:#160A2E}
+  html[data-theme="auto"][data-accent="amber"]{--acc:#FBBF24;--acc-ink:#2A1A00}
+  html[data-theme="auto"][data-accent="magenta"]{--acc:#F472B6;--acc-ink:#2A0A18}
 }
 
 *{box-sizing:border-box}
@@ -93,6 +143,8 @@ a:hover{color:var(--acc)}
 .skip{position:absolute;left:-999px;top:0;background:var(--ink);color:var(--bg);padding:10px 16px;z-index:300;border-radius:0 0 10px 0}
 .skip:focus{left:0}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:8px}
+/* variable display font for headings + hero numerals only (body keeps the system stack for perf) */
+.titles h1,.panel h2,.pcard h3,.dialog h3,.month h4,.stat .num{font-family:var(--font-display);letter-spacing:-.5px}
 
 /* animated aurora gradient backdrop */
 #aurora{position:fixed;inset:-20%;z-index:-2;pointer-events:none;opacity:.48;transition:opacity .3s var(--ease);
@@ -112,15 +164,24 @@ html[data-theme="dark"] #aurora{opacity:.6}
 @keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,4vh) scale(1.12)}}
 @keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vw,-3vh) scale(1.08)}}
 
+/* subtle film grain over the backdrop — sits BEHIND content (z-index -1), so body/card text contrast is untouched */
+#grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:150px 150px}
+html[data-theme="dark"] #grain,html[data-theme="oled"] #grain{opacity:.08;mix-blend-mode:screen}
+@media (prefers-reduced-motion:reduce){#grain{display:none}}
+
 /* scroll progress */
 #progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:200;background:transparent}
 #progress > i{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--acc);opacity:1}
 
 /* ----------------------------- app bar ------------------------------ */
-.appbar{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 82%,transparent);
-  backdrop-filter:saturate(150%) blur(12px);-webkit-backdrop-filter:saturate(150%) blur(12px);
-  transition:padding .25s var(--ease),box-shadow .25s var(--ease)}
-.appbar.scrolled{box-shadow:0 6px 18px -12px var(--sh)}
+.appbar{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 72%,transparent);
+  backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
+  box-shadow:inset 0 1px 0 var(--glass-hi);
+  transition:padding .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease)}
+.appbar.scrolled{background:color-mix(in srgb,var(--bg) 86%,transparent);
+  box-shadow:inset 0 1px 0 var(--glass-hi),0 8px 24px -16px var(--sh),0 1px 0 var(--line)}
 .appwrap{display:flex;align-items:center;gap:16px;max-width:1340px;margin:0 auto;padding:13px clamp(14px,3vw,30px);transition:padding .25s var(--ease)}
 .appbar.scrolled .appwrap{padding-top:9px;padding-bottom:9px}
 .brand{display:flex;align-items:center;gap:13px;min-width:0;will-change:transform}
@@ -148,6 +209,17 @@ html[data-theme="dark"] #aurora{opacity:.6}
 .btn.primary:active{transform:translateY(1px)}
 .btn.sm{padding:8px 12px;min-height:36px;font-size:12.5px}
 .btn .ic{width:17px;height:17px}
+
+/* accent-colour picker popover */
+.accent-wrap{position:relative;display:inline-flex}
+.accent-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:80;background:var(--card);border-radius:14px;
+  box-shadow:var(--raise-hi);padding:10px;display:flex;gap:9px}
+.accent-pop[hidden]{display:none}
+.sw{width:26px;height:26px;border-radius:50%;border:0;cursor:pointer;padding:0;
+  box-shadow:0 0 0 1px var(--line),var(--soft-in-sm);transition:transform .14s var(--ease-spring)}
+.sw:hover{transform:scale(1.14)}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink)}
+.sw:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
 /* ----------------------------- layout ------------------------------- */
 main{max-width:1340px;margin:0 auto;padding:var(--pad)}
@@ -410,6 +482,7 @@ button.hc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 <a href="#main" class="skip">Skip to content</a>
 <div id="aurora" aria-hidden="true"></div>
 <div id="orbs" aria-hidden="true"></div>
+<div id="grain" aria-hidden="true"></div>
 <div id="progress" aria-hidden="true"><i></i></div>
 
 <header class="appbar" id="appbar">
@@ -422,7 +495,11 @@ button.hc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
     </div>
     <div class="top-actions no-print">
       <button class="btn sm" id="btn-cmdk" title="Search (Ctrl/⌘ K)"><span class="ic" data-icon="search"></span><span class="bl">Search</span></button>
-      <button class="btn sm" id="btn-theme" title="Light / dark / auto"><span class="ic" data-icon="contrast"></span><span class="bl">Theme</span></button>
+      <button class="btn sm" id="btn-theme" title="Light / dark / OLED / auto"><span class="ic" data-icon="contrast"></span><span class="bl">Theme</span></button>
+      <div class="accent-wrap">
+        <button class="btn sm" id="btn-accent" aria-haspopup="true" aria-expanded="false" title="Accent colour"><span class="ic" data-icon="palette"></span><span class="bl">Accent</span></button>
+        <div class="accent-pop" id="accent-pop" role="menu" aria-label="Accent colour" hidden></div>
+      </div>
       <button class="btn sm" id="btn-add"><span class="ic" data-icon="plus"></span><span class="bl">Add</span></button>
       <button class="btn sm" id="btn-export"><span class="ic" data-icon="download"></span><span class="bl">Export</span></button>
       <button class="btn sm" id="btn-import"><span class="ic" data-icon="upload"></span><span class="bl">Import</span></button>
@@ -553,7 +630,9 @@ const ICONS={
   inbox:'<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
   activity:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
-  moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>'
+  moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
+  oled:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6" fill="currentColor" stroke="none"/>',
+  palette:'<circle cx="13.5" cy="6.5" r=".6" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".6" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".6" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".6" fill="currentColor" stroke="none"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.83-.44-1.12-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.67h1.99c3.05 0 5.56-2.5 5.56-5.55C21.96 6.01 17.46 2 12 2z"/>'
 };
 function icon(name,size){ size=size||18; return '<svg class="ic" viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[name]||"")+'</svg>'; }
 function paintIcons(root){ (root||document).querySelectorAll("[data-icon]").forEach(el=>{ el.outerHTML=icon(el.dataset.icon, el.classList.contains("ic")?17:18); }); }
@@ -886,11 +965,35 @@ function parseCSV(text){ const rows=[]; let row=[],cur="",q=false;
 document.getElementById("btn-print").addEventListener("click",()=>window.print());
 document.getElementById("btn-reset").addEventListener("click",()=>{ if(confirm("Discard local edits and reload the seed data?")){ localStorage.removeItem(STORE_KEY); DB=clone(SEED); animate=true; renderAll(); } });
 function updateThemeBtn(){ const t=document.documentElement.getAttribute("data-theme")||"auto";
-  const map={light:["sun","Light"],dark:["moon","Dark"],auto:["contrast","Auto"]}, pair=map[t]||map.auto, b=document.getElementById("btn-theme");
+  const map={light:["sun","Light"],dark:["moon","Dark"],oled:["oled","OLED"],auto:["contrast","Auto"]}, pair=map[t]||map.auto, b=document.getElementById("btn-theme");
   b.innerHTML=icon(pair[0],17)+`<span class="bl">${pair[1]}</span>`; b.title="Theme: "+pair[1]+" — click to change"; b.setAttribute("aria-label","Theme: "+pair[1]+", click to change"); }
-document.getElementById("btn-theme").addEventListener("click",()=>{ const cur=document.documentElement.getAttribute("data-theme"),next=cur==="dark"?"light":(cur==="light"?"auto":"dark");
+const THEME_ORDER=["light","dark","oled","auto"];
+document.getElementById("btn-theme").addEventListener("click",()=>{ const cur=document.documentElement.getAttribute("data-theme")||"auto";
+  const next=THEME_ORDER[(THEME_ORDER.indexOf(cur)+1)%THEME_ORDER.length];
   document.documentElement.setAttribute("data-theme",next); try{localStorage.setItem("glx-theme",next);}catch(e){} updateThemeBtn(); animate=false; renderAll(); });
 (function(){ try{const t=localStorage.getItem("glx-theme"); if(t) document.documentElement.setAttribute("data-theme",t);}catch(e){} })();
+
+/* ===================== accent-colour picker ===================== */
+const ACCENTS=[["cobalt","Cobalt","#0123B4"],["teal","Teal","#0F766E"],["violet","Violet","#6D28D9"],["amber","Amber","#B45309"],["magenta","Magenta","#BE185D"]];
+const accentBtn=document.getElementById("btn-accent"), accentPop=document.getElementById("accent-pop");
+function currentAccent(){ return document.documentElement.getAttribute("data-accent")||"cobalt"; }
+function buildAccentSwatches(){ const cur=currentAccent();
+  accentPop.innerHTML=ACCENTS.map(([k,label,c])=>`<button type="button" class="sw" role="menuitemradio" data-acc="${k}" title="${label}" aria-label="${label} accent" aria-pressed="${k===cur}" style="background:${c}"></button>`).join("");
+  accentPop.querySelectorAll(".sw").forEach(b=>b.addEventListener("click",()=>setAccent(b.dataset.acc))); }
+function setAccent(k){ document.documentElement.setAttribute("data-accent",k); try{localStorage.setItem("glx-accent",k);}catch(e){}
+  buildAccentSwatches(); const s=accentPop.querySelector(`[data-acc="${k}"]`); if(s) s.focus(); animate=false; renderAll(); }
+function openAccent(){ buildAccentSwatches(); accentPop.hidden=false; accentBtn.setAttribute("aria-expanded","true");
+  const sel=accentPop.querySelector('[aria-pressed="true"]')||accentPop.querySelector(".sw"); if(sel) sel.focus(); }
+function closeAccent(focus){ accentPop.hidden=true; accentBtn.setAttribute("aria-expanded","false"); if(focus) accentBtn.focus(); }
+if(accentBtn){
+  accentBtn.addEventListener("click",e=>{ e.stopPropagation(); accentPop.hidden?openAccent():closeAccent(); });
+  accentPop.addEventListener("keydown",e=>{ const sws=[...accentPop.querySelectorAll(".sw")],i=sws.indexOf(document.activeElement);
+    if(e.key==="Escape"){ e.preventDefault(); closeAccent(true); }
+    else if(e.key==="ArrowRight"||e.key==="ArrowDown"){ e.preventDefault(); (sws[(i+1)%sws.length]||sws[0]).focus(); }
+    else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){ e.preventDefault(); (sws[(i-1+sws.length)%sws.length]||sws[0]).focus(); } });
+  document.addEventListener("click",e=>{ if(!accentPop.hidden && !accentPop.contains(e.target) && !accentBtn.contains(e.target)) closeAccent(); });
+}
+(function(){ try{const a=localStorage.getItem("glx-accent"); if(a) document.documentElement.setAttribute("data-accent",a);}catch(e){} })();
 
 /* ===================== Lenis smooth scroll + progress + parallax ===================== */
 let lenis=null;
