@@ -5,10 +5,10 @@
     "span_start": "2025-11-19",
     "span_end": "2026-06-15",
     "stats": {
-      "projects": 21,
-      "active": 8,
-      "done": 8,
-      "total_commits": 904,
+      "projects": 19,
+      "active": 7,
+      "done": 7,
+      "total_commits": 900,
       "engagement_days": 55,
       "on_site_days": 10,
       "wfh_days": 44,
@@ -129,7 +129,7 @@
         ],
         [
           "2026-06-03",
-          99
+          94
         ],
         [
           "2026-06-04",
@@ -177,13 +177,13 @@
         ],
         [
           "2026-06-16",
-          9
+          10
         ]
       ],
       "commits_by_project": [
         [
           "THERMYNX — HVAC AI Operations Intelligence",
-          320
+          321
         ],
         [
           "OMNYX — Universal IoT Operations Platform",
@@ -216,20 +216,16 @@
         [
           "Graylinx Legacy-Code Analysis",
           7
-        ],
-        [
-          "TripTrail — Travel & Expense (RANGSONS)",
-          5
         ]
       ],
       "commits_by_category": [
         [
           "HVAC Platform",
-          591
+          592
         ],
         [
           "Client Apps",
-          196
+          191
         ],
         [
           "SelfAware Suite",
@@ -251,11 +247,11 @@
       "projects_by_status": [
         [
           "Done",
-          8
+          7
         ],
         [
           "Active",
-          6
+          5
         ],
         [
           "Paused",
@@ -277,11 +273,11 @@
         ],
         [
           "Personal",
-          5
+          4
         ],
         [
           "Client",
-          3
+          2
         ]
       ],
       "work_type": [
@@ -329,7 +325,7 @@
         ],
         [
           "W23",
-          355
+          350
         ],
         [
           "W24",
@@ -337,7 +333,7 @@
         ],
         [
           "W25",
-          36
+          37
         ]
       ],
       "weekend_worked": 16,
@@ -345,14 +341,14 @@
       "active_commit_days": 34,
       "busiest_day": {
         "date": "2026-06-03",
-        "commits": 99
+        "commits": 94
       },
-      "commits_per_active_day": 26.6,
+      "commits_per_active_day": 26.5,
       "longest_streak": 45,
       "hotel_nights": 6,
       "locations": 4
     },
-    "build": "f6d10a3355a6"
+    "build": "0c25c4a45b36"
   },
   "projects": [
     {
@@ -378,7 +374,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 320,
+      "commits": 321,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -1084,35 +1080,6 @@
       "notes": ""
     },
     {
-      "id": "concept-standard",
-      "parent_id": "",
-      "type": "project",
-      "name": "Concept Standard — Graph Analytics",
-      "category": "SelfAware Suite",
-      "scope": "Personal",
-      "description": "Interactive concept-map viewer (1,159 concepts, 5,985 relations) for lesson generation.",
-      "role": "Built the in-browser graph analytics tool (ECharts + Neo4j GDS).",
-      "tech": [
-        "Python",
-        "JavaScript",
-        "ECharts",
-        "Neo4j"
-      ],
-      "start": "2026-06-15",
-      "end": "ongoing",
-      "date_source": "approx",
-      "status": "Active",
-      "progress": 55,
-      "commits": 0,
-      "location": "D:\\Harshan\\concept-standard",
-      "highlights": [
-        "1,159 concepts / 5,985 relations",
-        "Force/circular graphs, command palette, light/dark, a11y"
-      ],
-      "links": "",
-      "notes": ""
-    },
-    {
       "id": "voxara",
       "parent_id": "",
       "type": "project",
@@ -1140,35 +1107,6 @@
       "highlights": [
         "Largest by file count (37 items)",
         "Local LLM + Whisper + Piper TTS"
-      ],
-      "links": "",
-      "notes": ""
-    },
-    {
-      "id": "travel-app",
-      "parent_id": "",
-      "type": "project",
-      "name": "TripTrail — Travel & Expense (RANGSONS)",
-      "category": "Client Apps",
-      "scope": "Client",
-      "description": "Buildless travel/expense reporting web app for RANGSONS LLP with HR approval + Google Sheets.",
-      "role": "Sole developer — static web app, Supabase backend, approval flow.",
-      "tech": [
-        "HTML",
-        "Tailwind",
-        "JavaScript",
-        "Supabase"
-      ],
-      "start": "2026-06-03",
-      "end": "2026-06-03",
-      "date_source": "git",
-      "status": "Done",
-      "progress": 100,
-      "commits": 5,
-      "location": "D:\\Harshan\\travel-app",
-      "highlights": [
-        "HR approval + Google Sheets integration",
-        "Buildless static deployment"
       ],
       "links": "",
       "notes": ""
@@ -2069,7 +2007,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "OMNYX [55]: feat(protocols): multi-protocol DAL — MQTT + Modbus + OPC-UA adapters; feat(rag): pgvector knowledge base — ingestion + agent retrieval [Phase 2]; feat(phase2): MinIO data lake + Airflow — working telemetry archive (+52 more) · Nesso [39]: feat(mobile): preflight checker + progress logging + timeouts in dev launcher; feat(web-vite): i18n increment — localize all page titles (en/kn/hi); fix(web-vite): responsive audit — stack field grid + scroll calendar on mobile (+36 more) · TripTrail [5]: Fix RLS infinite recursion: SECURITY DEFINER on policy helper functions; Fix totals trigger infinite recursion (pg_trigger_depth guard); Live: join user for employee_name/department; add re-runnable demo seed (+2 more)  (99 commits)",
+      "notes": "OMNYX [55]: feat(protocols): multi-protocol DAL — MQTT + Modbus + OPC-UA adapters; feat(rag): pgvector knowledge base — ingestion + agent retrieval [Phase 2]; feat(phase2): MinIO data lake + Airflow — working telemetry archive (+52 more) · Nesso [39]: feat(mobile): preflight checker + progress logging + timeouts in dev launcher; feat(web-vite): i18n increment — localize all page titles (en/kn/hi); fix(web-vite): responsive audit — stack field grid + scroll calendar on mobile (+36 more)  (94 commits)",
       "linked_project": "omnyx",
       "source": "derived"
     },
