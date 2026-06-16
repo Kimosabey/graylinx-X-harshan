@@ -310,15 +310,20 @@ PROJECTS = [
     },
     # --- 2025 POC / discovery phase (email-evidenced, pre-implementation) ---
     {
-        "id": "poc-hvac-pipeline", "name": "HVAC Pipeline POCs (POC 1–3)",
+        "id": "poc-hvac-pipeline", "name": "HVAC Data Pipeline (v1 & v2)",
         "dir": None, "git": False,
-        "category": "HVAC Platform", "status": "Done", "progress": 90,
-        "description": "POC 1 & 2 completed, POC 3 in discussion — HVAC data pipeline, the pre-implementation phase.",
-        "role": "Drove the POCs with J. Suryanarayanan & Satish Krishna (email-tracked milestones).",
-        "tech": ["NodeJS", "Kafka", "MinIO", "MySQL"],
-        "highlights": ["POC 1 & 2 completed; POC 3 discussion", "Milestone-tracked over email (Oct–Nov 2025)"],
-        "override": {"start": "2025-10-20", "end": "2025-11-27", "source": "email"},
-        "milestones": [],
+        "category": "HVAC Platform", "status": "Done", "progress": 100,
+        "description": "Production HVAC telemetry pipeline: Node.js → MySQL + Kafka → MinIO (Parquet) → Airflow → ClickHouse → Grafana. Original build on the harshan-aiyappa GitHub account (Nov 2025).",
+        "role": "Built the end-to-end pipeline + its 3 POCs with J. Suryanarayanan & Satish Krishna; milestone-tracked over email.",
+        "tech": ["Node.js", "Kafka", "MinIO", "Airflow", "ClickHouse", "Grafana", "Python", "Docker"],
+        "commits": 12,
+        "highlights": ["v1 (19 Nov) + v2 (26 Nov 2025) on the harshan-aiyappa account", "Ingestion · Data Lake · Analytics POCs", "Node→Kafka→MinIO→Airflow→ClickHouse→Grafana"],
+        "override": {"start": "2025-11-19", "end": "2025-11-26", "source": "github"},
+        "milestones": [
+            {"name": "POC 1 — Ingestion (Node.js → MySQL + Kafka)", "status": "Done", "progress": 100, "desc": "Simulator → Node.js service → MySQL + Kafka"},
+            {"name": "POC 2 — Data Lake (Kafka → MinIO/Parquet)", "status": "Done", "progress": 100, "desc": "Kafka → connector → MinIO Parquet storage"},
+            {"name": "POC 3 — Analytics (Airflow → ClickHouse → Grafana)", "status": "Done", "progress": 100, "desc": "MinIO → Airflow → ClickHouse → Grafana dashboards"},
+        ],
     },
     {
         "id": "poc-asset-mgmt", "name": "Asset Management POC — NodeJS → Kafka → MinIO",
