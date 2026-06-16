@@ -285,6 +285,85 @@ PROJECTS = [
         "highlights": ["Placeholder"],
         "milestones": [],
     },
+    # --- GitHub-confirmed Graylinx repos (authoritative dates via `gh`, account Kimosabey) ---
+    {
+        "id": "gl-hvac-early", "name": "Graylinx.ai HVAC (early prototype)",
+        "dir": None, "git": False,
+        "category": "HVAC Platform", "status": "Done", "progress": 100,
+        "description": "\"HVAC Data Pipeline v2\" — first Graylinx HVAC repo (Python), precursor to ClimaStream.",
+        "role": "Initial HVAC data-pipeline prototype.",
+        "tech": ["Python"], "commits": 8,
+        "highlights": ["First HVAC repo on GitHub (8 commits)", "Precursor to ClimaStream"],
+        "override": {"start": "2026-04-20", "end": "2026-04-21", "source": "github"},
+        "milestones": [],
+    },
+    {
+        "id": "gl-legacy-analysis", "name": "Graylinx Legacy-Code Analysis",
+        "dir": None, "git": False,
+        "category": "Graylinx Core", "status": "Done", "progress": 100,
+        "description": "Audit/analysis of the Graylinx legacy codebase that informed the v2/OMNYX rebuild.",
+        "role": "Reviewed & documented legacy code for migration.",
+        "tech": ["JavaScript", "Node.js"], "commits": 7,
+        "highlights": ["Legacy code audit (7 commits)", "Fed into OMNYX architecture"],
+        "override": {"start": "2026-04-28", "end": "2026-05-01", "source": "github"},
+        "milestones": [],
+    },
+    # --- 2025 POC / discovery phase (email-evidenced, pre-implementation) ---
+    {
+        "id": "poc-hvac-pipeline", "name": "HVAC Pipeline POCs (POC 1–3)",
+        "dir": None, "git": False,
+        "category": "HVAC Platform", "status": "Done", "progress": 90,
+        "description": "POC 1 & 2 completed, POC 3 in discussion — HVAC data pipeline, the pre-implementation phase.",
+        "role": "Drove the POCs with J. Suryanarayanan & Satish Krishna (email-tracked milestones).",
+        "tech": ["NodeJS", "Kafka", "MinIO", "MySQL"],
+        "highlights": ["POC 1 & 2 completed; POC 3 discussion", "Milestone-tracked over email (Oct–Nov 2025)"],
+        "override": {"start": "2025-10-20", "end": "2025-11-27", "source": "email"},
+        "milestones": [],
+    },
+    {
+        "id": "poc-asset-mgmt", "name": "Asset Management POC — NodeJS → Kafka → MinIO",
+        "dir": None, "git": False,
+        "category": "Graylinx Core", "status": "Done", "progress": 100,
+        "description": "Asset-management ingestion POC: NodeJS → Kafka → MinIO with MySQL.",
+        "role": "Designed table schema + ingestion flow (with Surya Narayanan).",
+        "tech": ["NodeJS", "Kafka", "MinIO", "MySQL"],
+        "highlights": ["NodeJS → Kafka → MinIO pipeline", "Nov 2025"],
+        "override": {"start": "2025-11-07", "end": "2025-11-12", "source": "email"},
+        "milestones": [],
+    },
+    {
+        "id": "poc-kafka-minio", "name": "Kafka → MinIO Data Ingestion POC",
+        "dir": None, "git": False,
+        "category": "Graylinx Core", "status": "Done", "progress": 100,
+        "description": "Kafka-to-MinIO data ingestion POC — plan & meeting summary.",
+        "role": "Led the plan + meeting summary (with Raghunandan Srinath, Surya Narayanan).",
+        "tech": ["Kafka", "MinIO"],
+        "highlights": ["Ingestion plan + meeting summary", "Nov 2025"],
+        "override": {"start": "2025-11-07", "end": "2025-11-07", "source": "email"},
+        "milestones": [],
+    },
+    {
+        "id": "poc-chiller", "name": "HVAC Chiller Plant Data Pipeline — POC 1",
+        "dir": None, "git": False,
+        "category": "HVAC Platform", "status": "Done", "progress": 100,
+        "description": "Chiller-plant data pipeline, POC 1.",
+        "role": "Started POC 1 (aligned with J. Suryanarayanan).",
+        "tech": ["NodeJS", "Kafka"],
+        "highlights": ["Chiller plant POC 1", "Nov 2025"],
+        "override": {"start": "2025-11-14", "end": "2025-11-14", "source": "email"},
+        "milestones": [],
+    },
+    {
+        "id": "rms-config", "name": "RMS Configuration",
+        "dir": None, "git": False,
+        "category": "Infra & Tooling", "status": "Done", "progress": 100,
+        "description": "RMS configuration coordination across the Vyoda/Tanu and Nagesh teams.",
+        "role": "Coordinated RMS configuration.",
+        "tech": ["Config"],
+        "highlights": ["RMS configuration", "Oct 2025"],
+        "override": {"start": "2025-10-28", "end": "2025-10-28", "source": "email"},
+        "milestones": [],
+    },
 ]
 
 # Engagement -> project cross-link rules (keyword in notes -> project id)
@@ -498,6 +577,7 @@ def build_projects():
             start = p["override"]["start"]
             end = p["override"]["end"]
             source = p["override"].get("source", "manual")
+            commits = p.get("commits", 0)   # catalogue may pin a commit count (e.g. GitHub-sourced)
         else:
             g = git_for_project(path)   # auto-detect, incl. nested repos
             if g:
