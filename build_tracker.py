@@ -325,17 +325,22 @@ PROJECTS = [
             {"name": "POC 3 — Analytics (Airflow → ClickHouse → Grafana)", "status": "Done", "progress": 100, "desc": "MinIO → Airflow → ClickHouse → Grafana dashboards"},
         ],
     },
-    {
-        "id": "rms-config", "name": "RMS Configuration",
-        "dir": None, "git": False,
-        "category": "Infra & Tooling", "status": "Done", "progress": 100,
-        "description": "RMS configuration coordination across the Vyoda/Tanu and Nagesh teams.",
-        "role": "Coordinated RMS configuration.",
-        "tech": ["Config"],
-        "highlights": ["RMS configuration", "Oct 2025"],
-        "override": {"start": "2025-10-28", "end": "2025-10-28", "source": "email"},
-        "milestones": [],
-    },
+    # --- COMMENTED OUT (2026-06-16) pending verification ---------------------
+    # "RMS Configuration" traces back to an email-evidenced works list Harshan
+    # shared from his Gmail, but the description (Vyoda/Tanu/Nagesh teams) and the
+    # single Oct-28-2025 date were unverified placeholders. Removed from the tracker
+    # for now; restore once the real description/dates/collaborators are confirmed.
+    # {
+    #     "id": "rms-config", "name": "RMS Configuration",
+    #     "dir": None, "git": False,
+    #     "category": "Infra & Tooling", "status": "Done", "progress": 100,
+    #     "description": "RMS configuration coordination across the Vyoda/Tanu and Nagesh teams.",
+    #     "role": "Coordinated RMS configuration.",
+    #     "tech": ["Config"],
+    #     "highlights": ["RMS configuration", "Oct 2025"],
+    #     "override": {"start": "2025-10-28", "end": "2025-10-28", "source": "email"},
+    #     "milestones": [],
+    # },
 ]
 
 # Engagement -> project cross-link rules (keyword in notes -> project id)

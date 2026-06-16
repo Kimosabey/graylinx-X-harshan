@@ -2,13 +2,13 @@
   "meta": {
     "title": "Harshan × Graylinx — Work Tracker",
     "generated": "2026-06-15",
-    "span_start": "2025-10-28",
+    "span_start": "2025-11-19",
     "span_end": "2026-06-15",
     "stats": {
-      "projects": 22,
+      "projects": 21,
       "active": 8,
-      "done": 9,
-      "total_commits": 901,
+      "done": 8,
+      "total_commits": 903,
       "engagement_days": 55,
       "on_site_days": 10,
       "wfh_days": 44,
@@ -177,13 +177,13 @@
         ],
         [
           "2026-06-16",
-          6
+          8
         ]
       ],
       "commits_by_project": [
         [
           "THERMYNX — HVAC AI Operations Intelligence",
-          317
+          319
         ],
         [
           "OMNYX — Universal IoT Operations Platform",
@@ -225,7 +225,7 @@
       "commits_by_category": [
         [
           "HVAC Platform",
-          588
+          590
         ],
         [
           "Client Apps",
@@ -251,7 +251,7 @@
       "projects_by_status": [
         [
           "Done",
-          9
+          8
         ],
         [
           "Active",
@@ -323,7 +323,7 @@
         ],
         [
           "W25",
-          33
+          35
         ]
       ],
       "weekend_worked": 16,
@@ -333,12 +333,12 @@
         "date": "2026-06-03",
         "commits": 99
       },
-      "commits_per_active_day": 26.5,
+      "commits_per_active_day": 26.6,
       "longest_streak": 45,
       "hotel_nights": 6,
       "locations": 4
     },
-    "build": "e2a48677fdf2"
+    "build": "95eddd7956e6"
   },
   "projects": [
     {
@@ -363,7 +363,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 317,
+      "commits": 319,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -1448,31 +1448,6 @@
       "commits": 0,
       "location": "",
       "highlights": [],
-      "links": "",
-      "notes": ""
-    },
-    {
-      "id": "rms-config",
-      "parent_id": "",
-      "type": "project",
-      "name": "RMS Configuration",
-      "category": "Infra & Tooling",
-      "description": "RMS configuration coordination across the Vyoda/Tanu and Nagesh teams.",
-      "role": "Coordinated RMS configuration.",
-      "tech": [
-        "Config"
-      ],
-      "start": "2025-10-28",
-      "end": "2025-10-28",
-      "date_source": "email",
-      "status": "Done",
-      "progress": 100,
-      "commits": 0,
-      "location": "",
-      "highlights": [
-        "RMS configuration",
-        "Oct 2025"
-      ],
       "links": "",
       "notes": ""
     }
