@@ -676,6 +676,7 @@ def compute_analytics(proj, engagement):
     active = len(per_day)
     total = sum(p["commits"] or 0 for p in proj)
     return {
+        "per_day": sorted(per_day.items()),
         "commits_by_project": by_proj,
         "commits_by_category": sorted(cat.items(), key=lambda x: -x[1]),
         "projects_by_status": sorted(status.items(), key=lambda x: -x[1]),
