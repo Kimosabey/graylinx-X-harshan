@@ -397,6 +397,61 @@ def git_for_project(project_dir):
     return sd[0], sd[-1], total, dates
 
 
+_DAY_COMMITS = None
+
+
+def repo_commits(repo):
+    """[(iso_date, subject)] for Harshan's commits in one repo."""
+    raw = _run(["git", "-C", repo, "log", "--all", "-i", "--author=harshan",
+                "--date=short", "--format=%ad\x1f%s"])
+    out = []
+    for ln in raw.splitlines():
+        if "\x1f" in ln:
+            d, s = ln.split("\x1f", 1)
+            d = d.strip()
+            if d[:1].isdigit():
+                out.append((d, s.strip()))
+    return out
+
+
+def day_commits():
+    """date -> {project_id: [commit subjects]} across all repos (cached)."""
+    global _DAY_COMMITS
+    if _DAY_COMMITS is not None:
+        return _DAY_COMMITS
+    proj_dirs = sorted(
+        [(os.path.abspath(os.path.join(BASE, p["dir"])), p["id"]) for p in PROJECTS if p.get("dir")],
+        key=lambda t: len(t[0]), reverse=True)
+    dc = {}
+    for repo in all_repos():
+        rp = os.path.abspath(repo)
+        pid = next((pid for d, pid in proj_dirs if rp == d or rp.startswith(d + os.sep)), "")
+        if not pid:
+            continue
+        for ds, subj in repo_commits(repo):
+            dc.setdefault(ds, {}).setdefault(pid, []).append(subj)
+    _DAY_COMMITS = dc
+    return dc
+
+
+def _short_name(pid):
+    for p in PROJECTS:
+        if p["id"] == pid:
+            return p["name"].split(" —")[0].split(" /")[0].strip()
+    return pid
+
+
+def describe_day(dmap):
+    """Descriptive note from a day's {pid:[subjects]} commit map — real git subjects."""
+    parts = []
+    for pid, subs in sorted(dmap.items(), key=lambda kv: -len(kv[1])):
+        clean = [s[:80] for s in subs if s]
+        top = "; ".join(clean[:3])
+        more = f" (+{len(clean) - 3} more)" if len(clean) > 3 else ""
+        parts.append(f"{_short_name(pid)} [{len(subs)}]: {top}{more}")
+    return " · ".join(parts)
+
+
 def mtime_dates(path, max_depth=2):
     """Estimate (start, end) from oldest/newest file mtime, ignoring noise dirs."""
     if not os.path.isdir(path):
@@ -536,33 +591,24 @@ def carry_forward(att, projects):
     have = {r["date"] for r in att}
     last = max(datetime.fromisoformat(r["date"]).date() for r in att)
 
-    # map iso-date -> project id across ALL repos (incl. nested), nearest project dir.
-    # This captures weekend (Sat/Sun) commits in graylinx-v2/omnyx, farmer-app/nesso, etc.
-    proj_dirs = sorted(
-        [(os.path.abspath(os.path.join(BASE, p["dir"])), p["id"]) for p in PROJECTS if p.get("dir")],
-        key=lambda t: len(t[0]), reverse=True)
-    git_day = {}
-    for repo in all_repos():
-        rp = os.path.abspath(repo)
-        pid = next((pid for d, pid in proj_dirs if rp == d or rp.startswith(d + os.sep)), "")
-        if not pid:
-            continue
-        for ds in repo_dates(repo)[1]:
-            git_day.setdefault(ds, pid)
+    # per-day commit subjects across ALL repos (incl. nested) -> a real, descriptive
+    # note for each derived day (captures weekend work in omnyx/nesso/etc. too).
+    dc = day_commits()
 
     extra = []
     d = last + timedelta(days=1)
     while d <= TODAY:
         iso = d.isoformat()
         if iso not in have:
-            pid = git_day.get(iso, "")
-            if pid:
-                pname = next((p["name"] for p in PROJECTS if p["id"] == pid), pid)
+            dm = dc.get(iso)
+            if dm:
+                pid = max(dm, key=lambda k: len(dm[k]))
+                total = sum(len(v) for v in dm.values())
                 extra.append({
                     "date": iso, "day": d.strftime("%A"), "work_type": "WFH",
                     "location": "Mysore (residence)", "hotel": "",
                     "check_in": "", "check_out": "", "travel": "",
-                    "notes": f"Development activity on {pname} (auto-derived from git).",
+                    "notes": describe_day(dm) + f"  ({total} commits)",
                     "linked_project": pid, "source": "derived",
                 })
             else:

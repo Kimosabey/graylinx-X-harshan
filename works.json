@@ -8,7 +8,7 @@
       "projects": 18,
       "active": 8,
       "done": 5,
-      "total_commits": 865,
+      "total_commits": 868,
       "engagement_days": 48,
       "on_site_days": 10,
       "wfh_days": 36,
@@ -41,7 +41,7 @@
       "WFH": "888888",
       "Leave": "ABABAB"
     },
-    "build": "f697fb672493"
+    "build": "fdca3b867c23"
   },
   "projects": [
     {
@@ -66,7 +66,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 310,
+      "commits": 311,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -329,7 +329,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 35,
-      "commits": 218,
+      "commits": 219,
       "location": "D:\\Harshan\\graylinx-v2",
       "highlights": [
         "Digital Twin fault detection & diagnostics (FDD)",
@@ -350,7 +350,7 @@
       "role": "",
       "tech": [],
       "start": "2026-05-25",
-      "end": "2026-05-29",
+      "end": "2026-05-30",
       "date_source": "git",
       "status": "Active",
       "progress": 40,
@@ -369,8 +369,8 @@
       "description": "Setpoint optimization",
       "role": "",
       "tech": [],
-      "start": "2026-05-29",
-      "end": "2026-06-02",
+      "start": "2026-05-30",
+      "end": "2026-06-04",
       "date_source": "git",
       "status": "Planned",
       "progress": 15,
@@ -389,8 +389,8 @@
       "description": "Operations agents",
       "role": "",
       "tech": [],
-      "start": "2026-06-02",
-      "end": "2026-06-06",
+      "start": "2026-06-04",
+      "end": "2026-06-09",
       "date_source": "git",
       "status": "Active",
       "progress": 30,
@@ -409,8 +409,8 @@
       "description": "Postgres + Timescale",
       "role": "",
       "tech": [],
-      "start": "2026-06-06",
-      "end": "2026-06-11",
+      "start": "2026-06-09",
+      "end": "2026-06-15",
       "date_source": "git",
       "status": "Active",
       "progress": 45,
@@ -869,11 +869,11 @@
         "Node.js"
       ],
       "start": "2026-05-28",
-      "end": "2026-06-03",
+      "end": "ongoing",
       "date_source": "git",
       "status": "Active",
       "progress": 45,
-      "commits": 190,
+      "commits": 191,
       "location": "D:\\Harshan\\farmer-app",
       "highlights": [
         "Farm-to-fork traceability (NR Group)",
@@ -1370,7 +1370,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on OMNYX — Universal IoT Operations Platform (auto-derived from git).",
+      "notes": "OMNYX [9]: docs: PROJECT_OVERVIEW.md — vision, legacy comparison, transformation story; docs: ARCHITECTURE_RATIONALE.md — pros, cons, risk register, on-site scenarios; docs: align all MD docs with 2-DB architecture + Alloy/Kafka images (+6 more)  (9 commits)",
       "linked_project": "omnyx",
       "source": "derived"
     },
@@ -1383,7 +1383,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).",
+      "notes": "THERMYNX [1]: feat: implement full-stack HVAC AI operations platform with multi-agent orchestr  (1 commits)",
       "linked_project": "thermynx",
       "source": "derived"
     },
@@ -1396,8 +1396,8 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on Nesso — Farm Traceability Platform (auto-derived from git).",
-      "linked_project": "farmer-app",
+      "notes": "THERMYNX [12]: feat: add architecture documentation and configure environment-specific Claude s; docs(ai): mark Tier 1/2/3 + Perf T1 + Reliability R1/R4 + Eval Phase 1 as shippe; fix(eval+ui): action-verb regex tolerates articles + vite proxy env-driven (+9 more) · Nesso [5]: docs: add comprehensive developer setup guide and link it in README; docs: initialize README.md with project overview, architecture, and documentatio; docs: add comprehensive project implementation plan and detailed screen inventor (+2 more)  (17 commits)",
+      "linked_project": "thermynx",
       "source": "derived"
     },
     {
@@ -1409,7 +1409,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on Nesso — Farm Traceability Platform (auto-derived from git).",
+      "notes": "Nesso [8]: feat: implement activities dashboard and logging interface with API integration; feat(phase-3): crops + activities + catalog (POP + inputs) backend; feat(phase-2): web admin UI for farmers — dashboard shell, list, detail, approva (+5 more)  (8 commits)",
       "linked_project": "farmer-app",
       "source": "derived"
     },
@@ -1422,7 +1422,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on Nesso — Farm Traceability Platform (auto-derived from git).",
+      "notes": "Nesso [68]: feat(mobile): real in-app support + live multi-language (no more \"coming soon\"); fix(mobile/login): bulletproof layout + themed + add missing elements; feat(mobile): app-wide dark mode — light/dark token system + working toggles ✅ (+65 more)  (68 commits)",
       "linked_project": "farmer-app",
       "source": "derived"
     },
@@ -1435,7 +1435,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on Nesso — Farm Traceability Platform (auto-derived from git).",
+      "notes": "Nesso [30]: perf(P2): web chart code-split, portal OG metadata, mobile FlatList tuning; fix(mobile): revert moti from dashboard — restore stable plain View KPI cards; docs: mark Phase 6/production ON HOLD until user says (P5 banner) (+27 more)  (30 commits)",
       "linked_project": "farmer-app",
       "source": "derived"
     },
@@ -1448,8 +1448,8 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on Nesso — Farm Traceability Platform (auto-derived from git).",
-      "linked_project": "farmer-app",
+      "notes": "OMNYX [40]: presentation: fix file:// security warning — embed logo as data URI; presentation: top-only navigation, no bottom nav, BOM stripped, better highlight; presentation: remove left section sidebar — full-width deck (+37 more) · Nesso [34]: feat(web-vite): MiniMap is now a real map (Leaflet+OSM, open-source, no key); docs: add INTEGRATIONS.md (APIs/CDNs/keys) + migration status; perf(web-vite): swap recharts->ECharts (tree-shaken) + lazy-load heavy routes (+31 more) · THERMYNX [10]: docs(ai): ADR for per-task LLM right-sizing decision; chore(ollama): bump MAX_LOADED_MODELS=3 + pre-warm hot set on restart; feat(ai): right-size models per task in config defaults (+7 more)  (84 commits)",
+      "linked_project": "omnyx",
       "source": "derived"
     },
     {
@@ -1461,8 +1461,8 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on Nesso — Farm Traceability Platform (auto-derived from git).",
-      "linked_project": "farmer-app",
+      "notes": "OMNYX [24]: docs(dev): keep ws-bridge in Docker when running api/web locally; style(frontend): new graphite + Klein palette, WCAG AA tuned for both modes; chore(dev): park Keycloak behind phase2 profile; add local hot-reload dev workfl (+21 more) · THERMYNX [10]: docs(ai): sync AI discovery docs and update README to 2026-06-02 final state; docs: add AI discovery documentation and local development settings; docs(ai): deprioritize Grafana/Prometheus dashboard panels — metrics already emi (+7 more) · Nesso [6]: docs(testing): update roles/logins doc for Vite cutover; feat(web-vite): full shell UI/UX parity with the design; fix(web-vite): Leaflet crash + LoginPage navigate-in-render (+3 more)  (40 commits)",
+      "linked_project": "omnyx",
       "source": "derived"
     },
     {
@@ -1474,8 +1474,8 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on Nesso — Farm Traceability Platform (auto-derived from git).",
-      "linked_project": "farmer-app",
+      "notes": "OMNYX [55]: feat(protocols): multi-protocol DAL — MQTT + Modbus + OPC-UA adapters; feat(rag): pgvector knowledge base — ingestion + agent retrieval [Phase 2]; feat(phase2): MinIO data lake + Airflow — working telemetry archive (+52 more) · Nesso [39]: feat(mobile): preflight checker + progress logging + timeouts in dev launcher; feat(web-vite): i18n increment — localize all page titles (en/kn/hi); fix(web-vite): responsive audit — stack field grid + scroll calendar on mobile (+36 more) · TripTrail [5]: Fix RLS infinite recursion: SECURITY DEFINER on policy helper functions; Fix totals trigger infinite recursion (pg_trigger_depth guard); Live: join user for employee_name/department; add re-runnable demo seed (+2 more)  (99 commits)",
+      "linked_project": "omnyx",
       "source": "derived"
     },
     {
@@ -1487,7 +1487,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on Current Works in GL — Core Monorepo (auto-derived from git).",
+      "notes": "Current Works in GL [16]: docs: add stress test summary report; docs: add Decision section to 1-page summary report; docs: update comparison and 1-page summary with all scales including 4000x and 5 (+13 more) · OMNYX [13]: docs(openapi): regenerate spec snapshots (adds /api/v1/analysis/correlation); chore: gitignore tsbuildinfo + egg-info build artifacts Co-Authored-By: Claude O; feat(analysis): device signal-correlation page + API (+10 more) · THERMYNX [6]: fix: H6+H7+H8 — forecast backend signal, agent history, is_running cast; feat(ui): work-order approve/dismiss card in agent trace (H3); fix(critical): C1+H1+H2+C3 — thread safety, tool injection, connection leak, mes (+3 more)  (35 commits)",
       "linked_project": "current-works",
       "source": "derived"
     },
@@ -1500,7 +1500,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on OMNYX — Universal IoT Operations Platform (auto-derived from git).",
+      "notes": "OMNYX [33]: feat: real energy/efficiency KPIs from catalog semantics (Gap 1); docs(site): point onboarding/multi-tenancy/simulator docs at the generator + Mer; chore(console): cut over to Console v2 — promote frontend-next, archive legacy,  (+30 more) · THERMYNX [13]: refactor(ai): consolidate prompts + share JSON parser (P1); bump NL-SQL timeout; feat(predictive): trend-based degradation -> auto-proposed PM work orders; fix(ai): reconcile kW/TR 'fair' threshold drift in prompts (+10 more)  (46 commits)",
       "linked_project": "omnyx",
       "source": "derived"
     },
@@ -1513,7 +1513,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on OMNYX — Universal IoT Operations Platform (auto-derived from git).",
+      "notes": "OMNYX [12]: docs(showcase): sync omnyx.html to delivered work; test(e2e): console v2 + reports persistence + control shadow checks; feat(console): report history/generate + RL control-actions card (+9 more) · THERMYNX [12]: feat(cmms): Phase 1C Alarm -> Work Order management; feat(ems): Phase 1B Energy Management + Cost; feat(ui): THERMYNX sibling theme — real thermal-cyan signature accent (+9 more)  (24 commits)",
       "linked_project": "omnyx",
       "source": "derived"
     },
@@ -1526,7 +1526,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on OMNYX — Universal IoT Operations Platform (auto-derived from git).",
+      "notes": "OMNYX [27]: feat: implement hvac vertical extension with agent-backed telemetry, twin predic; feat: implement initial docker-compose infra, airflow integration, and core serv; fix(security): pin RLS tenant in agentic-ai under the omnyx_svc role (+24 more)  (27 commits)",
       "linked_project": "omnyx",
       "source": "derived"
     },
@@ -1539,7 +1539,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).",
+      "notes": "THERMYNX [14]: chore: add backend runtime logs and IDE settings configuration files; fix(ai): substitute mistral-small3.2 for phi4 — phi4-14B crashes Ollama 0.30.6; feat(ui): readable model roster + modernized 'model in use' toast (+11 more)  (14 commits)",
       "linked_project": "thermynx",
       "source": "derived"
     },
@@ -1552,8 +1552,8 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on OMNYX — Universal IoT Operations Platform (auto-derived from git).",
-      "linked_project": "omnyx",
+      "notes": "THERMYNX [6]: build(agentic): F0 — OSS agentic runtime + eval/test dependency manifests; docs(agentic): fold model-eval routing, performance must-holds, OSS-software lic; docs(agentic): framework rewrite plan, target architecture, ADR-0002, gap re-aud (+3 more) · OMNYX [1]: docs: add OMNYX project handbook and master documentation index  (7 commits)",
+      "linked_project": "thermynx",
       "source": "derived"
     },
     {
@@ -1565,7 +1565,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).",
+      "notes": "THERMYNX [40]: feat: add custom environment settings and initial AgentRunner implementation; fix(anomaly): stop 'LLM timeout' on causal cards — warm model + headroom + keep_; chore(claude): expand tool allowlist accumulated this session (+37 more)  (40 commits)",
       "linked_project": "thermynx",
       "source": "derived"
     },
@@ -1578,8 +1578,8 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on OMNYX — Universal IoT Operations Platform (auto-derived from git).",
-      "linked_project": "omnyx",
+      "notes": "THERMYNX [25]: chore(obs): comment out the langfuse SDK; mark tracing disabled / future-only; chore(frontend): remove orphaned migration-leftover components (zero imports); docs(agentic): F4.9 HITL done; F1.11 durable checkpointer deferred to 48/64GB (+22 more) · OMNYX [1]: docs(ops): flag shared Ollama GPU with THERMYNX (avoid VRAM eviction)  (26 commits)",
+      "linked_project": "thermynx",
       "source": "derived"
     },
     {
@@ -1591,7 +1591,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).",
+      "notes": "THERMYNX [9]: docs(agentic): Session 3 handoff (2026-06-12); fix(eval): pre-push no longer auto-runs the golden suite (it floods the 20 GB GP; feat(agent): per-node timing traces (lightweight, no Langfuse/infra) (+6 more)  (9 commits)",
       "linked_project": "thermynx",
       "source": "derived"
     },
@@ -1604,7 +1604,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on THERMYNX — HVAC AI Operations Intelligence (auto-derived from git).",
+      "notes": "THERMYNX [6]: docs(agentic): loop-accurate plain-English overview + incidents log + Session-4 ; feat(frontend): Agent Lab workbench - tabbed Run/History/Compare/Tune/Validate +; feat(provider): OpenRouter dev-bridge provider switch (chat roles only; embeddin (+3 more)  (6 commits)",
       "linked_project": "thermynx",
       "source": "derived"
     },
@@ -1630,8 +1630,8 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "Development activity on ClimaStream — Real-time HVAC Pipeline (auto-derived from git).",
-      "linked_project": "climastream",
+      "notes": "THERMYNX [24]: feat: add .claude/settings.json with pre-configured shell execution permissions; feat(security): M9 recursive injection-hardening of tool results; Add architectural handbook for Graylinx LLM platform and initialize Claude proje (+21 more) · ClimaStream [1]: docs: add architecture and agentic flow diagrams to project documentation · Nesso [1]: chore: update lockfile to reflect dependency changes · OMNYX [1]: docs: initialize architecture, security, and roadmap documentation and implement  (27 commits)",
+      "linked_project": "thermynx",
       "source": "derived"
     }
   ]
