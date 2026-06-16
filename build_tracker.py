@@ -848,7 +848,7 @@ def inject_seed(path, payload):
 
 
 # Files copied into public/ for the Netlify deploy (self-contained, seed embedded).
-PUBLIC_FILES = ["index.html", "lenis.min.js", "graylinxLogo.png", "IMG-20230616-WA0000.jpg"]
+PUBLIC_FILES = ["index.html", "lenis.min.js", "echarts.min.js", "graylinxLogo.png", "IMG-20230616-WA0000.jpg"]
 
 
 def build_public():
