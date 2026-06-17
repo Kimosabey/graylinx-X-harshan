@@ -336,6 +336,45 @@ textarea{min-height:78px;resize:vertical;line-height:1.5}
 .gtoday{position:absolute;top:-10px;bottom:-10px;width:0;border-left:2px dashed var(--acc)}
 .gtoday::after{content:"today";position:absolute;top:-14px;left:4px;font-size:9px;color:var(--acc)}
 
+/* ===================== Timeline story spine (replaces gantt) ===================== */
+.tline{position:relative;max-width:940px;margin:4px auto;padding:4px 0}
+.tline::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);background:var(--line)}
+.tline-fill{position:absolute;left:50%;top:0;width:2px;transform:translateX(-50%);height:0;border-radius:2px;
+  background:linear-gradient(var(--acc),color-mix(in srgb,var(--acc) 22%,transparent));transition:height 1.3s var(--ease-out)}
+.tline.in .tline-fill{height:100%}
+.tl-month{position:relative;text-align:center;margin:22px 0 10px;z-index:2}
+.tl-month span{display:inline-block;background:var(--bg);padding:5px 15px;font-size:11px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--ink2);box-shadow:var(--inset-sm);border-radius:20px}
+.tl-item{position:relative;display:grid;grid-template-columns:1fr 1fr;margin:8px 0}
+.tl-node{position:absolute;left:50%;top:22px;width:15px;height:15px;border-radius:50%;transform:translateX(-50%);
+  background:var(--catcol,var(--acc));z-index:3;
+  box-shadow:0 0 0 4px var(--card),0 0 0 5px color-mix(in srgb,var(--catcol,var(--acc)) 55%,var(--line))}
+.tl-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--raise);padding:14px 16px;cursor:pointer;
+  position:relative;overflow:hidden;transition:box-shadow .2s var(--ease),transform .2s var(--ease)}
+.tl-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--catcol,var(--acc))}
+.tl-card:hover{box-shadow:var(--raise-hi);transform:translateY(-2px)}
+.tl-card:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.tl-left .tl-card{grid-column:1;margin-right:42px}
+.tl-right .tl-card{grid-column:2;margin-left:42px}
+.tl-card .tl-cat{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3)}
+.tl-card h3{margin:3px 0 9px;font-size:15px;font-weight:660;letter-spacing:-.2px}
+.tl-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:9px}
+.tl-dates{font-size:12px;color:var(--ink2)}
+.tl-card .bar{margin-top:11px}
+.tl-todaywrap{position:relative;text-align:center;margin-top:20px;z-index:2}
+.tl-today{display:inline-flex;align-items:center;gap:6px;background:var(--acc);color:var(--acc-ink);
+  padding:6px 15px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:1px;box-shadow:0 6px 16px -8px var(--acc)}
+.tl-today .ic{width:13px;height:13px}
+@media (prefers-reduced-motion:no-preference){.tl-today{animation:tlpulse 2.6s ease-in-out infinite}}
+@keyframes tlpulse{0%,100%{box-shadow:0 6px 16px -8px var(--acc)}50%{box-shadow:0 6px 22px -6px var(--acc),0 0 0 5px color-mix(in srgb,var(--acc) 18%,transparent)}}
+@media (max-width:680px){
+  .tline::before,.tline-fill{left:21px}
+  .tl-item{grid-template-columns:1fr}
+  .tl-node{left:21px}
+  .tl-left .tl-card,.tl-right .tl-card{grid-column:1;margin:0 0 0 48px}
+  .tl-month,.tl-todaywrap{text-align:left;padding-left:4px}
+}
+
 /* ----------------------------- cards -------------------------------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:var(--gap)}
 .pcard{background:var(--card);border-radius:var(--radius);box-shadow:var(--raise);padding:var(--pad-card);display:flex;
@@ -623,7 +662,7 @@ button.hc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
       <div class="field"><label for="t-status">Status</label><select id="t-status"><option value="">All statuses</option></select></div>
       <div class="field" style="flex:1;min-width:200px"><label for="t-search">Search</label><input type="text" id="t-search" class="search" placeholder="project name, tech…"/></div>
     </div>
-    <div class="panel"><h2><span class="ic" data-icon="chart"></span>Project timeline · Nov 2025 → Jun 2026</h2><div class="gantt" id="gantt"></div></div>
+    <div class="panel"><h2><span class="ic" data-icon="chart"></span>Project timeline · Nov 2025 → Jun 2026</h2><div id="gantt"></div></div>
     <div class="legend" id="status-legend"></div>
   </section>
 
@@ -925,43 +964,37 @@ function timelineProjects(){
   if(q) ps=ps.filter(p=>(p.name+" "+p.category+" "+asList(p.tech).join(" ")).toLowerCase().includes(q));
   return ps.sort((a,b)=>(a.start||"").localeCompare(b.start||""));
 }
+/* Vertical "story spine" timeline (replaces the gantt). Projects ordered by start date,
+   grouped under month markers, cards alternate sides, with a self-drawing spine + today node. */
 function renderGantt(){
   const g=document.getElementById("gantt"); if(!g) return;
   const all=timelineProjects();
-  const [r0,r1]=ganttRange(), total=Math.max(1,(r1-r0)/864e5), pct=d=>(((parse(d)||r0)-r0)/864e5/total*100);
-  const groups={}; all.forEach(p=>{(groups[p.category]=groups[p.category]||[]).push(p);});
-  let lines="",labels="",m=new Date(r0.getFullYear(),r0.getMonth(),1);
-  while(m<=r1){ const left=((m-r0)/864e5/total*100);
-    if(left>=0){ lines+=`<div class="gline" style="left:${left}%"></div>`; labels+=`<div class="mlabel" style="left:${left}%">${m.toLocaleDateString(undefined,{month:"short",year:"2-digit"})}</div>`; }
-    m=new Date(m.getFullYear(),m.getMonth()+1,1); }
-  const todayLeft=((parse(TODAY)-r0)/864e5/total*100);
   if(!all.length){ g.innerHTML=`<div class="empty-note">No projects match.</div>`; return; }
-  let html=`<div class="gantt-axis" style="margin-left:var(--labelw)">${labels}</div>`;
-  Object.keys(groups).sort().forEach(cat=>{
-    const cc=catHex(cat);
-    html+=`<div class="gantt-group"><div class="ghead"><span class="cdot" style="background:${cc}"></span>${esc(cat)}</div>`;
-    groups[cat].forEach(p=>{ const l=Math.max(0,pct(p.start)),w=Math.max(1.5,pct(effEnd(p))-l),sc=statusColor(p.status);
-      const dia=projects().filter(mm=>mm.parent_id===p.id&&mm.start).map(mm=>`<span class="gmile" style="left:${Math.max(0,Math.min(100,pct(mm.start)))}%" title="${esc(mm.name)}"></span>`).join("");
-      html+=`<div class="grow"><div class="glabel" title="${esc(p.name)}"><span class="gsd" style="background:${sc}"></span>${esc(p.name)}</div>
-        <div class="gtrack">${lines}<div class="gtoday" style="left:${todayLeft}%"></div>
-          <button type="button" class="gbar" data-id="${esc(p.id)}" data-name="${esc(p.name)}" data-range="${fmt(p.start)} → ${fmt(p.end)}" data-status="${esc(p.status)}" data-commits="${+p.commits||0}" style="left:${l}%;width:${w}%;background:linear-gradient(180deg,${cc},${mixHex(cc,'#000000',.14)})" aria-label="${esc(p.name)}, ${fmt(p.start)} to ${fmt(p.end)}, ${esc(p.status)}"></button>
-          ${dia}</div></div>`; });
-    html+=`</div>`; });
-  g.innerHTML=html;
-  const tip=document.getElementById("gtip");
-  function moveTip(ev,b){ const r=b.getBoundingClientRect(); const tw=tip.offsetWidth,th=tip.offsetHeight;
-    let x=(ev&&ev.clientX!=null)?ev.clientX:(r.left+r.width/2); x=Math.max(10,Math.min(x-tw/2,innerWidth-tw-10));
-    let y=r.top-th-10; if(y<8) y=r.bottom+10; tip.style.left=x+"px"; tip.style.top=y+"px"; }
-  function showTip(b){ const cm=+b.dataset.commits; tip.innerHTML=`<b>${esc(b.dataset.name)}</b><div class="gt-meta">${esc(b.dataset.range)} · ${esc(b.dataset.status)}${cm>0?(" · "+cm+" commits"):""}</div>`; tip.classList.add("show"); tip.setAttribute("aria-hidden","false"); }
-  function hideTip(){ tip.classList.remove("show"); tip.setAttribute("aria-hidden","true"); }
-  g.querySelectorAll(".gbar").forEach(b=>{
-    b.addEventListener("click",()=>openProject(b.dataset.id));
-    b.addEventListener("mouseenter",e=>{ showTip(b); moveTip(e,b); });
-    b.addEventListener("mousemove",e=>moveTip(e,b));
-    b.addEventListener("mouseleave",hideTip);
-    b.addEventListener("focus",()=>{ showTip(b); moveTip(null,b); });
-    b.addEventListener("blur",hideTip);
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  let html=`<div class="tline" data-reveal><i class="tline-fill" aria-hidden="true"></i>`, lastMon="", side=0;
+  all.forEach(p=>{
+    const d=parse(p.start), mk=d?d.getFullYear()+"-"+d.getMonth():"";
+    if(mk!==lastMon){ lastMon=mk; html+=`<div class="tl-month"><span>${d?MON[d.getMonth()]+" "+d.getFullYear():"—"}</span></div>`; }
+    const cc=catColor(p.category), sc=statusColor(p.status), sg=statusGlyph(p.status);
+    const sideCls=(side++%2===0)?"tl-left":"tl-right";
+    const ms=projects().filter(m=>m.parent_id===p.id).length, sctag=esc(p.scope||"Graylinx");
+    html+=`<div class="tl-item ${sideCls}" data-reveal style="--catcol:${cc}">
+      <span class="tl-node" aria-hidden="true" style="--catcol:${cc}"></span>
+      <article class="tl-card" data-id="${esc(p.id)}" tabindex="0" role="button" aria-label="${esc(p.name)}, ${esc(p.status)}, ${fmt(p.start)} to ${fmt(p.end)}. Open details.">
+        <div class="tl-cat">${esc(p.category)}</div><h3>${esc(p.name)}</h3>
+        <div class="tl-meta"><span class="chip"><span class="dot" style="background:${sc}"></span><span class="glyph">${sg}</span>${esc(p.status)}</span><span class="scope-tag scope-${sctag}">${sctag}</span></div>
+        <div class="tl-dates"><b>${fmt(p.start)}</b> → <b>${fmt(p.end)}</b>${(+p.commits>0)?` · ${p.commits} commits`:""}${ms?` · ${ms} milestones`:""}</div>
+        <div class="bar" title="${p.progress||0}%"><i data-w="${Math.max(2,+p.progress||0)}" style="--barcol:${cc}"></i></div>
+      </article></div>`;
   });
+  html+=`<div class="tl-todaywrap"><span class="tl-today">${icon("activity",13)} TODAY · ${fmt(TODAY)}</span></div></div>`;
+  g.innerHTML=html;
+  paintIcons(g);
+  const open=el=>openProject(el.dataset.id);
+  g.querySelectorAll(".tl-card").forEach(c=>{ c.addEventListener("click",()=>open(c));
+    c.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(c); } }); });
+  requestAnimationFrame(()=>g.querySelectorAll(".tl-card .bar > i").forEach(i=>i.style.width=i.dataset.w+"%"));
+  observeReveals(g);
 }
 
 /* ===================== Cards ===================== */
@@ -1011,7 +1044,7 @@ function renderCards(){
 function renderStatusLegend(){
   document.getElementById("status-legend").innerHTML=
     STATUS_LIST.map(s=>`<span><span class="dot" style="background:${statusColor(s)}"></span>${statusGlyph(s)} ${esc(s)}</span>`).join("")
-    +`<span style="margin-left:auto;color:var(--ink3)">bars by category · ● status (by name) · ◆ milestone · dashed = today</span>`;
+    +`<span style="margin-left:auto;color:var(--ink3)">node colour = category · ● status · ordered by start date · scroll to reveal</span>`;
 }
 
 /* ===================== Engagement ===================== */
