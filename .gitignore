@@ -12,6 +12,10 @@ _drop/
 _gitscan.json
 *.zip
 
+# Private Teams 1:1 DM exports — raw chats are build INPUTS only, never committed.
+# Only the derived per-day "communications" topic strings flow into the seed.
+gl_teams_chat/
+
 # Netlify
 .netlify/
 

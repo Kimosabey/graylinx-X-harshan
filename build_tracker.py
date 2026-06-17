@@ -38,6 +38,18 @@ ATTENDANCE_CSV = os.path.join(
 )
 INDEX_HTML = os.path.join(OUT_DIR, "index.html")
 
+# --- Teams 1:1 chat exports -> per-day "communications" (topics, never verbatim) ----------
+TEAMS_CHAT_DIR = os.path.join(OUT_DIR, "gl_teams_chat")
+# file stem -> display name (in-file sender labels are unreliable; e.g. anushri's file says "Intern")
+TEAMS_PEOPLE = {
+    "vishnu": "Vishnu Ranga", "pradeep": "Pradeep Nagabhushana", "anushri_intern": "Anushri",
+    "himanshu": "Himanshu", "karthik": "Karthik", "krishnaprasad": "Krishnaprasad",
+    "niralipatel": "Nirali Patel", "santosh": "Santosh",
+}
+# What lands in the PUBLIC seed: "counts" (who+how-many) | "topics" (default, derived themes,
+# no verbatim) | "full" (adds a short snippet — LOCAL builds only, never deployed).
+TEAMS_DETAIL = os.environ.get("GLX_TEAMS_DETAIL", "topics")
+
 # Monochrome black-and-white palette (neutral/achromatic) used for xlsx styling
 C = {
     "ink": "171717", "ink2": "4B4B4B", "line": "C6C6C6",
@@ -727,6 +739,176 @@ def apply_gap_fill(eng):
     return eng
 
 
+# --------------------------------------------------------------------------- #
+#  Teams 1:1 chat -> per-day communications (topics only; never verbatim)
+# --------------------------------------------------------------------------- #
+WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+_TS_ABS = re.compile(r"^(\d{2})-(\d{2})(?:-(\d{4}))?\s+\d{1,2}:\d{2}\s*[AP]M$")
+_TS_REL = re.compile(r"^(Yesterday|Today|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+\d{1,2}:\d{2}\s*[AP]M$")
+_TS_BARE = re.compile(r"^\d{1,2}:\d{2}\s*[AP]M$")
+_TEAMS_CHROME = {
+    "Chat", "Shared", "Storyline", "Unread", "Channels", "Chats", "Meeting chats",
+    "Message List", "Has context menu", "has context menu", "Notes", "Community",
+    "Temporarily shown", "Press Ctrl+F to find in this chat",
+    "Notes have been created in this chat.",
+}
+_TOPIC_RULES = [
+    (r"kafka|stress|throughput|150x|5000x|load[ -]?test|breaking point", "Kafka stress test"),
+    (r"\bgpu\b|vram|jarvis|80\s*gb|a100|h100|cuda|rtx|nvidia", "GPU / VRAM sizing"),
+    (r"agent|orchestrat|planner|langgraph|devstral|tool[- ]?call", "Agentic orchestration"),
+    (r"\beval\b|evaluat|benchmark|accuracy|metric|ground truth", "Model evaluation"),
+    (r"\brag\b|retriev|embedding|vector|chunk|pgvector", "RAG pipeline"),
+    (r"telemetry|virtual sens|sensor|\bgat\b|\bgnn\b|graph neural", "Telemetry / sensing"),
+    (r"deploy|docker|\bexe\b|on-?prem|netlify|nginx|container", "Deployment"),
+    (r"hir(e|ing)|interview|candidate|resume|recruit|onboard|shortlist", "Hiring / interviews"),
+    (r"quot|price|cost|budget|invoice|rupees|lakh|payment", "Hardware / cost"),
+    (r"bacnet|bacpypes|\bpbs\b|device sim|simulat", "BACnet / simulation"),
+    (r"schema|database|\bdb\b|postgres|mysql|timescale|backend|\bapi\b", "Backend / DB"),
+    (r"architect|design|diagram|\bflow\b|pipeline|module", "Architecture"),
+    (r"meet|call|\bsync\b|standup|discuss|\bplan\b|review", "Planning / sync"),
+]
+_TOPIC_STOP = set("""the and for with from this that have has will would can could should just like get got
+need want also more most there here what when where which who how why okay yeah your you our they them
+their image media preview link message reaction harshan aiyappa team teams about into your yours been
+will well done good thanks please sure into onto over under than then them code clone added connected""".split())
+# also drop colleague names (incl. spelling variants) so they never surface as a "topic"
+_TOPIC_STOP |= {w.lower() for name in TEAMS_PEOPLE.values() for w in name.split()} | {"santhosh"}
+
+
+def _resolve_rel(word, C):
+    if word == "Today":
+        return C
+    if word == "Yesterday":
+        return C - timedelta(days=1)
+    target = WEEKDAYS.index(word)
+    d = C
+    for _ in range(7):
+        if d.weekday() == target:
+            return d
+        d -= timedelta(days=1)
+    return C
+
+
+def _derive_topic(texts):
+    """Short THEME string for a day's chat text. Never returns verbatim message content."""
+    blob = re.sub(r"https?://\S+", " ", " ".join(texts).lower())
+    tags = []
+    for pat, tag in _TOPIC_RULES:
+        if re.search(pat, blob) and tag not in tags:
+            tags.append(tag)
+            if len(tags) >= 2:
+                break
+    if tags:
+        return ", ".join(tags)
+    freq = {}
+    for w in re.findall(r"[a-z]{4,}", blob):
+        if w in _TOPIC_STOP:
+            continue
+        freq[w] = freq.get(w, 0) + 1
+    top = sorted(freq, key=lambda w: (-freq[w], w))[:2]
+    return " ".join(t.title() for t in top) if top else "general chat"
+
+
+def _is_topic_text(ln, person):
+    low = ln.lower()
+    if ln.startswith("Begin quote") or low.startswith("http") or low.startswith("url preview"):
+        return False
+    if low in ("image", "media", "url preview") or ln in ("Harshan Aiyappa", person):
+        return False
+    if "reaction" in low and len(ln) < 24:
+        return False
+    if " by " in ln and ("attachment" in low or ln.rstrip().endswith(person) or ln.rstrip().endswith("Aiyappa")):
+        return False
+    return True
+
+
+def parse_teams_chat():
+    """gl_teams_chat/*.txt -> {iso_date: {person: {count, topic, snippet}}}.
+    Each file is one 1:1 chat, so every standalone timestamp line = one message with that person.
+    Pure + deterministic (no clock/random); year defaults to 2026; relative times anchor on TODAY."""
+    if not os.path.isdir(TEAMS_CHAT_DIR):
+        return {}
+    out = {}
+    for stem in sorted(TEAMS_PEOPLE):
+        path = os.path.join(TEAMS_CHAT_DIR, stem + ".txt")
+        if not os.path.exists(path):
+            continue
+        try:
+            with open(path, encoding="utf-8", errors="replace") as fh:
+                lines = fh.read().splitlines()
+        except OSError:
+            continue
+        if not any(ln.strip() for ln in lines):
+            continue
+        person = TEAMS_PEOPLE[stem]
+        cur, last_dt = None, None
+        for raw in lines:
+            ln = raw.strip()
+            if not ln or ln in _TEAMS_CHROME:
+                continue
+            cand = None
+            m = _TS_ABS.match(ln)
+            if m:
+                yr = int(m.group(3)) if m.group(3) else 2026
+                try:
+                    cand = date(yr, int(m.group(2)), int(m.group(1)))
+                except ValueError:
+                    cand = None
+            else:
+                mr = _TS_REL.match(ln)
+                if mr:
+                    cand = _resolve_rel(mr.group(1), TODAY)
+                elif _TS_BARE.match(ln):
+                    cand = TODAY
+            if cand is not None:
+                if last_dt and (last_dt - cand).days > 3:  # backward jump = quoted/pasted date
+                    continue
+                cur, last_dt = cand, cand
+                rec = out.setdefault(cur.isoformat(), {}).setdefault(person, {"count": 0, "_t": []})
+                rec["count"] += 1
+                continue
+            if cur and _is_topic_text(ln, person):
+                out[cur.isoformat()][person]["_t"].append(ln)
+    res = {}
+    for iso, pm in out.items():
+        res[iso] = {}
+        for person, rec in pm.items():
+            texts = rec["_t"]
+            snip = next((t for t in texts if len(t.split()) >= 4), texts[0] if texts else "")
+            res[iso][person] = {"count": rec["count"], "topic": _derive_topic(texts),
+                                "snippet": snip[:80].rstrip()}
+    return res
+
+
+def _fmt_comm(day_map, detail):
+    parts = []
+    for person in sorted(day_map):
+        rec = day_map[person]
+        seg = f"{person} ({rec['count']})"
+        if detail in ("topics", "full") and rec.get("topic"):
+            seg += f" — {rec['topic']}"
+        if detail == "full" and rec.get("snippet"):
+            seg += f": “{rec['snippet']}”"
+        parts.append(seg)
+    return " · ".join(parts)
+
+
+def apply_communications(eng, comm_by_date, detail=TEAMS_DETAIL):
+    """Enrich EXISTING engagement days with a per-day communications summary. Chat dates with no
+    matching engagement day are skipped (returns counts so main() can report them)."""
+    by = {r["date"]: r for r in eng}
+    matched = skipped = 0
+    for ds in sorted(comm_by_date):
+        if ds in by:
+            by[ds]["communications"] = _fmt_comm(comm_by_date[ds], detail)
+            matched += 1
+        else:
+            skipped += 1
+    for r in eng:
+        r.setdefault("communications", "")
+    return eng, matched, skipped
+
+
 def compute_analytics(proj, engagement):
     """Precompute 'how much worked' analytics for the dashboard Analytics view."""
     by_proj = sorted([[p["name"], p["commits"]] for p in proj if p.get("commits")],
@@ -785,7 +967,7 @@ PROJ_COLS = ["id", "parent_id", "type", "name", "category", "scope", "descriptio
              "tech", "start", "end", "date_source", "status", "progress", "commits",
              "location", "highlights", "links", "notes"]
 ENG_COLS = ["date", "day", "work_type", "location", "hotel", "check_in", "check_out",
-            "travel", "notes", "linked_project", "source"]
+            "travel", "notes", "linked_project", "source", "communications"]
 
 
 def _flat(v):
@@ -963,6 +1145,7 @@ def main():
     engagement = parse_attendance()
     engagement = carry_forward(engagement, projects)
     engagement = apply_gap_fill(engagement)
+    engagement, _comm_matched, _comm_skipped = apply_communications(engagement, parse_teams_chat())
     engagement.sort(key=lambda r: r["date"])
 
     proj_only = [r for r in projects if r["type"] == "project"]
@@ -1010,6 +1193,7 @@ def main():
 
     print(f"  projects: {len(proj_only)} (+{len(projects)-len(proj_only)} milestones)")
     print(f"  engagement days: {len(engagement)} (needs-fill: {needs_fill})")
+    print(f"  teams chat: detail={TEAMS_DETAIL} | {_comm_matched} days enriched, {_comm_skipped} out-of-span skipped")
     print(f"  span: {span_start} -> {TODAY.isoformat()} | commits: {total_commits}")
     print("  wrote works.csv, engagement.csv, works.json, works.xlsx; injected seed into index.html")
     print(f"  public/ deploy dir: {', '.join(pub) if pub else '(no files copied)'}")
