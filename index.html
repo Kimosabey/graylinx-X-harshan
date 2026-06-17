@@ -1241,6 +1241,10 @@ function selectTab(which,focusTab){
      Overview has its own hero/bento; Engagement & Analytics have their own stat rows. */
   document.getElementById("stats").classList.toggle("hidden", !(which==="projects"||which==="timeline"));
   animate=true; renderAll();
+  /* reset scroll on tab change so a shorter view never leaves you stranded in empty space,
+     and recalc Lenis dimensions now that the content height changed. */
+  if(lenis){ try{lenis.scrollTo(0,{immediate:true});}catch(e){} requestAnimationFrame(()=>{ try{lenis.resize();}catch(e){} }); }
+  else scrollTo(0,0);
 }
 VIEWS.forEach(([tid,,key])=>document.getElementById(tid).addEventListener("click",()=>selectTab(key)));
 /* roving arrow-key navigation per ARIA tablist pattern */
@@ -1386,7 +1390,7 @@ function mixHex(a,b,w){ a=a.replace("#",""); b=b.replace("#","");
   if(a.length===3)a=a.replace(/./g,"$&$&"); if(b.length===3)b=b.replace(/./g,"$&$&");
   const p=(s,i)=>parseInt(s.slice(i,i+2),16), m=(x,y)=>Math.round(x*(1-w)+y*w).toString(16).padStart(2,"0");
   return "#"+m(p(a,0),p(b,0))+m(p(a,2),p(b,2))+m(p(a,4),p(b,4)); }
-let _ecrz; addEventListener("resize",()=>{ clearTimeout(_ecrz); _ecrz=setTimeout(()=>{ for(const k in ECI){ try{ECI[k].resize();}catch(e){} } },150); });
+let _ecrz; addEventListener("resize",()=>{ clearTimeout(_ecrz); _ecrz=setTimeout(()=>{ if(lenis){try{lenis.resize();}catch(e){}} for(const k in ECI){ try{ECI[k].resize();}catch(e){} } },150); });
 
 paintIcons(); updateThemeBtn(); initFilters(); selectTab("overview");
 </script>
