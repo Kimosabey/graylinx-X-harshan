@@ -1572,7 +1572,7 @@ function enterDashboard(){
 
 /* edit gate — a soft, LOCAL-ONLY convenience toggle, NOT security: the data is public in the page
    source and edits only touch this device's localStorage. The passcode just avoids casual edits. */
-const EDIT_PASS="graylinx";
+const EDIT_PASS="kimo221996";
 function setEditing(on){ document.body.classList.toggle("editing",!!on);
   try{ on?localStorage.setItem("glx-edit","1"):localStorage.removeItem("glx-edit"); }catch(e){}
   const b=document.getElementById("btn-signin"); if(!b) return;
