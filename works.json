@@ -1,17 +1,17 @@
 {
   "meta": {
     "title": "Harshan × Graylinx — Work Tracker",
-    "generated": "2026-06-15",
+    "generated": "2026-06-17",
     "span_start": "2025-11-19",
-    "span_end": "2026-06-15",
+    "span_end": "2026-06-17",
     "stats": {
       "projects": 16,
       "active": 7,
       "done": 6,
-      "total_commits": 902,
-      "engagement_days": 55,
+      "total_commits": 929,
+      "engagement_days": 57,
       "on_site_days": 10,
-      "wfh_days": 44,
+      "wfh_days": 46,
       "hotel_nights": 6,
       "needs_fill": 0
     },
@@ -176,13 +176,17 @@
         ],
         [
           "2026-06-16",
-          12
+          14
+        ],
+        [
+          "2026-06-17",
+          25
         ]
       ],
       "commits_by_project": [
         [
           "THERMYNX — HVAC AI Operations Intelligence",
-          323
+          350
         ],
         [
           "OMNYX — Universal IoT Operations Platform",
@@ -220,7 +224,7 @@
       "commits_by_category": [
         [
           "HVAC Platform",
-          594
+          621
         ],
         [
           "Client Apps",
@@ -278,7 +282,7 @@
       "work_type": [
         [
           "WFH",
-          44
+          46
         ],
         [
           "Office",
@@ -328,22 +332,22 @@
         ],
         [
           "W25",
-          39
+          66
         ]
       ],
       "weekend_worked": 16,
-      "worked_days": 54,
-      "active_commit_days": 34,
+      "worked_days": 56,
+      "active_commit_days": 35,
       "busiest_day": {
         "date": "2026-06-03",
         "commits": 94
       },
       "commits_per_active_day": 26.5,
-      "longest_streak": 45,
+      "longest_streak": 47,
       "hotel_nights": 6,
       "locations": 4
     },
-    "build": "4f7bf61cf523"
+    "build": "2d48e3f7538e"
   },
   "projects": [
     {
@@ -369,7 +373,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 323,
+      "commits": 350,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -391,7 +395,7 @@
       "role": "",
       "tech": [],
       "start": "2026-05-08",
-      "end": "2026-05-15",
+      "end": "2026-05-16",
       "date_source": "git",
       "status": "Active",
       "progress": 80,
@@ -411,8 +415,8 @@
       "description": "Claude/LLM agents",
       "role": "",
       "tech": [],
-      "start": "2026-05-15",
-      "end": "2026-05-23",
+      "start": "2026-05-16",
+      "end": "2026-05-24",
       "date_source": "git",
       "status": "Active",
       "progress": 70,
@@ -432,8 +436,8 @@
       "description": "Retrieval over facility docs",
       "role": "",
       "tech": [],
-      "start": "2026-05-23",
-      "end": "2026-05-31",
+      "start": "2026-05-24",
+      "end": "2026-06-01",
       "date_source": "git",
       "status": "Active",
       "progress": 65,
@@ -453,8 +457,8 @@
       "description": "Work-order workflow",
       "role": "",
       "tech": [],
-      "start": "2026-05-31",
-      "end": "2026-06-08",
+      "start": "2026-06-01",
+      "end": "2026-06-09",
       "date_source": "git",
       "status": "Active",
       "progress": 60,
@@ -474,8 +478,8 @@
       "description": "Chiller/HVAC analytics",
       "role": "",
       "tech": [],
-      "start": "2026-06-08",
-      "end": "2026-06-16",
+      "start": "2026-06-09",
+      "end": "2026-06-17",
       "date_source": "git",
       "status": "Active",
       "progress": 60,
@@ -2074,6 +2078,32 @@
       "check_out": "",
       "travel": "",
       "notes": "THERMYNX [24]: feat: add .claude/settings.json with pre-configured shell execution permissions; feat(security): M9 recursive injection-hardening of tool results; Add architectural handbook for Graylinx LLM platform and initialize Claude proje (+21 more) · ClimaStream [1]: docs: add architecture and agentic flow diagrams to project documentation · Nesso [1]: chore: update lockfile to reflect dependency changes · OMNYX [1]: docs: initialize architecture, security, and roadmap documentation and implement  (27 commits)",
+      "linked_project": "thermynx",
+      "source": "derived"
+    },
+    {
+      "date": "2026-06-16",
+      "day": "Tuesday",
+      "work_type": "WFH",
+      "location": "Mysore (residence)",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "THERMYNX [14]: docs(infra): GPU cloud options + Jarvislabs setup plan to unblock Track B; docs(handoff): SESSION 6 — v3 Track-A batch + finalize IA spec; docs(plan): add plain-English v3 status (where we are / what's blocked) (+11 more)  (14 commits)",
+      "linked_project": "thermynx",
+      "source": "derived"
+    },
+    {
+      "date": "2026-06-17",
+      "day": "Wednesday",
+      "work_type": "WFH",
+      "location": "Mysore (residence)",
+      "hotel": "",
+      "check_in": "",
+      "check_out": "",
+      "travel": "",
+      "notes": "THERMYNX [25]: docs(handoff): SESSION 9 — no-box AI backlog cleared (M2/M5/M6/M7/M10/M11/M12); feat(M7): export per-graph-node latency as a Prometheus histogram; feat(M5): graph-level timeout + apply transient-error retry to LLM nodes (+22 more)  (25 commits)",
       "linked_project": "thermynx",
       "source": "derived"
     }

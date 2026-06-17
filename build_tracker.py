@@ -31,7 +31,7 @@ from datetime import date, datetime, timedelta
 # --------------------------------------------------------------------------- #
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))   # D:\Harshan\Graylinx X Harshan
 BASE = os.path.dirname(OUT_DIR)                          # D:\Harshan
-TODAY = date(2026, 6, 15)                                # "till now" anchor
+TODAY = date(2026, 6, 17)                                # "till now" anchor
 
 ATTENDANCE_CSV = os.path.join(
     OUT_DIR, "Harshan X Graylinx Deployment Tracker 2026(Deployment Attendance).csv"
