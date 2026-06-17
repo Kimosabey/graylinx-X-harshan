@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Harshan × Graylinx — Work Tracker</title>
 <meta name="description" content="Work tracker & showcase — projects, timeline and engagement at Graylinx." />
+<script>/* pre-paint: returning visitors skip the landing (no flash) */try{if(localStorage.getItem("glx-entered")==="1")document.documentElement.classList.add("did-enter");}catch(e){}</script>
 <style>
 /* ===================================================================== *
  *  ACCESSIBLE MONOCHROME NEUMORPHISM
@@ -457,6 +458,36 @@ textarea{min-height:78px;resize:vertical;line-height:1.5}
 footer{max-width:1340px;margin:8px auto 40px;padding:0 clamp(14px,2.4vw,30px);color:var(--ink3);font-size:11.5px}
 code{background:var(--card);border-radius:7px;padding:2px 7px;font-size:11px;box-shadow:var(--inset-sm)}
 .hidden{display:none!important}
+
+/* ===================== Landing page ===================== */
+#landing{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(24px,6vw,72px);overflow:auto;
+  background:radial-gradient(58% 68% at 82% 10%, color-mix(in srgb,var(--acc) 24%,transparent), transparent 60%),
+    radial-gradient(54% 58% at 8% 92%, color-mix(in srgb,var(--st-ongoing) 14%,transparent), transparent 60%),
+    var(--bg)}
+html.did-enter #landing, body.entered #landing{display:none}
+.landing-inner{max-width:1040px;margin:auto;width:100%}
+.landing-brand{display:flex;align-items:center;gap:12px;font-weight:680;color:var(--ink2);font-size:15px;margin-bottom:clamp(18px,4vw,40px)}
+.landing-brand .logo-plate{padding:5px 11px}.landing-brand .logo-plate img{height:26px;width:auto;display:block}
+.landing-head{font-family:var(--font-display);font-weight:760;letter-spacing:-1.5px;line-height:1.03;
+  font-size:clamp(34px,8vw,76px);margin:0 0 18px;color:var(--ink)}
+.landing-head .acc{color:var(--acc)}
+.landing-sub{font-size:clamp(14px,2vw,18px);color:var(--ink2);margin:0 0 clamp(22px,4vw,38px);max-width:56ch;line-height:1.55}
+.landing-stats{display:flex;flex-wrap:wrap;gap:clamp(16px,3vw,44px);margin-bottom:clamp(26px,5vw,46px)}
+.landing-stats .ls{display:flex;flex-direction:column;gap:3px}
+.landing-stats .ls .n{font-family:var(--font-display);font-weight:760;font-size:clamp(26px,4.5vw,42px);line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.landing-stats .ls .l{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3)}
+.landing-cta{display:flex;gap:12px;flex-wrap:wrap}
+.landing-cta .btn{min-height:46px;padding:12px 22px;font-size:14px}
+.brand{cursor:pointer}
+@media (prefers-reduced-motion:no-preference){
+  .landing-inner>*{animation:landIn .6s var(--ease-out) both}
+  .landing-head{animation-delay:.05s}.landing-sub{animation-delay:.12s}.landing-stats{animation-delay:.19s}.landing-cta{animation-delay:.26s}
+}
+@keyframes landIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* edit gate: public is read-only; "Sign in" adds body.editing to reveal editing controls */
+body:not(.editing) .edit-only{display:none!important}
 .empty-note{color:var(--ink3);font-size:13px;padding:26px;text-align:center}
 
 /* ===================== Dev Wrapped 2026 ===================== */
@@ -596,6 +627,7 @@ button.hc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 <div id="orbs" aria-hidden="true"></div>
 <div id="grain" aria-hidden="true"></div>
 <div id="progress" aria-hidden="true"><i></i></div>
+<section id="landing" aria-label="Welcome"></section>
 
 <header class="appbar" id="appbar">
   <div class="appwrap">
@@ -612,11 +644,12 @@ button.hc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
         <button class="btn sm" id="btn-accent" aria-haspopup="true" aria-expanded="false" title="Accent colour" aria-label="Accent colour"><span class="ic" data-icon="palette"></span><span class="bl">Accent</span></button>
         <div class="accent-pop" id="accent-pop" role="menu" aria-label="Accent colour" hidden></div>
       </div>
-      <button class="btn sm" id="btn-add" title="Add entry" aria-label="Add entry"><span class="ic" data-icon="plus"></span><span class="bl">Add</span></button>
+      <button class="btn sm" id="btn-signin" title="Owner edit mode (local only)" aria-label="Sign in to edit"><span class="ic" data-icon="key"></span><span class="bl">Sign in</span></button>
+      <button class="btn sm edit-only" id="btn-add" title="Add entry" aria-label="Add entry"><span class="ic" data-icon="plus"></span><span class="bl">Add</span></button>
       <button class="btn sm" id="btn-export" title="Export (CSV / JSON)" aria-label="Export data"><span class="ic" data-icon="download"></span><span class="bl">Export</span></button>
-      <button class="btn sm" id="btn-import" title="Import (CSV / JSON)" aria-label="Import data"><span class="ic" data-icon="upload"></span><span class="bl">Import</span></button>
+      <button class="btn sm edit-only" id="btn-import" title="Import (CSV / JSON)" aria-label="Import data"><span class="ic" data-icon="upload"></span><span class="bl">Import</span></button>
       <button class="btn sm" id="btn-print" title="Print / PDF" aria-label="Print or save as PDF"><span class="ic" data-icon="printer"></span><span class="bl">Print</span></button>
-      <button class="btn sm" id="btn-reset" title="Discard local edits" aria-label="Reset — discard local edits"><span class="ic" data-icon="reset"></span><span class="bl">Reset</span></button>
+      <button class="btn sm edit-only" id="btn-reset" title="Discard local edits" aria-label="Reset — discard local edits"><span class="ic" data-icon="reset"></span><span class="bl">Reset</span></button>
       <input type="file" id="file-input" accept=".json,.csv" class="hidden" />
     </div>
   </div>
@@ -723,9 +756,9 @@ button.hc:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
     <h3 id="modal-title">Edit</h3>
     <div id="modal-body"></div>
     <div class="dialog-actions">
-      <button class="btn sm left hidden" id="modal-delete"><span class="ic" data-icon="trash"></span>Delete</button>
-      <button class="btn sm" id="modal-cancel">Cancel</button>
-      <button class="btn primary sm" id="modal-save">Save</button>
+      <button class="btn sm left hidden edit-only" id="modal-delete"><span class="ic" data-icon="trash"></span>Delete</button>
+      <button class="btn sm" id="modal-cancel">Close</button>
+      <button class="btn primary sm edit-only" id="modal-save">Save</button>
     </div>
   </div>
 </div>
@@ -760,7 +793,9 @@ const ICONS={
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
   moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
   oled:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6" fill="currentColor" stroke="none"/>',
-  palette:'<circle cx="13.5" cy="6.5" r=".6" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".6" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".6" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".6" fill="currentColor" stroke="none"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.83-.44-1.12-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.67h1.99c3.05 0 5.56-2.5 5.56-5.55C21.96 6.01 17.46 2 12 2z"/>'
+  palette:'<circle cx="13.5" cy="6.5" r=".6" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".6" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".6" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".6" fill="currentColor" stroke="none"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.83-.44-1.12-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.67h1.99c3.05 0 5.56-2.5 5.56-5.55C21.96 6.01 17.46 2 12 2z"/>',
+  key:'<path d="m21 2-2 2"/><path d="m15.5 7.5 3 3"/><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/>',
+  logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/>'
 };
 function icon(name,size){ size=size||18; return '<svg class="ic" viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[name]||"")+'</svg>'; }
 function paintIcons(root){ (root||document).querySelectorAll("[data-icon]").forEach(el=>{ el.outerHTML=icon(el.dataset.icon, el.classList.contains("ic")?17:18); }); }
@@ -1038,7 +1073,7 @@ function renderCards(){
       ${hl.length?`<ul class="hl">${hl.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>`:""}
       ${ms.length?`<div class="pcat">Milestones (${ms.length})</div><div class="tags">${ms.map(m=>`<span class="tag" title="${esc(m.status)} · ${m.progress}%">${esc(m.name)}</span>`).join("")}</div>`:""}
       <div class="bar" title="${p.progress||0}%"><i data-w="${Math.max(2,+p.progress||0)}"></i></div>
-      <div class="row-actions no-print"><button class="btn sm" data-edit="${esc(p.id)}">${icon("edit",15)} Edit</button></div></article>`;
+      <div class="row-actions no-print edit-only"><button class="btn sm" data-edit="${esc(p.id)}">${icon("edit",15)} Edit</button></div></article>`;
   }).join("");
   wrap.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>openProject(b.dataset.edit)));
   requestAnimationFrame(()=>wrap.querySelectorAll(".bar > i").forEach(i=>i.style.width=i.dataset.w+"%"));
@@ -1139,7 +1174,9 @@ function openDay(dateStr){ let r=engagement().find(x=>x.date===dateStr);
 }
 function openModal(){ lastFocused=document.activeElement; modal.classList.add("open"); if(lenis) lenis.stop();
   document.addEventListener("keydown",trapFocus,true);
-  const f=modal.querySelector("#modal-body input,#modal-body select,#modal-body textarea"); if(f) f.focus(); }
+  const ro=!document.body.classList.contains("editing");  /* read-only when signed out */
+  modal.querySelectorAll("#modal-body input,#modal-body select,#modal-body textarea").forEach(el=>el.disabled=ro);
+  const f=ro?document.getElementById("modal-cancel"):modal.querySelector("#modal-body input,#modal-body select,#modal-body textarea"); if(f) f.focus(); }
 function closeModal(){ modal.classList.remove("open"); if(lenis) lenis.start(); modalCtx=null;
   document.removeEventListener("keydown",trapFocus,true);
   if(lastFocused&&typeof lastFocused.focus==="function"){ lastFocused.focus(); } lastFocused=null; }
@@ -1386,9 +1423,11 @@ function buildCmdk(){ const it=[
   {t:"Go to Analytics",ic:"activity",run:()=>selectTab("analytics")},
   {t:"Open Dev Wrapped 2026",ic:"activity",run:openWrapped},
   {t:"Toggle theme",ic:"contrast",run:()=>document.getElementById("btn-theme").click()},
-  {t:"Add entry",ic:"plus",run:()=>document.getElementById("btn-add").click()},
+  {t:"Back to intro (landing)",ic:"layout",run:()=>document.getElementById("brand").click()},
+  {t:document.body.classList.contains("editing")?"Sign out (disable editing)":"Sign in to edit",ic:document.body.classList.contains("editing")?"logout":"key",run:()=>document.getElementById("btn-signin").click()},
   {t:"Export data",ic:"download",run:()=>document.getElementById("btn-export").click()},
   {t:"Print / PDF",ic:"printer",run:()=>window.print()}];
+  if(document.body.classList.contains("editing")) it.splice(7,0,{t:"Add entry",ic:"plus",run:()=>document.getElementById("btn-add").click()});
   projects().filter(p=>p.type==="project").forEach(p=>it.push({t:p.name,sub:p.category,ic:"chart",run:()=>{selectTab("projects");openProject(p.id);}}));
   engagement().forEach(r=>it.push({t:fmt(r.date)+" — "+(r.work_type||r.source),sub:(r.location||r.notes||"").slice(0,42),ic:"calendar",run:()=>{selectTab("engagement");openDay(r.date);}}));
   return it; }
@@ -1427,7 +1466,57 @@ function mixHex(a,b,w){ a=a.replace("#",""); b=b.replace("#","");
   return "#"+m(p(a,0),p(b,0))+m(p(a,2),p(b,2))+m(p(a,4),p(b,4)); }
 let _ecrz; addEventListener("resize",()=>{ clearTimeout(_ecrz); _ecrz=setTimeout(()=>{ if(lenis){try{lenis.resize();}catch(e){}} for(const k in ECI){ try{ECI[k].resize();}catch(e){} } },150); });
 
-paintIcons(); updateThemeBtn(); initFilters(); selectTab("overview");
+/* ===================== Landing page + edit gate ===================== */
+function renderLanding(){
+  const el=document.getElementById("landing"); if(!el) return;
+  const st=(SEED.meta&&SEED.meta.stats)||{}, a=(SEED.meta&&SEED.meta.analytics)||{};
+  const days=st.engagement_days||engagement().length;
+  el.innerHTML=`<div class="landing-inner">
+    <div class="landing-brand"><span class="logo-plate"><img src="graylinxLogo.png" alt="" onerror="this.parentNode.style.display='none'"/></span> Harshan × Graylinx</div>
+    <h1 class="landing-head">Building <span class="acc">HVAC intelligence</span>,<br>end to end.</h1>
+    <p class="landing-sub">A living record of every project, commit and on-site day — from POC to production, ${esc(fmt(SEED.meta&&SEED.meta.span_start))} to today.</p>
+    <div class="landing-stats">
+      <div class="ls"><span class="n">${st.total_commits||0}</span><span class="l">commits</span></div>
+      <div class="ls"><span class="n">${st.projects||0}</span><span class="l">projects</span></div>
+      <div class="ls"><span class="n">${a.longest_streak||0}</span><span class="l">day streak</span></div>
+      <div class="ls"><span class="n">${days}</span><span class="l">days logged</span></div>
+    </div>
+    <div class="landing-cta">
+      <button class="btn primary" id="enter-dash" type="button">${icon("layout",17)} Enter dashboard</button>
+      <button class="btn" id="enter-wrapped" type="button">${icon("activity",17)} Dev Wrapped 2026</button>
+    </div></div>`;
+  document.getElementById("enter-dash").addEventListener("click",()=>enterDashboard());
+  document.getElementById("enter-wrapped").addEventListener("click",()=>{ enterDashboard(); setTimeout(openWrapped,RM?0:420); });
+}
+function enterDashboard(){
+  const go=()=>{ document.body.classList.add("entered"); document.documentElement.classList.remove("did-enter");
+    try{localStorage.setItem("glx-entered","1");}catch(e){} if(lenis){try{lenis.resize();}catch(e){}} };
+  if(!RM && document.startViewTransition){ document.startViewTransition(go); } else go();
+}
+(function(){ const b=document.getElementById("brand"); if(!b) return;
+  b.title="Back to intro"; b.setAttribute("role","button"); b.tabIndex=0;
+  const open=()=>{ document.body.classList.remove("entered"); document.documentElement.classList.remove("did-enter"); renderLanding(); };
+  b.addEventListener("click",open);
+  b.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } }); })();
+
+/* edit gate — a soft, LOCAL-ONLY convenience toggle, NOT security: the data is public in the page
+   source and edits only touch this device's localStorage. The passcode just avoids casual edits. */
+const EDIT_PASS="graylinx";
+function setEditing(on){ document.body.classList.toggle("editing",!!on);
+  try{ on?localStorage.setItem("glx-edit","1"):localStorage.removeItem("glx-edit"); }catch(e){}
+  const b=document.getElementById("btn-signin"); if(!b) return;
+  b.innerHTML=icon(on?"logout":"key",17)+`<span class="bl">${on?"Sign out":"Sign in"}</span>`;
+  b.title=on?"Editing enabled (local only) — click to sign out":"Owner edit mode (local only)";
+  b.setAttribute("aria-label",on?"Sign out and disable editing":"Sign in to enable editing"); }
+(function(){ const b=document.getElementById("btn-signin"); if(!b) return;
+  b.addEventListener("click",()=>{ if(document.body.classList.contains("editing")){ setEditing(false); return; }
+    const p=prompt("Owner passcode to enable editing (local to this device only — not a security gate):");
+    if(p==null) return;
+    if(p===EDIT_PASS) setEditing(true); else alert("Incorrect passcode. Editing stays off.");
+  });
+  let on=false; try{ on=localStorage.getItem("glx-edit")==="1"; }catch(e){} setEditing(on); })();
+
+paintIcons(); updateThemeBtn(); initFilters(); renderLanding(); selectTab("overview");
 </script>
 </body>
 </html>
