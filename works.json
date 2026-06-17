@@ -8,7 +8,7 @@
       "projects": 16,
       "active": 7,
       "done": 6,
-      "total_commits": 932,
+      "total_commits": 933,
       "engagement_days": 57,
       "on_site_days": 10,
       "wfh_days": 46,
@@ -180,13 +180,13 @@
         ],
         [
           "2026-06-17",
-          28
+          29
         ]
       ],
       "commits_by_project": [
         [
           "THERMYNX — HVAC AI Operations Intelligence",
-          353
+          354
         ],
         [
           "OMNYX — Universal IoT Operations Platform",
@@ -224,7 +224,7 @@
       "commits_by_category": [
         [
           "HVAC Platform",
-          624
+          625
         ],
         [
           "Client Apps",
@@ -332,7 +332,7 @@
         ],
         [
           "W25",
-          69
+          70
         ]
       ],
       "weekend_worked": 16,
@@ -342,12 +342,12 @@
         "date": "2026-06-03",
         "commits": 94
       },
-      "commits_per_active_day": 26.6,
+      "commits_per_active_day": 26.7,
       "longest_streak": 47,
       "hotel_nights": 6,
       "locations": 4
     },
-    "build": "f958ebfba6b0"
+    "build": "aab730e0a5a6"
   },
   "projects": [
     {
@@ -373,7 +373,7 @@
       "date_source": "git",
       "status": "Active",
       "progress": 70,
-      "commits": 353,
+      "commits": 354,
       "location": "D:\\Harshan\\HVAC AI Operations Intelligence Platform",
       "highlights": [
         "Most active project — 308 commits",
@@ -2159,7 +2159,7 @@
       "check_in": "",
       "check_out": "",
       "travel": "",
-      "notes": "THERMYNX [28]: test(P2): unit tests for the preflight guard (action/equipment/topic gates); feat(L6): config-ize hardcoded RAG/orchestrate knobs into settings; docs(handoff): record green golden eval (50/50, idle box) post-session-9 (+25 more)  (28 commits)",
+      "notes": "THERMYNX [29]: fix(ingest): count deleted rows via RETURNING, not result.rowcount; test(P2): unit tests for the preflight guard (action/equipment/topic gates); feat(L6): config-ize hardcoded RAG/orchestrate knobs into settings (+26 more)  (29 commits)",
       "linked_project": "thermynx",
       "source": "derived",
       "communications": "Vishnu Ranga (6) — GPU / VRAM sizing, Agentic orchestration"
