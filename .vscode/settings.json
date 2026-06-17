@@ -1,0 +1,10 @@
+{
+  // Live Server: bind all network interfaces (not just 127.0.0.1) so other
+  // devices on the LAN (phone, tablet, another laptop) can open the preview.
+  // After changing this, STOP and START Live Server again for it to take effect.
+  "liveServer.settings.host": "0.0.0.0",
+  "liveServer.settings.port": 5500,
+  // Open the browser using this machine's LAN IP instead of localhost, so the
+  // address bar shows a URL other devices can also use.
+  "liveServer.settings.useLocalIp": true
+}

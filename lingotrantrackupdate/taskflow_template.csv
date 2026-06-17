@@ -1,0 +1,2 @@
+﻿title,description,team,sub_category,assigned_to,priority,status,quadrant,due_date (YYYY-MM-DD),start_date (YYYY-MM-DD),type,notes
+Example task — only title is required,Optional description text,Development,Backend,"Alice, Bob",medium,todo,q2,2026-06-30,2026-06-15,task,Any notes here
