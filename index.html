@@ -92,7 +92,7 @@ html[data-theme="oled"]{
   --soft-in:inset 0 1px 2px rgba(0,0,0,.7);
   --soft-in-sm:inset 0 1px 1.5px rgba(0,0,0,.55);
 }
-html[data-theme="oled"] #aurora{opacity:.7}
+html[data-theme="oled"] #aurora{opacity:.55}
 @media (prefers-color-scheme:dark){
   html[data-theme="auto"]{
     --bg:#0B0E16; --card:#141A28; --elev:#1E2640; --hl:#2A2A2A; --sh:#05060A;
@@ -159,17 +159,17 @@ a:hover{color:var(--acc)}
 .landing-head,.bt-hero .big{letter-spacing:-1.5px}
 
 /* animated aurora gradient backdrop */
-#aurora{position:fixed;inset:-20%;z-index:-2;pointer-events:none;opacity:.48;transition:opacity .3s var(--ease);
+#aurora{position:fixed;inset:-20%;z-index:-2;pointer-events:none;opacity:.4;transition:opacity .3s var(--ease);
   background:
     radial-gradient(42% 48% at 18% 22%, color-mix(in srgb,var(--acc) 16%,transparent), transparent 60%),
     radial-gradient(40% 45% at 84% 28%, color-mix(in srgb,var(--acc-2) 14%,transparent), transparent 60%),
     radial-gradient(46% 52% at 62% 86%, color-mix(in srgb,var(--acc-3) 11%,transparent), transparent 62%);
   background-size:200% 200%;background-position:0% 50%;animation:aurora 32s ease-in-out infinite}
-html[data-theme="dark"] #aurora{opacity:.6}
+html[data-theme="dark"] #aurora{opacity:.5}
 @keyframes aurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-/* decorative parallax orbs (drift slowly) */
-#orbs{position:fixed;inset:-10% -10% auto -10%;height:120vh;z-index:-1;pointer-events:none;opacity:.5}
+/* decorative orbs retired — the single aurora layer carries the colour wash now (calmer + cheaper) */
+#orbs{display:none}
 #orbs::before,#orbs::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);will-change:transform}
 #orbs::before{width:46vw;height:46vw;left:-6vw;top:2vh;background:radial-gradient(circle,color-mix(in srgb,var(--acc) 20%,transparent),transparent 70%);animation:float1 26s ease-in-out infinite}
 #orbs::after{width:40vw;height:40vw;right:-4vw;top:38vh;background:radial-gradient(circle,var(--sh),transparent 70%);animation:float2 33s ease-in-out infinite}
@@ -177,10 +177,10 @@ html[data-theme="dark"] #aurora{opacity:.6}
 @keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vw,-3vh) scale(1.08)}}
 
 /* subtle film grain over the backdrop — sits BEHIND content (z-index -1), so body/card text contrast is untouched */
-#grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+#grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.025;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size:150px 150px}
-html[data-theme="dark"] #grain,html[data-theme="oled"] #grain{opacity:.08;mix-blend-mode:screen}
+html[data-theme="dark"] #grain,html[data-theme="oled"] #grain{opacity:.04;mix-blend-mode:screen}
 @media (prefers-reduced-motion:reduce){#grain{display:none}}
 
 /* scroll progress */
@@ -383,7 +383,7 @@ textarea{min-height:78px;resize:vertical;line-height:1.5}
 .tl-today{display:inline-flex;align-items:center;gap:6px;background:var(--acc);color:var(--acc-ink);
   padding:6px 15px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:1px;box-shadow:0 6px 16px -8px var(--acc)}
 .tl-today .ic{width:13px;height:13px}
-@media (prefers-reduced-motion:no-preference){.tl-today{animation:tlpulse 2.6s ease-in-out infinite}}
+@media (prefers-reduced-motion:no-preference){.tl-today{animation:tlpulse 2.6s ease-in-out 3}}
 @keyframes tlpulse{0%,100%{box-shadow:0 6px 16px -8px var(--acc)}50%{box-shadow:0 6px 22px -6px var(--acc),0 0 0 5px color-mix(in srgb,var(--acc) 18%,transparent)}}
 @media (max-width:680px){
   .tline::before,.tline-fill{left:21px}
@@ -892,10 +892,14 @@ function countUp(el,to){ if(RM||!/^\d+$/.test(String(to))){ el.textContent=to; r
   (function step(t){ const k=Math.min(1,(t-t0)/dur); el.textContent=Math.round(end*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(step); })(t0); }
 
 /* ===================== Stats ===================== */
+const _counted=new Set();
 function statCards(target,cards){
-  target.innerHTML=cards.map((c,i)=>`<div class="stat ${animate&&!RM?"reveal":""}" style="animation-delay:${i*45}ms">
+  /* count up only the FIRST time a stat row appears — not on every tab revisit */
+  const seen=target.id&&_counted.has(target.id);
+  const rev=(animate&&!RM&&!seen&&!window.gsap)?"reveal":"";
+  target.innerHTML=cards.map((c,i)=>`<div class="stat ${rev}" style="animation-delay:${i*45}ms">
     <div class="num" data-c="${esc(c[1])}">${esc(c[1])}</div><div class="lbl">${esc(c[0])}</div><div class="meta">${esc(c[2])}</div></div>`).join("");
-  target.querySelectorAll(".num").forEach(n=>countUp(n,n.dataset.c));
+  if(!seen){ target.querySelectorAll(".num").forEach(n=>countUp(n,n.dataset.c)); if(target.id) _counted.add(target.id); }
 }
 function renderStats(){
   const ps=projects().filter(p=>p.type==="project"), st=(SEED.meta&&SEED.meta.stats)||{};
@@ -1365,7 +1369,7 @@ let lenis=null;
 const progressBar=document.querySelector("#progress > i"), appbar=document.getElementById("appbar"), brand=document.getElementById("brand"), orbs=document.getElementById("orbs");
 function onScroll(st){ const h=document.documentElement.scrollHeight-innerHeight; const k=h>0?Math.min(1,st/h):0;
   progressBar.style.transform="scaleX("+k+")"; appbar.classList.toggle("scrolled", st>8);
-  if(!RM){ if(orbs) orbs.style.transform="translateY("+(st*0.18)+"px)"; if(brand) brand.style.transform="translateY("+Math.min(st*0.04,6)+"px)"; } }
+  if(!RM){ if(brand) brand.style.transform="translateY("+Math.min(st*0.04,6)+"px)"; } }
 if(!RM && window.Lenis){
   lenis=new Lenis({duration:1.05,smoothWheel:true,wheelMultiplier:1});
   lenis.on("scroll",e=>{ onScroll(e.scroll||e.animatedScroll||scrollY); if(window.ScrollTrigger) ScrollTrigger.update(); });
@@ -1393,7 +1397,7 @@ function selectTab(which,focusTab){
     if(lenis){ try{lenis.scrollTo(0,{immediate:true});}catch(e){} requestAnimationFrame(()=>{ try{lenis.resize();}catch(e){} }); }
     else scrollTo(0,0);
   };
-  withVT(apply);
+  apply(); /* tab content motion handled by the GSAP stagger; no extra View-Transition crossfade */
 }
 VIEWS.forEach(([tid,,key])=>document.getElementById(tid).addEventListener("click",()=>selectTab(key)));
 /* roving arrow-key navigation per ARIA tablist pattern */
