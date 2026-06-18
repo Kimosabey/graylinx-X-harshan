@@ -477,7 +477,7 @@ code{background:var(--card);border-radius:7px;padding:2px 7px;font-size:11px;box
     var(--bg)}
 html.did-enter #landing, body.entered #landing{display:none}
 .landing-inner{max-width:1040px;margin:auto;width:100%;position:relative;z-index:1}
-#landing>canvas{z-index:0}
+#vanta-bg{position:fixed;inset:0;z-index:0}
 .landing-brand{display:flex;align-items:center;gap:12px;font-weight:680;color:var(--ink2);font-size:15px;margin-bottom:clamp(18px,4vw,40px)}
 .landing-brand .logo-plate{padding:5px 11px}.landing-brand .logo-plate img{height:26px;width:auto;display:block}
 /* personal portrait — featured HERO element with a cobalt→teal gradient ring + soft glow */
@@ -1606,10 +1606,14 @@ function _loadScript(src,cb){ const ex=document.querySelector('script[data-dyn="
   s.onload=()=>{ s.dataset.loaded="1"; cb(); }; s.onerror=cb; document.head.appendChild(s); }
 function initLandingVanta(){
   if(RM || _vanta) return; const host=document.getElementById("landing"); if(!host) return;
+  /* render Vanta on a FIXED full-viewport layer (not the scrolling #landing) so the net never clips
+     when the hero is taller than the screen; content (.landing-inner, z-index 1) sits above it. */
+  let bg=document.getElementById("vanta-bg");
+  if(!bg){ bg=document.createElement("div"); bg.id="vanta-bg"; host.insertBefore(bg, host.firstChild); }
   _loadScript("vendor/three.r134.min.js",()=>_loadScript("vendor/vanta.net.min.js",()=>{
     try{ if(!_vanta && window.VANTA && window.VANTA.NET && !document.body.classList.contains("entered")){
       const acc=parseInt((cssvar("--acc")||"#3b5bdb").replace("#",""),16)||0x3B5BDB;
-      _vanta=window.VANTA.NET({el:host,mouseControls:true,touchControls:true,gyroControls:false,
+      _vanta=window.VANTA.NET({el:bg,mouseControls:true,touchControls:true,gyroControls:false,
         minHeight:200,minWidth:200,scale:1,scaleMobile:1,color:acc,backgroundAlpha:0,points:9,maxDistance:20,spacing:17});
     } }catch(e){}
   }));
