@@ -1118,7 +1118,8 @@ def inject_seed(path, payload):
 PUBLIC_FILES = ["index.html",
                 "assets/favicon.svg", "assets/graylinxLogo.png",
                 "assets/IMG-20230616-WA0000.jpg", "assets/SpaceGrotesk.woff2",
-                "vendor/lenis.min.js", "vendor/echarts.min.js"]
+                "vendor/lenis.min.js", "vendor/echarts.min.js",
+                "vendor/gsap.min.js", "vendor/ScrollTrigger.min.js"]
 
 
 def build_public():
