@@ -476,7 +476,8 @@ code{background:var(--card);border-radius:7px;padding:2px 7px;font-size:11px;box
     radial-gradient(54% 58% at 8% 92%, color-mix(in srgb,var(--st-ongoing) 14%,transparent), transparent 60%),
     var(--bg)}
 html.did-enter #landing, body.entered #landing{display:none}
-.landing-inner{max-width:1040px;margin:auto;width:100%}
+.landing-inner{max-width:1040px;margin:auto;width:100%;position:relative;z-index:1}
+#landing>canvas{z-index:0}
 .landing-brand{display:flex;align-items:center;gap:12px;font-weight:680;color:var(--ink2);font-size:15px;margin-bottom:clamp(18px,4vw,40px)}
 .landing-brand .logo-plate{padding:5px 11px}.landing-brand .logo-plate img{height:26px;width:auto;display:block}
 /* personal portrait — featured HERO element with a cobalt→teal gradient ring + soft glow */
@@ -1594,7 +1595,26 @@ function renderLanding(){
   document.getElementById("enter-dash").addEventListener("click",()=>enterDashboard());
   document.getElementById("enter-wrapped").addEventListener("click",()=>{ enterDashboard(); setTimeout(openWrapped,RM?0:420); });
   introLanding();
+  if(!document.documentElement.classList.contains("did-enter")) initLandingVanta();
 }
+/* Vanta NET — animated WebGL backdrop on the LANDING ONLY. Lazy-loaded (three.js is ~600KB, so
+   returning visitors who skip the landing never pay for it), destroyed on enter, off under reduced-motion. */
+let _vanta=null;
+function _loadScript(src,cb){ const ex=document.querySelector('script[data-dyn="'+src+'"]');
+  if(ex){ if(ex.dataset.loaded) cb(); else { ex.addEventListener("load",cb); ex.addEventListener("error",cb); } return; }
+  const s=document.createElement("script"); s.src=src; s.async=false; s.setAttribute("data-dyn",src);
+  s.onload=()=>{ s.dataset.loaded="1"; cb(); }; s.onerror=cb; document.head.appendChild(s); }
+function initLandingVanta(){
+  if(RM || _vanta) return; const host=document.getElementById("landing"); if(!host) return;
+  _loadScript("vendor/three.r134.min.js",()=>_loadScript("vendor/vanta.net.min.js",()=>{
+    try{ if(!_vanta && window.VANTA && window.VANTA.NET && !document.body.classList.contains("entered")){
+      const acc=parseInt((cssvar("--acc")||"#3b5bdb").replace("#",""),16)||0x3B5BDB;
+      _vanta=window.VANTA.NET({el:host,mouseControls:true,touchControls:true,gyroControls:false,
+        minHeight:200,minWidth:200,scale:1,scaleMobile:1,color:acc,backgroundAlpha:0,points:9,maxDistance:20,spacing:17});
+    } }catch(e){}
+  }));
+}
+function killVanta(){ if(_vanta){ try{_vanta.destroy();}catch(e){} _vanta=null; } }
 /* GSAP landing intro: portrait → brand → intro → headline → sub → stats(count-up) → CTAs.
    Gated by GSAP presence + reduced-motion; on any failure everything is force-revealed. */
 function introLanding(){
@@ -1619,7 +1639,7 @@ function introLanding(){
   }catch(e){ inner.querySelectorAll(":scope>*").forEach(x=>{x.style.opacity="1";x.style.transform="none";}); }
 }
 function enterDashboard(){
-  const go=()=>{ document.body.classList.add("entered"); document.documentElement.classList.remove("did-enter");
+  const go=()=>{ document.body.classList.add("entered"); document.documentElement.classList.remove("did-enter"); killVanta();
     try{localStorage.setItem("glx-entered","1");}catch(e){} if(lenis){try{lenis.resize();}catch(e){}}
     /* roll the hero number once now that Overview is actually visible (it ran behind the landing at boot) */
     _rolled=false; const hr=document.querySelector("#bento [data-roll]"); if(hr) rollNumber(hr,hr.dataset.roll); };
