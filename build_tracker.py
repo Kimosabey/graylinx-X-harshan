@@ -34,7 +34,7 @@ BASE = os.path.dirname(OUT_DIR)                          # D:\Harshan
 TODAY = date(2026, 6, 17)                                # "till now" anchor
 
 ATTENDANCE_CSV = os.path.join(
-    OUT_DIR, "Harshan X Graylinx Deployment Tracker 2026(Deployment Attendance).csv"
+    OUT_DIR, "data", "Harshan X Graylinx Deployment Tracker 2026(Deployment Attendance).csv"
 )
 INDEX_HTML = os.path.join(OUT_DIR, "index.html")
 
@@ -1115,8 +1115,10 @@ def inject_seed(path, payload):
 
 
 # Files copied into public/ for the Netlify deploy (self-contained, seed embedded).
-PUBLIC_FILES = ["index.html", "favicon.svg", "lenis.min.js", "echarts.min.js", "SpaceGrotesk.woff2",
-                "graylinxLogo.png", "IMG-20230616-WA0000.jpg"]
+PUBLIC_FILES = ["index.html",
+                "assets/favicon.svg", "assets/graylinxLogo.png",
+                "assets/IMG-20230616-WA0000.jpg", "assets/SpaceGrotesk.woff2",
+                "vendor/lenis.min.js", "vendor/echarts.min.js"]
 
 
 def build_public():
@@ -1131,7 +1133,9 @@ def build_public():
     for name in PUBLIC_FILES:
         src = os.path.join(OUT_DIR, name)
         if os.path.exists(src):
-            shutil.copy2(src, os.path.join(pub, name))
+            dst = os.path.join(pub, name)
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            shutil.copy2(src, dst)
             copied.append(name)
     return copied
 
@@ -1184,10 +1188,11 @@ def main():
     ).hexdigest()[:12]
     payload = {"meta": meta, "projects": projects, "engagement": engagement}
 
-    write_csv(os.path.join(OUT_DIR, "works.csv"), PROJ_COLS, projects)
-    write_csv(os.path.join(OUT_DIR, "engagement.csv"), ENG_COLS, engagement)
-    write_json(os.path.join(OUT_DIR, "works.json"), payload)
-    write_xlsx(os.path.join(OUT_DIR, "works.xlsx"), projects, engagement)
+    os.makedirs(os.path.join(OUT_DIR, "data"), exist_ok=True)
+    write_csv(os.path.join(OUT_DIR, "data", "works.csv"), PROJ_COLS, projects)
+    write_csv(os.path.join(OUT_DIR, "data", "engagement.csv"), ENG_COLS, engagement)
+    write_json(os.path.join(OUT_DIR, "data", "works.json"), payload)
+    write_xlsx(os.path.join(OUT_DIR, "data", "works.xlsx"), projects, engagement)
     inject_seed(INDEX_HTML, payload)
     pub = build_public()
 
